@@ -5,6 +5,7 @@ import com.devcamp.flametalk.domain.file.domain.FileRepository;
 import com.devcamp.flametalk.domain.profile.domain.Profile;
 import com.devcamp.flametalk.domain.profile.domain.ProfileRepository;
 import com.devcamp.flametalk.domain.profile.dto.ProfileCreateRequest;
+import com.devcamp.flametalk.domain.profile.dto.ProfileResponse;
 import com.devcamp.flametalk.domain.user.domain.User;
 import com.devcamp.flametalk.domain.user.domain.UserRepository;
 import javax.persistence.EntityNotFoundException;
@@ -38,5 +39,11 @@ public class ProfileService {
     private File getFileById(Long id) {
         return fileRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("파일이 존재하지 않습니다."));
+    }
+
+    public ProfileResponse findProfile(Long id) {
+        Profile profile = profileRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("프로필이 존재하지 않습니다."));
+        return ProfileResponse.of(profile);
     }
 }

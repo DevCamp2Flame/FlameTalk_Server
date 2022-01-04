@@ -1,6 +1,7 @@
 package com.devcamp.flametalk.domain.profile.controller;
 
 import com.devcamp.flametalk.domain.profile.dto.ProfileCreateRequest;
+import com.devcamp.flametalk.domain.profile.dto.ProfileResponse;
 import com.devcamp.flametalk.domain.profile.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,5 +24,10 @@ public class ProfileController {
         Long savedProfileId = profileService.save(request);
         log.info("create " + request.getUserId() + " user profile:" + savedProfileId);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProfileResponse> findProfile(@PathVariable Long id) {
+        return ResponseEntity.ok(profileService.findProfile(id));
     }
 }
