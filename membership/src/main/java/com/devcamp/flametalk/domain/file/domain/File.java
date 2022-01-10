@@ -1,36 +1,39 @@
 package com.devcamp.flametalk.domain.file.domain;
 
+import com.devcamp.flametalk.domain.model.BaseTime;
 import com.devcamp.flametalk.domain.profile.domain.Profile;
-import com.devcamp.flametalk.domain.user.domain.User;
-import com.devcamp.flametalk.model.BaseTime;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
 @Entity
 public class File extends BaseTime {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
 
-    @NotNull
-    private String content;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private long id;
 
-    @NotNull
-    private String type;
+  @NotNull
+  private String content;
 
-    private String thumbnail;
+  @NotNull
+  private String type;
 
-    @OneToOne(mappedBy = "image")
-    private Profile profileImage;
+  private String thumbnail;
 
-    @OneToOne(mappedBy = "backgroundImage")
-    private Profile profileBackgroundImage;
+  @OneToOne(mappedBy = "image")
+  private Profile profileImage;
 
-    @OneToOne(mappedBy = "stickerImage")
-    private Profile profileStickerImage;
+  @OneToOne(mappedBy = "backgroundImage")
+  private Profile profileBackgroundImage;
+
+  @OneToOne(mappedBy = "stickerImage")
+  private Profile profileStickerImage;
 }

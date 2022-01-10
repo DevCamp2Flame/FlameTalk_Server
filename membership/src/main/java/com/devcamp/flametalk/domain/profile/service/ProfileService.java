@@ -17,48 +17,50 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class ProfileService {
-    private final ProfileRepository profileRepository;
-    private final UserRepository userRepository;
-    private final FileRepository fileRepository;
 
-    @Transactional
-    public Long save(ProfileCreateRequest request) {
-        // TODO: 인가 로직 수정
-        User user = userRepository.getById(request.getUserId());
+  private final ProfileRepository profileRepository;
+  private final UserRepository userRepository;
+  private final FileRepository fileRepository;
 
-        File image = getFileById(request.getImageId());
-        File backgroundImage = getFileById(request.getBackgroundImageId());
-        File sticker = getFileById(request.getStickerId());
+  @Transactional
+  public Long save(ProfileCreateRequest request) {
+    // TODO: 인가 로직 수정
+    User user = userRepository.getById(request.getUserId());
 
-        Profile profile = request.toProfile(user, image, backgroundImage, sticker);
-        profileRepository.save(profile);
+    File image = getFileById(request.getImageId());
+    File backgroundImage = getFileById(request.getBackgroundImageId());
+    File sticker = getFileById(request.getStickerId());
 
-        return profile.getId();
-    }
+    Profile profile = request.toProfile(user, image, backgroundImage, sticker);
+    profileRepository.save(profile);
 
-    private File getFileById(Long id) {
-        return fileRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("파일이 존재하지 않습니다."));
-    }
+    return profile.getId();
+  }
 
-    public ProfileResponse findProfile(Long id) {
-        Profile profile = profileRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("프로필이 존재하지 않습니다."));
-        return ProfileResponse.of(profile);
-    }
+  private File getFileById(Long id) {
+    return fileRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("파일이 존재하지 않습니다."));
+  }
 
-    public Long updateProfile(ProfileUpdateRequest request) {
-        // TODO: 인가 로직 수정
-        Profile profile = profileRepository.findById(request.getId())
-            .orElseThrow(() -> new EntityNotFoundException("프로필이 존재하지 않습니다."));
+  public ProfileResponse findProfile(Long id) {
+    Profile profile = profileRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("프로필이 존재하지 않습니다."));
+    return ProfileResponse.of(profile);
+  }
 
-        User user = userRepository.getById(request.getUserId());
-        File image = getFileById(request.getImageId());
-        File backgroundImage = getFileById(request.getBackgroundImageId());
-        File sticker = getFileById(request.getStickerId());
-        Profile updatedProfile = request.toProfile(user, image, backgroundImage, sticker);
+  @Transactional
+  public Long updateProfile(ProfileUpdateRequest request) {
+    // TODO: 인가 로직 수정
+    Profile profile = profileRepository.findById(request.getId())
+        .orElseThrow(() -> new EntityNotFoundException("프로필이 존재하지 않습니다."));
 
-        profile.update(updatedProfile);
-        return profile.getId();
-    }
+    User user = userRepository.getById(request.getUserId());
+    File image = getFileById(request.getImageId());
+    File backgroundImage = getFileById(request.getBackgroundImageId());
+    File sticker = getFileById(request.getStickerId());
+    Profile updatedProfile = request.toProfile(user, image, backgroundImage, sticker);
+
+    profile.update(updatedProfile);
+    return profile.getId();
+  }
 }

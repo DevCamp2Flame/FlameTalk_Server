@@ -1,8 +1,8 @@
 package com.devcamp.flametalk.domain.profile.domain;
 
 import com.devcamp.flametalk.domain.file.domain.File;
+import com.devcamp.flametalk.domain.model.BaseTime;
 import com.devcamp.flametalk.domain.user.domain.User;
-import com.devcamp.flametalk.model.BaseTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -51,7 +51,8 @@ public class Profile extends BaseTime {
 
   @Builder
   public Profile(long id, File image, File backgroundImage, File stickerImage,
-      int stickerPositionX, int stickerPositionY, String description, User user, boolean isDefault) {
+      int stickerPositionX, int stickerPositionY, String description, User user,
+      boolean isDefault) {
     this.id = id;
     this.image = image;
     this.backgroundImage = backgroundImage;
