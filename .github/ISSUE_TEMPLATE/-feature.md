@@ -12,7 +12,8 @@ assignees: ''
 
 ## Todo
 - [ ] todo
-- [ ] todo
+- [ ] Google Checksytle 검사
+- [ ] SonarQube를 통한 코드 분석 및 품질 향상
 
 ## ETC
 기타사항
