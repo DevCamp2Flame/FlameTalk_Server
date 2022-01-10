@@ -6,6 +6,7 @@ import com.devcamp.flametalk.domain.profile.domain.Profile;
 import com.devcamp.flametalk.domain.profile.domain.ProfileRepository;
 import com.devcamp.flametalk.domain.profile.dto.ProfileCreateRequest;
 import com.devcamp.flametalk.domain.profile.dto.ProfileResponse;
+import com.devcamp.flametalk.domain.profile.dto.ProfileUpdateRequest;
 import com.devcamp.flametalk.domain.user.domain.User;
 import com.devcamp.flametalk.domain.user.domain.UserRepository;
 import javax.persistence.EntityNotFoundException;
@@ -24,7 +25,6 @@ public class ProfileService {
     public Long save(ProfileCreateRequest request) {
         // TODO: 인가 로직 수정
         User user = userRepository.getById(request.getUserId());
-
 
         File image = getFileById(request.getImageId());
         File backgroundImage = getFileById(request.getBackgroundImageId());
@@ -45,5 +45,20 @@ public class ProfileService {
         Profile profile = profileRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("프로필이 존재하지 않습니다."));
         return ProfileResponse.of(profile);
+    }
+
+    public Long updateProfile(ProfileUpdateRequest request) {
+        // TODO: 인가 로직 수정
+        Profile profile = profileRepository.findById(request.getId())
+            .orElseThrow(() -> new EntityNotFoundException("프로필이 존재하지 않습니다."));
+
+        User user = userRepository.getById(request.getUserId());
+        File image = getFileById(request.getImageId());
+        File backgroundImage = getFileById(request.getBackgroundImageId());
+        File sticker = getFileById(request.getStickerId());
+        Profile updatedProfile = request.toProfile(user, image, backgroundImage, sticker);
+
+        profile.update(updatedProfile);
+        return profile.getId();
     }
 }

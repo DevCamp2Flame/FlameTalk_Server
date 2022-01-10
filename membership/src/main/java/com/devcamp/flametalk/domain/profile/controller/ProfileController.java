@@ -2,6 +2,7 @@ package com.devcamp.flametalk.domain.profile.controller;
 
 import com.devcamp.flametalk.domain.profile.dto.ProfileCreateRequest;
 import com.devcamp.flametalk.domain.profile.dto.ProfileResponse;
+import com.devcamp.flametalk.domain.profile.dto.ProfileUpdateRequest;
 import com.devcamp.flametalk.domain.profile.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,5 +30,13 @@ public class ProfileController {
     @GetMapping("/{id}")
     public ResponseEntity<ProfileResponse> findProfile(@PathVariable Long id) {
         return ResponseEntity.ok(profileService.findProfile(id));
+    }
+
+    @PatchMapping("/me")
+    public ResponseEntity<Void> updateProfile(@RequestBody @Valid ProfileUpdateRequest request) {
+        // TODO: 인가 로직 추후 구현
+        Long savedProfileId = profileService.updateProfile(request);
+        log.info("update " + request.getUserId() + " user profile:" + savedProfileId);
+        return ResponseEntity.ok().build();
     }
 }

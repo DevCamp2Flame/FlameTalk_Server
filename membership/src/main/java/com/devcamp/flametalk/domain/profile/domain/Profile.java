@@ -62,4 +62,15 @@ public class Profile extends BaseTime {
     this.user = user;
     this.isDefault = isDefault;
   }
+
+  public void update(Profile updatedProfile) {
+    this.image = updatedProfile.image;
+    this.backgroundImage = updatedProfile.backgroundImage;
+    this.stickerImage = updatedProfile.stickerImage;
+    this.stickerPositionX = updatedProfile.stickerPositionX;
+    this.stickerPositionY = updatedProfile.stickerPositionY;
+    this.description = updatedProfile.description;
+    this.user = updatedProfile.user;
+    this.isDefault = updatedProfile.isDefault;
+  }
 }
