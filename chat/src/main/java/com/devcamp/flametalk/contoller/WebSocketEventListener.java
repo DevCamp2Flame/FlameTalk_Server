@@ -14,28 +14,28 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 @Component
 public class WebSocketEventListener {
 
-    private static final Logger logger = LoggerFactory.getLogger(WebSocketEventListener.class);
+  private static final Logger logger = LoggerFactory.getLogger(WebSocketEventListener.class);
 
-    @Autowired
-    private SimpMessageSendingOperations messagingTemplate;
+  @Autowired
+  private SimpMessageSendingOperations messagingTemplate;
 
-    @EventListener
-    public void handleWebSocketConnectListener(SessionConnectedEvent event) {
-        logger.info("Received a new web socket connection");
+  @EventListener
+  public void handleWebSocketConnectListener(SessionConnectedEvent event) {
+    logger.info("Received a new web socket connection");
+  }
+
+  @EventListener
+  public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
+    StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+
+    String username = (String) headerAccessor.getSessionAttributes().get("username");
+    if (username != null) {
+      logger.info("User Disconnected : " + username);
+
+      ChattingMessage chatMessage = new ChattingMessage("exit:");
+      chatMessage.setUser(username);
+
+      messagingTemplate.convertAndSend("/topic/public", chatMessage);
     }
-
-    @EventListener
-    public void handleWebSocketDisconnectListener(SessionDisconnectEvent event) {
-        StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-
-        String username = (String) headerAccessor.getSessionAttributes().get("username");
-        if (username != null) {
-            logger.info("User Disconnected : " + username);
-
-            ChattingMessage chatMessage = new ChattingMessage("exit:");
-            chatMessage.setUser(username);
-
-            messagingTemplate.convertAndSend("/topic/public", chatMessage);
-        }
-    }
+  }
 }

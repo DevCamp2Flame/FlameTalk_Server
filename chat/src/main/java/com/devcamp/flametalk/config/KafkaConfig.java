@@ -20,10 +20,12 @@ import org.springframework.kafka.support.serializer.JsonSerializer;
 @EnableKafka
 @Configuration
 public class KafkaConfig {
+
   //Sender config
   @Bean
   public ProducerFactory<String, ChattingMessage> producerFactory() {
-    return new DefaultKafkaProducerFactory<>(producerConfigs(), null, new JsonSerializer<ChattingMessage>());
+    return new DefaultKafkaProducerFactory<>(producerConfigs(), null,
+        new JsonSerializer<ChattingMessage>());
   }
 
   @Bean
@@ -33,7 +35,6 @@ public class KafkaConfig {
 
   @Bean
   public Map<String, Object> producerConfigs() {
-
     return ImmutableMap.<String, Object>builder()
         .put("bootstrap.servers", "localhost:9092")//kafka server ip & port
         .put("key.serializer", IntegerSerializer.class)
@@ -41,6 +42,7 @@ public class KafkaConfig {
         .put("group.id", "spring-boot-test") // chatting  group id
         .build();
   }
+
   //Receiver config
   @Bean
   public ConcurrentKafkaListenerContainerFactory<String, ChattingMessage> kafkaListenerContainerFactory() {
@@ -51,16 +53,15 @@ public class KafkaConfig {
 
   @Bean
   public ConsumerFactory<String, ChattingMessage> consumerFactory() {
-    return new DefaultKafkaConsumerFactory<>(consumerConfigs(), null, new JsonDeserializer<>(ChattingMessage.class));
+    return new DefaultKafkaConsumerFactory<>(consumerConfigs(), null,
+        new JsonDeserializer<>(ChattingMessage.class));
   }
 
   @Bean
   public Map<String, Object> consumerConfigs() {
-    return ImmutableMap.<String, Object>builder()
-        .put("bootstrap.servers", "localhost:9092")
+    return ImmutableMap.<String, Object>builder().put("bootstrap.servers", "localhost:9092")
         .put("key.deserializer", IntegerDeserializer.class)
-        .put("value.deserializer", JsonDeserializer.class)
-        .put("group.id", "spring-boot-test")
+        .put("value.deserializer", JsonDeserializer.class).put("group.id", "spring-boot-test")
         .build();
   }
 }
