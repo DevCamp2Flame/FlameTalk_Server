@@ -1,2 +1,8 @@
-spring.kafka.consumer.group-id=boot
-spring.kafka.consumer.auto-offset-reset=earliest
+#spring.kafka.consumer.group-id=boot
+#spring.kafka.consumer.auto-offset-reset=earliest
+
+spring:
+  thymeleaf:
+    prefix : classpath:/templates/
+    suffix : .html
+    cache : false
