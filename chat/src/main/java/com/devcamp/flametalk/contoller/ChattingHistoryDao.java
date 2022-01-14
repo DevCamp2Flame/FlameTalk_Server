@@ -27,5 +27,4 @@ public class ChattingHistoryDao {
         .sorted(Comparator.comparing(ChattingMessage::getTimeStamp))
         .collect(Collectors.toList());
   }
-
 }

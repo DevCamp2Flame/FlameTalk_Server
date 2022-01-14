@@ -26,10 +26,10 @@ public class ChattingController {
 
   private static String BOOT_TOPIC = "kafka-chatting";
 
-  //// "url/app/message"로 들어오는 메시지를 "/topic/public"을 구독하고있는 사람들에게 송신
+  // "url/app/message"로 들어오는 메시지를 "/topic/public"을 구독하고있는 사람들에게 송신
   @MessageMapping("/message")
-  //@MessageMapping works for WebSocket protocol communication. This defines the URL mapping.
-  //@SendTo("/topic/public")//websocket subscribe topic& direct send
+  // @MessageMapping works for WebSocket protocol communication. This defines the URL mapping.
+  // @SendTo("/topic/public")//websocket subscribe topic& direct send
   public void sendMessage(ChattingMessage message) throws Exception {
     message.setTimeStamp(System.currentTimeMillis());
     chattingHistoryDao.save(message);
@@ -48,5 +48,4 @@ public class ChattingController {
   public ChattingMessage sendFile(ChattingMessage message) throws Exception {
     return new ChattingMessage(message.getFileName(), message.getRawData(), message.getUser());
   }
-
 }
