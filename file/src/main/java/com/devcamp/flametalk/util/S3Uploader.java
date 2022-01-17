@@ -3,6 +3,7 @@ package com.devcamp.flametalk.util;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.devcamp.flametalk.dto.S3UploadedFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * S3에 정적 파일을 올리는 클래스입니다.
- *
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -35,10 +35,12 @@ public class S3Uploader {
    * @return 전환된 File S3로 upload
    * @throws IOException MultipartFile 을 File 로 변환할 수 없는 경우
    */
-  public String upload(MultipartFile multipartFile, String dirName) throws IOException {
+  public S3UploadedFile upload(MultipartFile multipartFile, String dirName) throws IOException {
     File uploadFile = convert(multipartFile)
         .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
-    return upload(uploadFile, dirName);
+    String url = upload(uploadFile, dirName);
+    S3UploadedFile fileRequest = new S3UploadedFile(uploadFile.getName(), url);
+    return fileRequest;
   }
 
   private String upload(File uploadFile, String dirName) {
