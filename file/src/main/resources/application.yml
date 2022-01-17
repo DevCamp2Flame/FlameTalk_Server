@@ -1,0 +1,11 @@
+cloud:
+  aws:
+    credentials:
+      accessKey: ${ACCESS_KEY}
+      secretKey: ${SECRET_KEY}
+    s3:
+      bucket: flametalk-bucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
