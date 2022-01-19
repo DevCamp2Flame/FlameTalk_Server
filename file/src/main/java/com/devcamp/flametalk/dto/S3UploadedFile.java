@@ -1,8 +1,12 @@
 package com.devcamp.flametalk.dto;
 
+import com.devcamp.flametalk.domain.Chatroom;
 import com.devcamp.flametalk.domain.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import lombok.Getter;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * S3에 업로드된 파일 정보에 대한 DTO 입니다.
@@ -10,20 +14,26 @@ import org.apache.commons.io.FilenameUtils;
 @Getter
 public class S3UploadedFile {
 
+  private MultipartFile multipartFile;
   private String title;
   private String extension;
   private String url;
+  private Chatroom chatroom;
 
   /**
    * 생성자입니다.
    *
-   * @param name S3에 업로드된 파일의 이름(파일명 + 확장자)
-   * @param url  S3에 업로드된 파일의 url
+   * @param multipartFile S3에 업로드된 파일의 이름(파일명 + 확장자)
+   * @param chatroom 파일이 채팅방에서 업로드된 경우의 해당 채팅방 정보
    */
-  public S3UploadedFile(String name, String url) {
-    this.title = FilenameUtils.getBaseName(name);
-    this.extension = FilenameUtils.getExtension(name);
-    this.url = url;
+  public S3UploadedFile(MultipartFile multipartFile, Chatroom chatroom) {
+    String originFileName = multipartFile.getOriginalFilename();
+    SimpleDateFormat date = new SimpleDateFormat("yyyymmddHHmmss");
+    this.multipartFile = multipartFile;
+    this.title =
+        "flametalk_" + FilenameUtils.getBaseName(originFileName) + "_" + date.format(new Date());
+    this.extension = FilenameUtils.getExtension(originFileName);
+    this.chatroom = chatroom;
   }
 
   /**
@@ -36,6 +46,11 @@ public class S3UploadedFile {
         .title(title)
         .extension(extension)
         .url(url)
+        .chatroom(chatroom)
         .build();
+  }
+
+  public void updateUrl(String url) {
+    this.url = url;
   }
 }

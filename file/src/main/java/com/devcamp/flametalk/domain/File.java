@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,21 +32,23 @@ public class File extends BaseTime {
   @NotNull
   private String url;
 
-  private String chatroomId;
+  @ManyToOne
+  @JoinColumn(name = "chatroom_id")
+  private Chatroom chatroom;
 
   /**
    * File 엔티티의 빌더입니다.
    *
-   * @param title      파일명
-   * @param extension  파일 확장자
-   * @param url        파일의 S3 url
-   * @param chatroomId 채팅방에서 사용된 파일의 경우, 채팅방의 id
+   * @param title     파일명
+   * @param extension 파일 확장자
+   * @param url       파일의 S3 url
+   * @param chatroom  파일이 사용된 채팅방
    */
   @Builder
-  public File(String title, String extension, String url, String chatroomId) {
+  public File(String title, String extension, String url, Chatroom chatroom) {
     this.title = title;
     this.extension = extension;
     this.url = url;
-    this.chatroomId = chatroomId;
+    this.chatroom = chatroom;
   }
 }

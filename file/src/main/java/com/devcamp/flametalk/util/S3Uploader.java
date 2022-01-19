@@ -30,22 +30,20 @@ public class S3Uploader {
   /**
    * S3로 파일 업로드 시퀀스를 담당하는 함수입니다.
    *
-   * @param multipartFile client 로부터 전달받은 파일
-   * @param dirName S3에 생성된 디렉토리
-   * @return 전환된 File S3로 upload
-   * @throws IOException MultipartFile 을 File 로 변환할 수 없는 경우
+   * @param file    s3에 업로드 되어야하는 파일 정보
+   * @param dirName s3 폴더링을 위한 디렉토리명
+   * @return s3에 업로드된 파일의 url
+   * @throws IOException TODO::예외처리
    */
-  public S3UploadedFile upload(MultipartFile multipartFile, String dirName) throws IOException {
-    File uploadFile = convert(multipartFile)
+  public String upload(S3UploadedFile file, String dirName) throws IOException {
+    File uploadFile = convert(file.getMultipartFile())
         .orElseThrow(() -> new IllegalArgumentException("MultipartFile -> File 전환 실패"));
-    String url = upload(uploadFile, dirName);
-    S3UploadedFile fileRequest = new S3UploadedFile(uploadFile.getName(), url);
-    return fileRequest;
+    String s3FileKey = dirName + "/" + file.getTitle() + "." + file.getExtension();
+    return upload(uploadFile, s3FileKey);
   }
 
-  private String upload(File uploadFile, String dirName) {
-    String fileName = dirName + "/" + uploadFile.getName();
-    String uploadImageUrl = putS3(uploadFile, fileName);
+  private String upload(File uploadFile, String s3FileKey) {
+    String uploadImageUrl = putS3(uploadFile, s3FileKey);
     removeNewFile(uploadFile);
     return uploadImageUrl;
   }
