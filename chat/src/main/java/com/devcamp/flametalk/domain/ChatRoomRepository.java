@@ -25,10 +25,13 @@ public class ChatRoomRepository {
   /**
    * 채팅방 생성.
    *
-   * @return 채팅방 생성 순서 최근 순으로 반환
+   * @param hostId 오픈 채팅방 방장 id
+   * @param count  채팅방 인원 수
+   * @param isOpen 오픈 채팅방이라면 1, 아니라면 0
+   * @return 채팅방
    */
-  public ChatRoomDto createChatRoomDto(String name) {
-    ChatRoomDto room = ChatRoomDto.create(name);
+  public ChatRoomDto createChatRoomDto(String hostId, int count, short isOpen) {
+    ChatRoomDto room = ChatRoomDto.create(hostId, count, isOpen);
     chatRoomDtoMap.put(room.getRoomId(), room);
 
     return room;

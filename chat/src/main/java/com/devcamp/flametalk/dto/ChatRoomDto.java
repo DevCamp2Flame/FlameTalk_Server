@@ -12,15 +12,20 @@ import org.springframework.web.socket.WebSocketSession;
 public class ChatRoomDto {
 
   private String roomId;
-  private String name;
+  private String hostId;
+  private int count;
+  private short isOpen;
+
   // WebSocketSession은 Spring에서 Websocket Connection이 맺어진 세션
   private Set<WebSocketSession> sessions = new HashSet<>();
 
-  public static ChatRoomDto create(String name) {
+  public static ChatRoomDto create(String hostId, int count, short isOpen) {
     ChatRoomDto room = new ChatRoomDto();
 
     room.roomId = UUID.randomUUID().toString();
-    room.name = name;
+    room.hostId = hostId;
+    room.count = count;
+    room.isOpen = isOpen;
     return room;
   }
 }

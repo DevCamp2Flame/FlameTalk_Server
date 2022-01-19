@@ -32,9 +32,9 @@ public class RoomController {
 
   // 채팅방 개설
   @PostMapping(value = "/room")
-  public String create(@RequestParam String name, RedirectAttributes attributes) {
-    log.info("# Create Chat Room , name: " + name);
-    attributes.addFlashAttribute("roomName", repository.createChatRoomDto(name));
+  public String create(@RequestParam String hostId, @RequestParam int count, @RequestParam short isOpen, RedirectAttributes attributes) {
+    log.info("# Create Chat Room , hostId: " + hostId);
+    attributes.addFlashAttribute("roomName", repository.createChatRoomDto(hostId, count, isOpen));
     return "redirect:/chat/rooms";
   }
 
