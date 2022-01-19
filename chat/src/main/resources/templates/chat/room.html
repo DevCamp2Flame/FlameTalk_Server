@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-
+<script src="http://code.jquery.com/jquery-latest.js"></script>
 <th:block>
   <th:block th:fragment="content">
 
@@ -35,7 +35,7 @@
 
     var roomName = [[${room.name}]];
     var roomId = [[${room.roomId}]];
-    var username = [[${#authentication.principal.username}]];
+    var username = "username";
 
     console.log(roomName + ", " + roomId + ", " + username);
 
@@ -53,6 +53,9 @@
 
         var writer = content.writer;
         var str = '';
+
+        console.log(writer);
+        console.log(str);
 
         if (writer === username) {
           str = "<div class='col-6'>";
