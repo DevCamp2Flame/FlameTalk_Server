@@ -1,11 +1,15 @@
 package com.devcamp.flametalk.controller;
 
+import com.devcamp.flametalk.dto.FileDetailResponse;
+import com.devcamp.flametalk.dto.SingleResponse;
 import com.devcamp.flametalk.service.FileService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -40,5 +44,12 @@ public class FileController {
     //TODO: Exception 처리
 
     return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/{fileId}")
+  public ResponseEntity<SingleResponse<FileDetailResponse>> findById(@PathVariable Long fileId) {
+    SingleResponse<FileDetailResponse> response = fileService.findById(fileId);
+    log.info("[File Searched]" + response.toString());
+    return ResponseEntity.ok(response);
   }
 }
