@@ -34,7 +34,7 @@ public class FileService {
    *
    * @param file       controller 로부터 전달받은 파일
    * @param chatroomId controller 로부터 전달받은 채팅방 id
-   * @return DB에 저장된 파일의 ID
+   * @return DB에 저장된 파일 ID
    * @throws IOException File 처리 실패한 경우
    */
   @Transactional
@@ -52,6 +52,13 @@ public class FileService {
     return savedFile.getId();
   }
 
+  /**
+   * DB에 저장된 파일의 상세정보를 조회합니다.
+   *
+   * @param id  DB에 저장된 파일 ID
+   * @param <T> FileDetailResponse
+   * @return 파일 조회 결과
+   */
   public <T> SingleResponse<T> findById(Long id) {
     File file = fileRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 파일입니다."));

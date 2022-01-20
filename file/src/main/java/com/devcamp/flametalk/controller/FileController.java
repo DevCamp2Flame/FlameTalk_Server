@@ -48,6 +48,12 @@ public class FileController {
     return ResponseEntity.ok().build();
   }
 
+  /**
+   * 요청받은 파일에 대한 상세 정보를 조회합니다.
+   *
+   * @param fileId DB에 저장된 파일 ID
+   * @return 파일 상세 정보
+   */
   @GetMapping("/{fileId}")
   public ResponseEntity<SingleResponse<FileDetailResponse>> findById(@PathVariable Long fileId) {
     SingleResponse<FileDetailResponse> response = fileService.findById(fileId);
@@ -56,9 +62,9 @@ public class FileController {
   }
 
   /**
-   * 파일 삭제 컨트롤러입니다.
+   * 요청받은 파일을 삭제합니다.
    *
-   * @param fileId DB에 저장된 파일의 ID
+   * @param fileId DB에 저장된 파일 ID
    * @return 삭제 결과에 따른 응답 정보
    */
   @DeleteMapping("/{fileId}")
