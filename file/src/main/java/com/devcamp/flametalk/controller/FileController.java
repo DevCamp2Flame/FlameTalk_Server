@@ -1,6 +1,7 @@
 package com.devcamp.flametalk.controller;
 
 import com.devcamp.flametalk.dto.FileDetailResponse;
+import com.devcamp.flametalk.dto.SimpleResponse;
 import com.devcamp.flametalk.dto.SingleResponse;
 import com.devcamp.flametalk.service.FileService;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,5 +53,18 @@ public class FileController {
     SingleResponse<FileDetailResponse> response = fileService.findById(fileId);
     log.info("[File Searched]" + response.toString());
     return ResponseEntity.ok(response);
+  }
+
+  /**
+   * 파일 삭제 컨트롤러입니다.
+   *
+   * @param fileId DB에 저장된 파일의 ID
+   * @return 삭제 결과에 따른 응답 정보
+   */
+  @DeleteMapping("/{fileId}")
+  public ResponseEntity<SimpleResponse> deleteById(@PathVariable Long fileId) {
+    SimpleResponse response = fileService.deleteById(fileId);
+    log.info("[File Deleted] fileId: {}", fileId);
+    return ResponseEntity.ok().body(response);
   }
 }

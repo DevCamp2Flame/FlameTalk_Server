@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class S3Uploader {
+public class S3Util {
 
   private final AmazonS3Client amazonS3Client;
 
@@ -71,5 +71,9 @@ public class S3Uploader {
       return Optional.of(convertFile);
     }
     return Optional.empty();
+  }
+
+  public void deleteS3File(String key) {
+    amazonS3Client.deleteObject(bucket, key);
   }
 }
