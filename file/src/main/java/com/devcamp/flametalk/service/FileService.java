@@ -5,10 +5,10 @@ import com.devcamp.flametalk.domain.ChatroomRepository;
 import com.devcamp.flametalk.domain.File;
 import com.devcamp.flametalk.domain.FileRepository;
 import com.devcamp.flametalk.domain.ResponseMessage;
+import com.devcamp.flametalk.dto.CommonResponse;
 import com.devcamp.flametalk.dto.FileDetailResponse;
 import com.devcamp.flametalk.dto.S3UploadedFile;
-import com.devcamp.flametalk.dto.SimpleResponse;
-import com.devcamp.flametalk.dto.SingleResponse;
+import com.devcamp.flametalk.dto.SingleDataResponse;
 import com.devcamp.flametalk.util.S3Util;
 import java.io.IOException;
 import java.util.Optional;
@@ -59,14 +59,14 @@ public class FileService {
    * @param <T> FileDetailResponse
    * @return 파일 조회 결과
    */
-  public <T> SingleResponse<T> findById(Long id) {
+  public <T> SingleDataResponse<T> findById(Long id) {
     File file = fileRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 파일입니다."));
 
     FileDetailResponse fileDetail = new FileDetailResponse(file);
-    SingleResponse singleResponse = new SingleResponse(fileDetail);
-    singleResponse.setSuccessResponse("파일 조회 성공");
-    return singleResponse;
+    SingleDataResponse singleDataResponse = new SingleDataResponse(fileDetail);
+    singleDataResponse.success(ResponseMessage.FILE_DETAIL_SUCCESS);
+    return singleDataResponse;
   }
 
   /**
@@ -75,7 +75,7 @@ public class FileService {
    * @param id DB에 저장된 파일 ID
    * @return 파일 삭제 성공 여부
    */
-  public SimpleResponse deleteById(Long id) {
+  public CommonResponse deleteById(Long id) {
     File file = fileRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 파일입니다."));
     fileRepository.deleteById(id);
@@ -85,7 +85,7 @@ public class FileService {
         .orElse("profile/") + file.getTitle() + "." + file.getExtension();
     s3Util.deleteS3File(fileKey);
 
-    SimpleResponse response = new SimpleResponse();
+    CommonResponse response = new CommonResponse();
     response.success(ResponseMessage.FILE_DELETE_SUCCESS);
     return response;
   }

@@ -1,10 +1,11 @@
 package com.devcamp.flametalk.controller;
 
+import com.devcamp.flametalk.dto.CommonResponse;
 import com.devcamp.flametalk.dto.FileDetailResponse;
-import com.devcamp.flametalk.dto.SimpleResponse;
-import com.devcamp.flametalk.dto.SingleResponse;
+import com.devcamp.flametalk.dto.SingleDataResponse;
 import com.devcamp.flametalk.service.FileService;
 import java.io.IOException;
+import java.net.URI;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +46,7 @@ public class FileController {
 
     //TODO: Exception 처리
 
-    return ResponseEntity.ok().build();
+    return ResponseEntity.created(URI.create("api/file/" + id)).build();
   }
 
   /**
@@ -55,8 +56,8 @@ public class FileController {
    * @return 파일 상세 정보
    */
   @GetMapping("/{fileId}")
-  public ResponseEntity<SingleResponse<FileDetailResponse>> findById(@PathVariable Long fileId) {
-    SingleResponse<FileDetailResponse> response = fileService.findById(fileId);
+  public ResponseEntity<SingleDataResponse<?>> findById(@PathVariable Long fileId) {
+    SingleDataResponse<FileDetailResponse> response = fileService.findById(fileId);
     log.info("[File Searched]" + response.toString());
     return ResponseEntity.ok(response);
   }
@@ -68,8 +69,8 @@ public class FileController {
    * @return 삭제 결과에 따른 응답 정보
    */
   @DeleteMapping("/{fileId}")
-  public ResponseEntity<SimpleResponse> deleteById(@PathVariable Long fileId) {
-    SimpleResponse response = fileService.deleteById(fileId);
+  public ResponseEntity<CommonResponse> deleteById(@PathVariable Long fileId) {
+    CommonResponse response = fileService.deleteById(fileId);
     log.info("[File Deleted] fileId: {}", fileId);
     return ResponseEntity.ok().body(response);
   }

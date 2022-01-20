@@ -8,11 +8,11 @@ import lombok.Getter;
  * @param <T> 적합한 response dto
  */
 @Getter
-public class SingleResponse<T> extends CommonResponse {
+public class SingleDataResponse<T> extends CommonResponse {
 
   private T data;
 
-  public SingleResponse(T data) {
+  public SingleDataResponse(T data) {
     super();
     this.data = data;
   }
