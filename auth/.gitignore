@@ -1,0 +1,40 @@
+HELP.md
+.gradle
+build
+!gradlewrappergradle-wrapper.jar
+!srcmainbuild
+!srctestbuild
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin
+!srcmainbin
+!srctestbin
+
+### IntelliJ IDEA ###
+.idea
+.iws
+.iml
+.ipr
+out
+!srcmainout
+!srctestout
+
+### NetBeans ###
+nbprojectprivate
+nbbuild
+dist
+nbdist
+.nb-gradle
+
+### VS Code ###
+.vscode
+
+### log ###
+logs
