@@ -56,10 +56,10 @@ public class FileController {
    * @return 파일 상세 정보
    */
   @GetMapping("/{fileId}")
-  public ResponseEntity<SingleDataResponse<?>> findById(@PathVariable Long fileId) {
+  public ResponseEntity<SingleDataResponse> findById(@PathVariable Long fileId) {
     SingleDataResponse<FileDetailResponse> response = fileService.findById(fileId);
     log.info("[File Searched]" + response.toString());
-    return ResponseEntity.ok(response);
+    return ResponseEntity.ok().body(response);
   }
 
   /**
