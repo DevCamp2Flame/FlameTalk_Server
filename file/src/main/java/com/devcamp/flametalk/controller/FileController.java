@@ -6,6 +6,7 @@ import com.devcamp.flametalk.dto.SingleDataResponse;
 import com.devcamp.flametalk.service.FileService;
 import java.io.IOException;
 import java.net.URI;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -39,8 +40,8 @@ public class FileController {
    * @throws IOException File 처리 실패한 경우
    */
   @PostMapping
-  public ResponseEntity<Void> create(@RequestPart MultipartFile file,
-      @RequestPart(required = false) String chatroomId) throws IOException {
+  public ResponseEntity<Void> create(@RequestPart("file") MultipartFile file,
+      @RequestPart(required = false, name = "chatroomId") String chatroomId) throws IOException {
     Long id = fileService.create(file, chatroomId);
     log.info("[File Saved] " + id);
 
