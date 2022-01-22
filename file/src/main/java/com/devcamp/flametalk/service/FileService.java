@@ -1,5 +1,8 @@
 package com.devcamp.flametalk.service;
 
+import static com.devcamp.flametalk.error.ErrorCode.CHATROOM_NOT_FOUND;
+import static com.devcamp.flametalk.error.ErrorCode.FILE_NOT_FOUND;
+
 import com.devcamp.flametalk.domain.Chatroom;
 import com.devcamp.flametalk.domain.ChatroomRepository;
 import com.devcamp.flametalk.domain.File;
@@ -9,10 +12,10 @@ import com.devcamp.flametalk.dto.CommonResponse;
 import com.devcamp.flametalk.dto.FileDetailResponse;
 import com.devcamp.flametalk.dto.S3UploadedFile;
 import com.devcamp.flametalk.dto.SingleDataResponse;
+import com.devcamp.flametalk.error.exception.EntityNotFoundException;
 import com.devcamp.flametalk.util.S3Util;
 import java.io.IOException;
 import java.util.Optional;
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,7 +44,7 @@ public class FileService {
   public Long create(MultipartFile file, String chatroomId) throws IOException {
     Optional<Chatroom> chatroom = Optional.ofNullable(chatroomId)
         .map(id -> chatroomRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅방입니다.")));
+            .orElseThrow(() -> new EntityNotFoundException(CHATROOM_NOT_FOUND)));
     String dirName = chatroom.map(room -> "chatroom/" + room.getId()).orElse("profile");
 
     S3UploadedFile uploadFile = new S3UploadedFile(file,
@@ -61,7 +64,7 @@ public class FileService {
    */
   public <T> SingleDataResponse<T> findById(Long id) {
     File file = fileRepository.findById(id)
-        .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 파일입니다."));
+        .orElseThrow(() -> new EntityNotFoundException(FILE_NOT_FOUND));
 
     FileDetailResponse fileDetail = new FileDetailResponse(file);
     SingleDataResponse singleDataResponse = new SingleDataResponse(fileDetail);
@@ -77,7 +80,7 @@ public class FileService {
    */
   public CommonResponse deleteById(Long id) {
     File file = fileRepository.findById(id)
-        .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 파일입니다."));
+        .orElseThrow(() -> new EntityNotFoundException(FILE_NOT_FOUND));
     fileRepository.deleteById(id);
 
     String fileKey = Optional.ofNullable(file.getChatroom().getId())
