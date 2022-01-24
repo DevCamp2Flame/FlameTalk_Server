@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 /**
  * 프로젝트 전역에 발생하는 Exception Handler 입니다.
@@ -24,10 +24,10 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
   }
 
-  @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-  protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
-      MethodArgumentTypeMismatchException e) {
-    log.error("[Method Argument Type Mismatch Exception]" + e);
+  @ExceptionHandler(MissingServletRequestPartException.class)
+  protected ResponseEntity<ErrorResponse> handleMissingServletRequestPartException(
+      MissingServletRequestPartException e) {
+    log.error("[Missing Servlet RequestPart Exception]" + e);
     ErrorResponse response = ErrorResponse.from(ErrorCode.BAD_REQUEST);
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
   }
