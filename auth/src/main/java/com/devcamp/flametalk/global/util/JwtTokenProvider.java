@@ -1,8 +1,9 @@
-package com.devcamp.flametalk.token.service;
+package com.devcamp.flametalk.global.util;
 
-import static com.devcamp.flametalk.exception.ErrorCode.REDIRECT_TO_LOGIN;
+import static com.devcamp.flametalk.global.error.ErrorCode.REDIRECT_TO_LOGIN;
 
-import com.devcamp.flametalk.exception.CustomException;
+import com.devcamp.flametalk.global.error.exception.CustomException;
+import com.devcamp.flametalk.token.service.TokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -72,7 +73,10 @@ public class JwtTokenProvider {
     tokens.put("access_token", accessToken);
     tokens.put("refresh_token", refreshToken);
 
-    tokenService.save(userId, deviceId, accessToken, refreshToken);
+    tokenService.saveAccessToken(userId, deviceId, accessToken,
+        tokenValidMillisecondForAccessToken);
+    tokenService.saveRefreshToken(userId, deviceId, refreshToken,
+        tokenValidMillisecondForRefreshToken);
 
     return tokens;
   }
@@ -138,35 +142,40 @@ public class JwtTokenProvider {
   /**
    * 토큰을 갱신합니다.
    *
-   * @param prevAccessToken 만료된 이전 accessToken
+   * @param prevAccessToken  만료된 이전 accessToken
    * @param prevRefreshToken 유효한 refreshToken
    * @return 새로 발급된 토큰
    */
   public Map<String, String> renewToken(String prevAccessToken, String prevRefreshToken) {
     // accessToken 의 유효시간이 아직 남아있거나, DB에 저장된 토큰값과 다르면 탈취되었다고 판단하여 재로그인하게 유도한다.
-    if (validateToken(prevAccessToken) || !tokenService.isEqualPrevToken(
-        getDeviceId(prevRefreshToken), prevAccessToken, prevRefreshToken)) {
-      tokenService.save(getUserId(prevRefreshToken), getDeviceId(prevRefreshToken), "", "");
+    String userId = getUserId(prevRefreshToken);
+    String deviceId = getDeviceId(prevRefreshToken);
+
+    if (validateToken(prevAccessToken) ||
+        !tokenService.isEqualPrevTokenForAccess(userId, deviceId, prevAccessToken) ||
+        !tokenService.isEqualPrevTokenForRefresh(userId, deviceId, prevRefreshToken)) {
+      tokenService.delete(userId, deviceId);
       throw new CustomException(REDIRECT_TO_LOGIN);
     }
 
     Date now = new Date();
     String accessToken = createToken(makeClaims(prevRefreshToken), now,
         tokenValidMillisecondForAccessToken);
-    String refreshToken = prevRefreshToken;
+    tokenService.saveAccessToken(userId, deviceId, accessToken,
+        tokenValidMillisecondForAccessToken);
 
     // refreshToken 만료 기간이 일주일 이내라면 갱신
+    String refreshToken = prevRefreshToken;
     if (prevRefreshToken != null && validateTokenWithinWeek(prevRefreshToken)) {
       refreshToken = createToken(makeClaims(prevRefreshToken), now,
+          tokenValidMillisecondForRefreshToken);
+      tokenService.saveRefreshToken(userId, deviceId, refreshToken,
           tokenValidMillisecondForRefreshToken);
     }
 
     Map<String, String> tokens = new HashMap<>();
     tokens.put("access_token", accessToken);
     tokens.put("refresh_token", refreshToken);
-
-    tokenService.save(getUserId(accessToken), getDeviceId(accessToken),
-        accessToken, refreshToken);
 
     return tokens;
   }

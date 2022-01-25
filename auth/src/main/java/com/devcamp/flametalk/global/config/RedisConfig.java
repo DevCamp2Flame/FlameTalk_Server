@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.config;
+package com.devcamp.flametalk.global.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;

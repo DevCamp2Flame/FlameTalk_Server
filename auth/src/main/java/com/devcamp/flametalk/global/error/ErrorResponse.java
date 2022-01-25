@@ -1,8 +1,9 @@
-package com.devcamp.flametalk.exception;
+package com.devcamp.flametalk.global.error;
 
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 /**
@@ -24,12 +25,13 @@ public class ErrorResponse {
    * @param errorCode 에러 코드
    * @return ErrorCode 의 정보를 담아 ResponseEntity 를 반환
    */
-  public static ResponseEntity<ErrorResponse> toResponseEntity(ErrorCode errorCode) {
+  public static ResponseEntity<ErrorResponse> toResponseEntity(HttpStatus httpStatus,
+      ErrorCode errorCode) {
     return ResponseEntity
-        .status(errorCode.getHttpStatus())
+        .status(httpStatus)
         .body(ErrorResponse.builder()
-            .status(errorCode.getHttpStatus().value())
-            .error(errorCode.getHttpStatus().name())
+            .status(errorCode.getStatus())
+            .error(errorCode.getError())
             .code(errorCode.name())
             .message(errorCode.getMessage())
             .build()

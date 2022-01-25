@@ -1,5 +1,6 @@
-package com.devcamp.flametalk.exception;
+package com.devcamp.flametalk.global.error.exception;
 
+import com.devcamp.flametalk.global.error.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
