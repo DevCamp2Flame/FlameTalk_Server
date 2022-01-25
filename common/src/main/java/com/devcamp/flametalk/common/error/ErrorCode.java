@@ -25,6 +25,7 @@ public enum ErrorCode {
   MISMATCH_REFRESH_TOKEN(400, "BAD_REQUEST", "리프레시 토큰의 사용자 정보가 일치하지 않습니다."),
   MISMATCH_PASSWORD(400, "BAD_REQUEST", "비밀번호가 일치하지 않습니다."),
   LEAVE_USER(400, "BAD_REQUEST", "탈퇴한 사용자입니다."),
+  BAD_REQUEST(400, "BAD_REQUEST", "잘못된 요청 파라미터입니다."),
 
   // 404 NOT_FOUND : Resource 를 찾을 수 없음
   USER_NOT_FOUND(404, "NOT_FOUND", "해당 사용자 정보를 찾을 수 없습니다."),
@@ -32,7 +33,9 @@ public enum ErrorCode {
 
   // 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재
   DUPLICATE_PHONE_NUMBER(409, "CONFLICT", "이미 가입된 전화번호입니다."),
-  DUPLICATE_EMAIL(409, "CONFLICT", "이미 가입된 이메일입니다.");
+  DUPLICATE_EMAIL(409, "CONFLICT", "이미 가입된 이메일입니다."),
+
+  INTERNAL_SERVER_ERROR(500, "SERVER ERROR", "서버 오류입니다.");
 
   private final int status;
   private final String error;
