@@ -7,11 +7,8 @@ import com.devcamp.flametalk.domain.Chatroom;
 import com.devcamp.flametalk.domain.ChatroomRepository;
 import com.devcamp.flametalk.domain.File;
 import com.devcamp.flametalk.domain.FileRepository;
-import com.devcamp.flametalk.domain.ResponseMessage;
-import com.devcamp.flametalk.dto.CommonResponse;
 import com.devcamp.flametalk.dto.FileDetailResponse;
 import com.devcamp.flametalk.dto.S3UploadedFile;
-import com.devcamp.flametalk.dto.SingleDataResponse;
 import com.devcamp.flametalk.error.exception.EntityNotFoundException;
 import com.devcamp.flametalk.util.S3Util;
 import java.io.IOException;
@@ -58,38 +55,31 @@ public class FileService {
   /**
    * DB에 저장된 파일의 상세정보를 조회합니다.
    *
-   * @param id  DB에 저장된 파일 ID
-   * @param <T> FileDetailResponse
+   * @param id DB에 저장된 파일 ID
    * @return 파일 조회 결과
    */
-  public <T> SingleDataResponse<T> findById(Long id) {
+  public FileDetailResponse findById(Long id) {
     File file = fileRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(FILE_NOT_FOUND));
 
     FileDetailResponse fileDetail = new FileDetailResponse(file);
-    SingleDataResponse singleDataResponse = new SingleDataResponse(fileDetail);
-    singleDataResponse.success(ResponseMessage.FILE_DETAIL_SUCCESS);
-    return singleDataResponse;
+    return fileDetail;
   }
 
   /**
    * id에 해당하는 파일을 DB 에서 삭제하고 해당 파일을 S3에서도 삭제합니다.
    *
    * @param id DB에 저장된 파일 ID
-   * @return 파일 삭제 성공 여부
    */
-  public CommonResponse deleteById(Long id) {
+  public void deleteById(Long id) {
     File file = fileRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(FILE_NOT_FOUND));
     fileRepository.deleteById(id);
 
-    String fileKey = Optional.ofNullable(file.getChatroom().getId())
-        .map(roomId -> "chatroom/" + roomId + "/")
+    String fileKey = Optional.ofNullable(file.getChatroom())
+        .map(chatroom -> "chatroom/" + chatroom.getId() + "/")
         .orElse("profile/") + file.getTitle() + "." + file.getExtension();
-    s3Util.deleteS3File(fileKey);
 
-    CommonResponse response = new CommonResponse();
-    response.success(ResponseMessage.FILE_DELETE_SUCCESS);
-    return response;
+    s3Util.deleteS3File(fileKey);
   }
 }

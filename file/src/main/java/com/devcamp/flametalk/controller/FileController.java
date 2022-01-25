@@ -1,5 +1,6 @@
 package com.devcamp.flametalk.controller;
 
+import com.devcamp.flametalk.domain.FileResponseMessage;
 import com.devcamp.flametalk.dto.CommonResponse;
 import com.devcamp.flametalk.dto.FileDetailResponse;
 import com.devcamp.flametalk.dto.SingleDataResponse;
@@ -39,7 +40,7 @@ public class FileController {
    * @throws IOException File 처리 실패한 경우
    */
   @PostMapping
-  public ResponseEntity<Void> create(@RequestParam(name = "file") MultipartFile file,
+  public ResponseEntity<CommonResponse> create(@RequestParam(name = "file") MultipartFile file,
       @RequestParam(required = false, name = "chatroomId") String chatroomId)
       throws IOException {
     Long id = fileService.create(file, chatroomId);
@@ -47,7 +48,9 @@ public class FileController {
 
     //TODO: Exception 처리
 
-    return ResponseEntity.created(URI.create("api/file/" + id)).build();
+    CommonResponse response = new CommonResponse();
+    response.success(FileResponseMessage.FILE_CREATE_SUCCESS.getMessage());
+    return ResponseEntity.created(URI.create("api/file/" + id)).body(response);
   }
 
   /**
@@ -58,8 +61,11 @@ public class FileController {
    */
   @GetMapping("/{fileId}")
   public ResponseEntity<SingleDataResponse> findById(@PathVariable Long fileId) {
-    SingleDataResponse<FileDetailResponse> response = fileService.findById(fileId);
-    log.info("[File Searched]" + response.toString());
+    FileDetailResponse fileDetail = fileService.findById(fileId);
+    log.info("[File Searched]" + fileDetail.toString());
+
+    SingleDataResponse response = new SingleDataResponse(fileDetail);
+    response.success(FileResponseMessage.FILE_DETAIL_SUCCESS.getMessage());
     return ResponseEntity.ok().body(response);
   }
 
@@ -71,8 +77,11 @@ public class FileController {
    */
   @DeleteMapping("/{fileId}")
   public ResponseEntity<CommonResponse> deleteById(@PathVariable Long fileId) {
-    CommonResponse response = fileService.deleteById(fileId);
+    fileService.deleteById(fileId);
     log.info("[File Deleted] fileId: {}", fileId);
+
+    CommonResponse response = new CommonResponse();
+    response.success(FileResponseMessage.FILE_DELETE_SUCCESS.getMessage());
     return ResponseEntity.ok().body(response);
   }
 }

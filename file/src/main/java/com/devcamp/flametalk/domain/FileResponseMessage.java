@@ -8,7 +8,8 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public enum ResponseMessage {
+public enum FileResponseMessage {
+  FILE_CREATE_SUCCESS("파일 생성 성공"),
   FILE_DELETE_SUCCESS("파일 삭제 성공"),
   FILE_DETAIL_SUCCESS("파일 조회 성공");
 

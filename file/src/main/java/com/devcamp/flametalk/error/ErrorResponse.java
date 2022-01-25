@@ -1,5 +1,6 @@
 package com.devcamp.flametalk.error;
 
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,9 +14,12 @@ public class ErrorResponse {
 
   private int status;
   private String message;
+  private String error;
+  private String code;
+  private LocalDateTime timestamp;
 
   /**
-   * 정적 팩토리 메소드
+   * 정적 팩토리 메소드입니다.
    *
    * @param error 예외 종류
    * @return 클라이언트가 확인가능한 response
@@ -24,6 +28,9 @@ public class ErrorResponse {
     ErrorResponse response = new ErrorResponse();
     response.status = error.getStatus();
     response.message = error.getMessage();
+    response.error = error.getError();
+    response.code = error.name();
+    response.timestamp = LocalDateTime.now();
     return response;
   }
 }

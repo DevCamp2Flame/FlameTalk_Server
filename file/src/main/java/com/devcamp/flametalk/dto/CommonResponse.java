@@ -1,6 +1,5 @@
 package com.devcamp.flametalk.dto;
 
-import com.devcamp.flametalk.domain.ResponseMessage;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -13,8 +12,8 @@ public class CommonResponse {
   private int status;
   private String message;
 
-  public void success(ResponseMessage message) {
+  public void success(String message) {
     this.status = HttpStatus.OK.value();
-    this.message = message.getMessage();
+    this.message = message;
   }
 }
