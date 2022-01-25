@@ -1,6 +1,6 @@
 package com.devcamp.flametalk.token.domain;
 
-import com.devcamp.flametalk.util.BaseTimeEntity;
+import com.devcamp.flametalk.common.util.BaseTimeEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
