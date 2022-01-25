@@ -1,25 +1,26 @@
 package com.devcamp.flametalk.user.service;
 
-import static com.devcamp.flametalk.exception.ErrorCode.DUPLICATE_PHONE_NUMBER;
-import static com.devcamp.flametalk.exception.ErrorCode.INVALID_REFRESH_TOKEN;
-import static com.devcamp.flametalk.exception.ErrorCode.LEAVE_USER;
-import static com.devcamp.flametalk.exception.ErrorCode.MISMATCH_PASSWORD;
-import static com.devcamp.flametalk.exception.ErrorCode.USER_NOT_FOUND;
+import static com.devcamp.flametalk.global.error.ErrorCode.DUPLICATE_EMAIL;
+import static com.devcamp.flametalk.global.error.ErrorCode.DUPLICATE_PHONE_NUMBER;
+import static com.devcamp.flametalk.global.error.ErrorCode.INVALID_REFRESH_TOKEN;
+import static com.devcamp.flametalk.global.error.ErrorCode.LEAVE_USER;
+import static com.devcamp.flametalk.global.error.ErrorCode.MISMATCH_PASSWORD;
+import static com.devcamp.flametalk.global.error.ErrorCode.USER_NOT_FOUND;
 
-import com.devcamp.flametalk.common.domain.Device;
-import com.devcamp.flametalk.common.domain.User;
-import com.devcamp.flametalk.common.repository.DeviceRepository;
-import com.devcamp.flametalk.common.repository.UserRepository;
-import com.devcamp.flametalk.common.type.Social;
-import com.devcamp.flametalk.common.type.Status;
-import com.devcamp.flametalk.exception.CustomException;
+import com.devcamp.flametalk.device.Device;
+import com.devcamp.flametalk.device.DeviceRepository;
+import com.devcamp.flametalk.global.error.CustomException;
+import com.devcamp.flametalk.user.domain.Social;
+import com.devcamp.flametalk.user.domain.Status;
+import com.devcamp.flametalk.user.domain.User;
 import com.devcamp.flametalk.user.domain.UserRedisRepository;
+import com.devcamp.flametalk.user.domain.UserRepository;
 import com.devcamp.flametalk.user.dto.RenewTokenDto;
 import com.devcamp.flametalk.user.dto.SignInRequestDto;
 import com.devcamp.flametalk.user.dto.SignInResponseDto;
 import com.devcamp.flametalk.user.dto.SignUpRequestDto;
 import com.devcamp.flametalk.user.dto.SignUpResponseDto;
-import com.devcamp.flametalk.token.service.JwtTokenProvider;
+import com.devcamp.flametalk.global.util.JwtTokenProvider;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -132,7 +133,7 @@ public class UserService implements UserDetailsService {
     // 유저 캐싱
     userRedisRepository.saveIdleUser(user.getId());
 
-    return "탈퇴 완료 : " + user.getNickname() + "님 30일 이내에 재접속하면 탈퇴되지 않습니다.";
+    return user.getNickname() + "님 30일 이내에 재접속하면 탈퇴되지 않습니다.";
   }
 
   /**
@@ -153,5 +154,11 @@ public class UserService implements UserDetailsService {
     Map<String, String> tokens = jwtTokenProvider.renewToken(accessToken, refreshToken);
 
     return new RenewTokenDto(user, tokens);
+  }
+
+  public Boolean checkEmail(String email) {
+    if(userRepository.findByEmail(email).isPresent())
+      throw new CustomException(DUPLICATE_EMAIL);
+    return true;
   }
 }
