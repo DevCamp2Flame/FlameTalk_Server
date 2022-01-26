@@ -1,13 +1,12 @@
 package com.devcamp.flametalk.user.controller;
 
-import static com.devcamp.flametalk.global.common.DefaultResponse.toResponseEntity;
-import static com.devcamp.flametalk.global.common.StatusCode.CREATED_TOKEN;
-import static com.devcamp.flametalk.global.common.StatusCode.CREATED_USER;
-import static com.devcamp.flametalk.global.common.StatusCode.SUCCESS_LEAVE_USER;
-import static com.devcamp.flametalk.global.common.StatusCode.SUCCESS_LOGIN;
-import static com.devcamp.flametalk.global.common.StatusCode.VALID_EMAIL;
+import static com.devcamp.flametalk.global.response.StatusCode.CREATED_TOKEN;
+import static com.devcamp.flametalk.global.response.StatusCode.CREATED_USER;
+import static com.devcamp.flametalk.global.response.StatusCode.SUCCESS_LEAVE_USER;
+import static com.devcamp.flametalk.global.response.StatusCode.SUCCESS_LOGIN;
+import static com.devcamp.flametalk.global.response.StatusCode.VALID_EMAIL;
 
-import com.devcamp.flametalk.global.common.DefaultResponse;
+import com.devcamp.flametalk.global.response.DefaultResponse;
 import com.devcamp.flametalk.user.dto.RenewTokenDto;
 import com.devcamp.flametalk.user.dto.SignInRequestDto;
 import com.devcamp.flametalk.user.dto.SignInResponseDto;
@@ -39,13 +38,15 @@ public class UserController {
   @PostMapping("/signup")
   public ResponseEntity<DefaultResponse<SignUpResponseDto>> signUp(
       @RequestBody SignUpRequestDto signUpRequestDto) {
-    return DefaultResponse.toResponseEntity(CREATED_USER, userService.signUp(signUpRequestDto));
+    return DefaultResponse.toResponseEntity(HttpStatus.OK, CREATED_USER,
+        userService.signUp(signUpRequestDto));
   }
 
   @PostMapping("/signin")
   public ResponseEntity<DefaultResponse<SignInResponseDto>> signIn(
       @RequestBody SignInRequestDto signInRequestDto) {
-    return DefaultResponse.toResponseEntity(SUCCESS_LOGIN, userService.signIn(signInRequestDto));
+    return DefaultResponse.toResponseEntity(HttpStatus.OK, SUCCESS_LOGIN,
+        userService.signIn(signInRequestDto));
   }
 
   // todo: 이메일 인증 GetMapping
@@ -53,19 +54,21 @@ public class UserController {
   @DeleteMapping("/leave")
   public ResponseEntity<DefaultResponse<String>> leave(
       @RequestHeader("ACCESS-TOKEN") String token) {
-    return DefaultResponse.toResponseEntity(SUCCESS_LEAVE_USER, userService.leave(token));
+    return DefaultResponse.toResponseEntity(HttpStatus.OK, SUCCESS_LEAVE_USER,
+        userService.leave(token));
   }
 
   @GetMapping("/token")
   public ResponseEntity<DefaultResponse<RenewTokenDto>> renewToken(
       @RequestHeader("ACCESS-TOKEN") String accessToken,
       @RequestHeader("REFRESH-TOKEN") String refreshToken) {
-    return DefaultResponse.toResponseEntity(CREATED_TOKEN,
+    return DefaultResponse.toResponseEntity(HttpStatus.OK, CREATED_TOKEN,
         userService.renewToken(accessToken, refreshToken));
   }
 
   @GetMapping("/check")
   public ResponseEntity<DefaultResponse<Boolean>> checkEmail(@RequestParam("email") String email) {
-    return DefaultResponse.toResponseEntity(HttpStatus.OK, VALID_EMAIL, userService.checkEmail(email));
+    return DefaultResponse.toResponseEntity(HttpStatus.OK, VALID_EMAIL,
+        userService.checkEmail(email));
   }
 }

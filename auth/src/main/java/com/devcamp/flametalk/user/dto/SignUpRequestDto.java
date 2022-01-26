@@ -1,8 +1,8 @@
 package com.devcamp.flametalk.user.dto;
 
-import com.devcamp.flametalk.common.domain.User;
-import com.devcamp.flametalk.common.type.Social;
-import com.devcamp.flametalk.common.type.Status;
+import com.devcamp.flametalk.user.domain.Social;
+import com.devcamp.flametalk.user.domain.Status;
+import com.devcamp.flametalk.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

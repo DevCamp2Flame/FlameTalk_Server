@@ -1,6 +1,5 @@
 package com.devcamp.flametalk.token.domain;
 
-import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -24,19 +23,19 @@ public class TokenRedisRepository {
   }
 
   public void saveAccessToken(String key, String accessToken, long timeout) {
-    valueOperations.set(key + "accessToken", accessToken, timeout, TimeUnit.MILLISECONDS);
+    valueOperations.set("accessToken:" + key, accessToken, timeout, TimeUnit.MILLISECONDS);
   }
 
   public void saveRefreshToken(String key, String refreshToken, long timeout) {
-    valueOperations.set(key + "refreshToken", refreshToken, timeout, TimeUnit.MILLISECONDS);
+    valueOperations.set("refreshToken:" + key, refreshToken, timeout, TimeUnit.MILLISECONDS);
   }
 
   public void deleteToken(String key) {
-    redisTemplate.delete(key + "accessToken");
-    redisTemplate.delete(key + "refreshToken");
+    redisTemplate.delete("accessToken:" + key);
+    redisTemplate.delete("refreshToken:" + key);
   }
 
   public String findToken(String userId, String deviceId, String token) {
-    return valueOperations.get(userId + deviceId + token);
+    return valueOperations.get(token + ":" + userId + deviceId);
   }
 }

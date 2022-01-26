@@ -54,22 +54,6 @@ CREATE TABLE IF NOT EXISTS `flametalk_db`.`device`
 )
     ENGINE = InnoDB;
 
--- -----------------------------------------------------
--- Table `flametalk_db`.`token`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `flametalk_db`.`token`
-(
-    `id`                 BIGINT       NOT NULL AUTO_INCREMENT,
-    `user_id`            VARCHAR(20)  NOT NULL,
-    `device_id`          VARCHAR(16)  NOT NULL,
-    `access_token`       VARCHAR(244) NULL,
-    `refresh_token`      VARCHAR(244) NULL,
-    `created_at`         DATETIME     NOT NULL,
-    `updated_at`         DATETIME     NOT NULL,
-    PRIMARY KEY (`id`)
-)
-    ENGINE = InnoDB;
-
 SET SQL_MODE = @OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS = @OLD_UNIQUE_CHECKS;

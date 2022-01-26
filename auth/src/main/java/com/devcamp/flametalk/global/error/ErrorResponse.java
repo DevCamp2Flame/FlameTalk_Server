@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.common.error;
+package com.devcamp.flametalk.global.error;
 
 import java.time.LocalDateTime;
 import lombok.Builder;
