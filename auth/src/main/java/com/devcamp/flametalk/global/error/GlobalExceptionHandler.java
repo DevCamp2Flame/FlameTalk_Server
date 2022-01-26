@@ -1,6 +1,8 @@
 package com.devcamp.flametalk.global.error;
 
+import static com.devcamp.flametalk.global.error.ErrorCode.EXPIRED_TOKEN;
 import static com.devcamp.flametalk.global.error.ErrorCode.INTERNAL_SERVER_ERROR;
+import static com.devcamp.flametalk.global.error.ErrorCode.INVALID_SIGNATURE;
 import static com.devcamp.flametalk.global.error.ErrorCode.INVALID_TOKEN;
 
 import com.devcamp.flametalk.global.error.exception.CustomException;
@@ -27,11 +29,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return ErrorResponse.toResponseEntity(HttpStatus.BAD_REQUEST, e.getErrorCode());
   }
 
-  @ExceptionHandler({SignatureException.class, MalformedJwtException.class,
-      ExpiredJwtException.class})
+  @ExceptionHandler({SignatureException.class, MalformedJwtException.class})
   protected ResponseEntity<ErrorResponse> handleJwtException(Exception e) {
     log.error("[Invalid token] " + e);
-    return ErrorResponse.toResponseEntity(HttpStatus.UNAUTHORIZED, INVALID_TOKEN);
+    return ErrorResponse.toResponseEntity(HttpStatus.UNAUTHORIZED, INVALID_SIGNATURE);
+  }
+
+  @ExceptionHandler(ExpiredJwtException.class)
+  protected ResponseEntity<ErrorResponse> handleJwtExpiredException(Exception e) {
+    log.error("[Expired token] " + e);
+    return ErrorResponse.toResponseEntity(HttpStatus.UNAUTHORIZED, EXPIRED_TOKEN);
   }
 
   @ExceptionHandler(Exception.class)

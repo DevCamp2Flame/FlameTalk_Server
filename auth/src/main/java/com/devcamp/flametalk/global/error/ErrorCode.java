@@ -22,8 +22,7 @@ public enum ErrorCode {
 
   // 401 UNAUTHORIZED : 권한 없음
   INVALID_TOKEN(401, "UNAUTHORIZED", "토큰이 유효하지 않습니다."),
-  INVALID_SIGNATURE(401, "UNAUTHORIZED", "토큰의 서명이 유효하지 않습니다."),
-  INVALID_MALFORME(401, "UNAUTHORIZED", "토큰의 구조가 유효하지 않습니다."),
+  INVALID_SIGNATURE(401, "UNAUTHORIZED", "토큰의 서명 또는 구조가 유효하지 않습니다."),
   EXPIRED_TOKEN(401, "UNAUTHORIZED", "토큰의 유효 기간이 지났습니다."),
 
   // 404 NOT_FOUND : Resource 를 찾을 수 없음

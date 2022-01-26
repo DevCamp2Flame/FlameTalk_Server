@@ -36,6 +36,6 @@ public class TokenRedisRepository {
   }
 
   public String findToken(String userId, String deviceId, String token) {
-    return valueOperations.get(userId + deviceId + token);
+    return valueOperations.get(token + ":" + userId + deviceId);
   }
 }
