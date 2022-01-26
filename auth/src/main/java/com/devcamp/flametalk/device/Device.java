@@ -1,7 +1,7 @@
 package com.devcamp.flametalk.device;
 
+import com.devcamp.flametalk.global.util.BaseTimeEntity;
 import com.devcamp.flametalk.user.domain.User;
-import com.devcamp.flametalk.util.BaseTimeEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

@@ -1,6 +1,6 @@
 package com.devcamp.flametalk.user.domain;
 
-import com.devcamp.flametalk.util.BaseTimeEntity;
+import com.devcamp.flametalk.global.util.BaseTimeEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Collection;
 import javax.persistence.Column;
@@ -31,7 +31,7 @@ public class User extends BaseTimeEntity implements UserDetails {
   @GeneratedValue(generator = "uuid")
   @GenericGenerator(
       name = "uuid",
-      strategy = "com.devcamp.flametalk.util.UuidGenerator"
+      strategy = "com.devcamp.flametalk.global.util.UuidGenerator"
   )
   @Column(nullable = false, columnDefinition = "VARCHAR(20)")
   private String id;

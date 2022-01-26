@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.util;
+package com.devcamp.flametalk.global.util;
 
 import java.time.LocalDateTime;
 import javax.persistence.Column;

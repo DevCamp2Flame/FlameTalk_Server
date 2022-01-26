@@ -36,8 +36,8 @@ public class JwtTokenProvider {
 
   @Value("spring.jwt.secret")
   private String secretKey;
-  private long tokenValidMillisecondForAccessToken = 1000L * 60 * 60; // 1시간 동안 토큰 유효
-  private long tokenValidMillisecondForRefreshToken = 1000L * 60 * 60 * 24 * 14; // 14일간 토큰 유효
+  private long validMillisecondForAccessToken = 1000L * 60 * 60; // 1시간 동안 토큰 유효
+  private long validMillisecondForRefreshToken = 1000L * 60 * 60 * 24 * 14; // 14일간 토큰 유효
   private String deviceId = "deviceId";
   private String nickname = "nickname";
   private String status = "status";
@@ -66,17 +66,17 @@ public class JwtTokenProvider {
 
     Claims claims = makeClaims(userId, nickname, status, deviceId);
     Date now = new Date();
-    String accessToken = createToken(claims, now, tokenValidMillisecondForAccessToken);
-    String refreshToken = createToken(claims, now, tokenValidMillisecondForRefreshToken);
+    String accessToken = createToken(claims, now, validMillisecondForAccessToken);
+    String refreshToken = createToken(claims, now, validMillisecondForRefreshToken);
 
     Map<String, String> tokens = new HashMap<>();
     tokens.put("access_token", accessToken);
     tokens.put("refresh_token", refreshToken);
 
     tokenService.saveAccessToken(userId, deviceId, accessToken,
-        tokenValidMillisecondForAccessToken);
+        validMillisecondForAccessToken);
     tokenService.saveRefreshToken(userId, deviceId, refreshToken,
-        tokenValidMillisecondForRefreshToken);
+        validMillisecondForRefreshToken);
 
     return tokens;
   }
@@ -151,26 +151,26 @@ public class JwtTokenProvider {
     String userId = getUserId(prevRefreshToken);
     String deviceId = getDeviceId(prevRefreshToken);
 
-    if (validateToken(prevAccessToken) ||
-        !tokenService.isEqualPrevTokenForAccess(userId, deviceId, prevAccessToken) ||
-        !tokenService.isEqualPrevTokenForRefresh(userId, deviceId, prevRefreshToken)) {
+    if (validateToken(prevAccessToken)
+        || !tokenService.isEqualPrevTokenForAccess(userId, deviceId, prevAccessToken)
+        || !tokenService.isEqualPrevTokenForRefresh(userId, deviceId, prevRefreshToken)) {
       tokenService.delete(userId, deviceId);
       throw new CustomException(REDIRECT_TO_LOGIN);
     }
 
     Date now = new Date();
     String accessToken = createToken(makeClaims(prevRefreshToken), now,
-        tokenValidMillisecondForAccessToken);
+        validMillisecondForAccessToken);
     tokenService.saveAccessToken(userId, deviceId, accessToken,
-        tokenValidMillisecondForAccessToken);
+        validMillisecondForAccessToken);
 
     // refreshToken 만료 기간이 일주일 이내라면 갱신
     String refreshToken = prevRefreshToken;
     if (prevRefreshToken != null && validateTokenWithinWeek(prevRefreshToken)) {
       refreshToken = createToken(makeClaims(prevRefreshToken), now,
-          tokenValidMillisecondForRefreshToken);
+          validMillisecondForRefreshToken);
       tokenService.saveRefreshToken(userId, deviceId, refreshToken,
-          tokenValidMillisecondForRefreshToken);
+          validMillisecondForRefreshToken);
     }
 
     Map<String, String> tokens = new HashMap<>();
@@ -224,5 +224,10 @@ public class JwtTokenProvider {
             new Date(now.getTime() + validMilisecond)) // set Expire Time
         .signWith(SignatureAlgorithm.HS256, secretKey) // 암호화 알고리즘, secret값 세팅
         .compact();
+  }
+
+  public boolean isEqualPrevTokenForAccess(String accessToken) {
+    return tokenService.isEqualPrevTokenForAccess(getUserId(accessToken), getDeviceId(accessToken),
+        accessToken);
   }
 }
