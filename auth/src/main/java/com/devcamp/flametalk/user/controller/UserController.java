@@ -38,13 +38,15 @@ public class UserController {
   @PostMapping("/signup")
   public ResponseEntity<DefaultResponse<SignUpResponseDto>> signUp(
       @RequestBody SignUpRequestDto signUpRequestDto) {
-    return DefaultResponse.toResponseEntity(HttpStatus.OK, CREATED_USER, userService.signUp(signUpRequestDto));
+    return DefaultResponse.toResponseEntity(HttpStatus.OK, CREATED_USER,
+        userService.signUp(signUpRequestDto));
   }
 
   @PostMapping("/signin")
   public ResponseEntity<DefaultResponse<SignInResponseDto>> signIn(
       @RequestBody SignInRequestDto signInRequestDto) {
-    return DefaultResponse.toResponseEntity(HttpStatus.OK, SUCCESS_LOGIN, userService.signIn(signInRequestDto));
+    return DefaultResponse.toResponseEntity(HttpStatus.OK, SUCCESS_LOGIN,
+        userService.signIn(signInRequestDto));
   }
 
   // todo: 이메일 인증 GetMapping
@@ -52,7 +54,8 @@ public class UserController {
   @DeleteMapping("/leave")
   public ResponseEntity<DefaultResponse<String>> leave(
       @RequestHeader("ACCESS-TOKEN") String token) {
-    return DefaultResponse.toResponseEntity(HttpStatus.OK, SUCCESS_LEAVE_USER, userService.leave(token));
+    return DefaultResponse.toResponseEntity(HttpStatus.OK, SUCCESS_LEAVE_USER,
+        userService.leave(token));
   }
 
   @GetMapping("/token")
@@ -65,6 +68,7 @@ public class UserController {
 
   @GetMapping("/check")
   public ResponseEntity<DefaultResponse<Boolean>> checkEmail(@RequestParam("email") String email) {
-    return DefaultResponse.toResponseEntity(HttpStatus.OK, VALID_EMAIL, userService.checkEmail(email));
+    return DefaultResponse.toResponseEntity(HttpStatus.OK, VALID_EMAIL,
+        userService.checkEmail(email));
   }
 }

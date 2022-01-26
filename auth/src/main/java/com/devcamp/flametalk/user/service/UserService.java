@@ -2,6 +2,7 @@ package com.devcamp.flametalk.user.service;
 
 import static com.devcamp.flametalk.global.error.ErrorCode.DUPLICATE_EMAIL;
 import static com.devcamp.flametalk.global.error.ErrorCode.DUPLICATE_PHONE_NUMBER;
+import static com.devcamp.flametalk.global.error.ErrorCode.INVALID_TOKEN;
 import static com.devcamp.flametalk.global.error.ErrorCode.LEAVE_USER;
 import static com.devcamp.flametalk.global.error.ErrorCode.MISMATCH_PASSWORD;
 import static com.devcamp.flametalk.global.error.ErrorCode.USER_NOT_FOUND;
@@ -9,6 +10,7 @@ import static com.devcamp.flametalk.global.error.ErrorCode.USER_NOT_FOUND;
 import com.devcamp.flametalk.device.Device;
 import com.devcamp.flametalk.device.DeviceRepository;
 import com.devcamp.flametalk.global.error.exception.CustomException;
+import com.devcamp.flametalk.global.util.JwtTokenProvider;
 import com.devcamp.flametalk.user.domain.Social;
 import com.devcamp.flametalk.user.domain.Status;
 import com.devcamp.flametalk.user.domain.User;
@@ -19,7 +21,6 @@ import com.devcamp.flametalk.user.dto.SignInRequestDto;
 import com.devcamp.flametalk.user.dto.SignInResponseDto;
 import com.devcamp.flametalk.user.dto.SignUpRequestDto;
 import com.devcamp.flametalk.user.dto.SignUpResponseDto;
-import com.devcamp.flametalk.global.util.JwtTokenProvider;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -122,6 +123,10 @@ public class UserService implements UserDetailsService {
    * @return 탈퇴 완료 메시지
    */
   public String leave(String token) {
+    if (!jwtTokenProvider.isEqualPrevTokenForAccess(token)) {
+      new CustomException(INVALID_TOKEN);
+    }
+
     User user = userRepository.findById(jwtTokenProvider.getUserId(token))
         .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
@@ -151,6 +156,12 @@ public class UserService implements UserDetailsService {
     return new RenewTokenDto(user, tokens);
   }
 
+  /**
+   * 회원가입할 때 중복된 이메일이 있는지 확인합니다.
+   *
+   * @param email 이메일
+   * @return 중복된 이메일이 아니라면 true, 회원가입된 이메일이라면 error
+   */
   public Boolean checkEmail(String email) {
     if (userRepository.findByEmail(email).isPresent()) {
       throw new CustomException(DUPLICATE_EMAIL);

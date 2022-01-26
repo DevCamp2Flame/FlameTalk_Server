@@ -17,6 +17,8 @@ public class TokenService {
   private final TokenRedisRepository tokenRedisRepository;
 
   /**
+   * 토큰을 발급받은 적이 있다면, accessToken 정보를 갱신하고, 그렇지 않다면 새로운 token 정보를 저장합니다.
+   *
    * @param userId           사용자 id
    * @param deviceId         사용자 기기 id
    * @param accessToken      accessToken
@@ -28,7 +30,7 @@ public class TokenService {
   }
 
   /**
-   * 토큰을 발급받은 적이 있다면, token 정보를 갱신하고, 그렇지 않다면 새로운 token 정보를 저장합니다.
+   * 토큰을 발급받은 적이 있다면, refreshToken 정보를 갱신하고, 그렇지 않다면 새로운 token 정보를 저장합니다.
    *
    * @param userId            사용자 id
    * @param deviceId          사용자 기기 id
