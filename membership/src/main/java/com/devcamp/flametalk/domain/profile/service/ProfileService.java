@@ -1,12 +1,9 @@
 package com.devcamp.flametalk.domain.profile.service;
 
-import com.devcamp.flametalk.domain.file.domain.File;
-import com.devcamp.flametalk.domain.file.domain.FileRepository;
 import com.devcamp.flametalk.domain.profile.domain.Profile;
 import com.devcamp.flametalk.domain.profile.domain.ProfileRepository;
-import com.devcamp.flametalk.domain.profile.dto.ProfileCreateRequest;
-import com.devcamp.flametalk.domain.profile.dto.ProfileResponse;
-import com.devcamp.flametalk.domain.profile.dto.ProfileUpdateRequest;
+import com.devcamp.flametalk.domain.profile.dto.ProfileDetailResponse;
+import com.devcamp.flametalk.domain.profile.dto.ProfileRequest;
 import com.devcamp.flametalk.domain.user.domain.User;
 import com.devcamp.flametalk.domain.user.domain.UserRepository;
 import javax.persistence.EntityNotFoundException;
@@ -20,47 +17,32 @@ public class ProfileService {
 
   private final ProfileRepository profileRepository;
   private final UserRepository userRepository;
-  private final FileRepository fileRepository;
 
   @Transactional
-  public Long save(ProfileCreateRequest request) {
-    // TODO: 인가 로직 수정
-    User user = userRepository.getById(request.getUserId());
+  public Long save(ProfileRequest request) {
+    User user = userRepository.findById(request.getUserId())
+        .orElseThrow(() -> new EntityNotFoundException("유저가 존재하지 않습니다."));
 
-    File image = getFileById(request.getImageId());
-    File backgroundImage = getFileById(request.getBackgroundImageId());
-    File sticker = getFileById(request.getStickerId());
-
-    Profile profile = request.toProfile(user, image, backgroundImage, sticker);
+    Profile profile = request.toProfile(user);
     profileRepository.save(profile);
-
     return profile.getId();
   }
 
-  private File getFileById(Long id) {
-    return fileRepository.findById(id)
-        .orElseThrow(() -> new EntityNotFoundException("파일이 존재하지 않습니다."));
-  }
-
-  public ProfileResponse findProfile(Long id) {
+  public ProfileDetailResponse findProfile(Long id) {
     Profile profile = profileRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException("프로필이 존재하지 않습니다."));
-    return ProfileResponse.of(profile);
+    return ProfileDetailResponse.from(profile);
   }
 
   @Transactional
-  public Long updateProfile(ProfileUpdateRequest request) {
-    // TODO: 인가 로직 수정
-    Profile profile = profileRepository.findById(request.getId())
+  public Long updateProfile(Long profileId, ProfileRequest request) {
+    User user = userRepository.findById(request.getUserId())
+        .orElseThrow(() -> new EntityNotFoundException("유저가 존재하지 않습니다."));
+    Profile profile = profileRepository.findById(profileId)
         .orElseThrow(() -> new EntityNotFoundException("프로필이 존재하지 않습니다."));
 
-    User user = userRepository.getById(request.getUserId());
-    File image = getFileById(request.getImageId());
-    File backgroundImage = getFileById(request.getBackgroundImageId());
-    File sticker = getFileById(request.getStickerId());
-    Profile updatedProfile = request.toProfile(user, image, backgroundImage, sticker);
-
-    profile.update(updatedProfile);
-    return profile.getId();
+    Profile requestProfile = request.toProfile(user);
+    Profile updatedProfile = profile.update(requestProfile);
+    return updatedProfile.getId();
   }
 }
