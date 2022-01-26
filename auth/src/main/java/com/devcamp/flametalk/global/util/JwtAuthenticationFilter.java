@@ -1,6 +1,5 @@
-package com.devcamp.flametalk.util;
+package com.devcamp.flametalk.global.util;
 
-import com.devcamp.flametalk.token.service.JwtTokenProvider;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

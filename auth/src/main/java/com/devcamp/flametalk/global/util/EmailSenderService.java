@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.util;
+package com.devcamp.flametalk.global.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
