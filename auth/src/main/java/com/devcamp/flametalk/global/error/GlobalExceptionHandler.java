@@ -1,6 +1,12 @@
 package com.devcamp.flametalk.global.error;
 
+import static com.devcamp.flametalk.global.error.ErrorCode.INTERNAL_SERVER_ERROR;
+import static com.devcamp.flametalk.global.error.ErrorCode.INVALID_TOKEN;
+
 import com.devcamp.flametalk.global.error.exception.CustomException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +23,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(CustomException.class)
   protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
-    log.error("[handleCustomException throw CustomException] {}", e.getErrorCode());
+    log.error("[HandleCustomException] " + e.getErrorCode());
     return ErrorResponse.toResponseEntity(HttpStatus.BAD_REQUEST, e.getErrorCode());
+  }
+
+  @ExceptionHandler({SignatureException.class, MalformedJwtException.class,
+      ExpiredJwtException.class})
+  protected ResponseEntity<ErrorResponse> handleJwtException(Exception e) {
+    log.error("[Invalid token] " + e);
+    return ErrorResponse.toResponseEntity(HttpStatus.UNAUTHORIZED, INVALID_TOKEN);
   }
 
   @ExceptionHandler(Exception.class)
   protected ResponseEntity<ErrorResponse> handleException(Exception e) {
-    log.error("[Internal Server Exception]" + e);
-    return ErrorResponse.toResponseEntity(HttpStatus.BAD_REQUEST, ErrorCode.INTERNAL_SERVER_ERROR);
+    log.error("[HandleException] " + e);
+    return ErrorResponse.toResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, INTERNAL_SERVER_ERROR);
   }
 }
