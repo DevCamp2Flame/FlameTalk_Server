@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * 프로필 엔티티에 JSON 형식으로 저장되는 스티커 객체입니다.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

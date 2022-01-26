@@ -5,9 +5,10 @@ import com.devcamp.flametalk.domain.profile.domain.Sticker;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 
-@ToString
+/**
+ * 프로필 상세 정보 응답을 위한 클래스입니다.
+ */
 @AllArgsConstructor
 @Getter
 public class ProfileDetailResponse {
@@ -20,6 +21,12 @@ public class ProfileDetailResponse {
   private boolean isDefault;
   private LocalDateTime updatedDate;
 
+  /**
+   * Profile 엔티티를 응답 객체로 생성하는 정적 팩토리 메소드입니다.
+   *
+   * @param profile Profile 엔티티
+   * @return 프로필 상세 정보 응답 객체
+   */
   public static ProfileDetailResponse from(Profile profile) {
     return new ProfileDetailResponse(
         profile.getId(),

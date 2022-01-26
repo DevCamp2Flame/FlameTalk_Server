@@ -14,9 +14,10 @@ import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-@ToString
+/**
+ * Profile 엔티티 입니다.
+ */
 @Getter
 @NoArgsConstructor
 @Entity
@@ -32,6 +33,7 @@ public class Profile extends BaseTime {
 
   private String description;
 
+  // TODO: List 저장으로 변경
   @Convert(converter = StickerConverter.class)
   private Sticker sticker;
 
@@ -44,6 +46,17 @@ public class Profile extends BaseTime {
   @JoinColumn(name = "user_id")
   private User user;
 
+  /**
+   * Profile 엔티티의 빌더입니다.
+   *
+   * @param id          프로필 id
+   * @param imageUrl    프로필 사진 S3 URL
+   * @param bgImageUrl  프로필 배경 사진 S3 URL
+   * @param sticker     프로필에 적용된 sticker
+   * @param description 프로필 상태 메세지
+   * @param isDefault   기본 프로필 여부
+   * @param user        프로필에 해당하는 유저
+   */
   @Builder
   public Profile(long id, String imageUrl, String bgImageUrl, Sticker sticker, String description,
       boolean isDefault, User user) {
@@ -56,6 +69,12 @@ public class Profile extends BaseTime {
     this.user = user;
   }
 
+  /**
+   * 프로필 엔티티를 업데이트합니다.
+   *
+   * @param updatedProfile 업데이트될 프로필
+   * @return 업데이트된 프로필
+   */
   public Profile update(Profile updatedProfile) {
     this.imageUrl = updatedProfile.imageUrl;
     this.bgImageUrl = updatedProfile.bgImageUrl;

@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import javax.persistence.AttributeConverter;
 
+/**
+ * Sticker 객체를 DB 테이블에 JSON 형태로 저장하기 위한 Converter 입니다.
+ */
 public class StickerConverter implements AttributeConverter<Sticker, String> {
 
   private static final ObjectMapper objectMapper = new ObjectMapper()

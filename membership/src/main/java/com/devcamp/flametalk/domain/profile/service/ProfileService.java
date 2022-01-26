@@ -12,6 +12,9 @@ import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * Profile API 로직을 관리하는 Service 입니다.
+ */
 @RequiredArgsConstructor
 @Service
 public class ProfileService {
@@ -19,6 +22,12 @@ public class ProfileService {
   private final ProfileRepository profileRepository;
   private final UserRepository userRepository;
 
+  /**
+   * 프로필을 DB에 생성합니다.
+   *
+   * @param request 프로필에 생성할 정보
+   * @return DB에 저장된 프로필 id
+   */
   @Transactional
   public Long save(ProfileRequest request) {
     User user = userRepository.findById(request.getUserId())
@@ -29,12 +38,25 @@ public class ProfileService {
     return profile.getId();
   }
 
+  /**
+   * DB에 저장된 프로필의 상세정보를 조회합니다.
+   *
+   * @param id DB에 저장된 프로필 ID
+   * @return 조회된 프로필 상세 정보
+   */
   public ProfileDetailResponse findProfile(Long id) {
     Profile profile = profileRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(ErrorCode.PROFILE_NOT_FOUND));
     return ProfileDetailResponse.from(profile);
   }
 
+  /**
+   * DB에 저장된 프로필 정보를 업데이트합니다.
+   *
+   * @param profileId 업데이트할 프로필 id
+   * @param request   업데이트할 프로필 상세 정보
+   * @return 업데이트된 프로필 id
+   */
   @Transactional
   public Long updateProfile(Long profileId, ProfileRequest request) {
     User user = userRepository.findById(request.getUserId())

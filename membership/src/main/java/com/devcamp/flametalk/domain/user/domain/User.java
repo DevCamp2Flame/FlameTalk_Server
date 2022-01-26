@@ -10,6 +10,9 @@ import javax.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * User 엔티티 입니다.
+ */
 @Getter
 @NoArgsConstructor
 @Entity

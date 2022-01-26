@@ -8,6 +8,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+/**
+ * JPA Auditing 기능을 수행하는 BaseTime 엔티티입니다.
+ */
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
