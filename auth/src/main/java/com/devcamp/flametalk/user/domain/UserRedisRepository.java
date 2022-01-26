@@ -24,18 +24,14 @@ public class UserRedisRepository {
   }
 
   public void saveIdleUser(String userId) {
-    valueOperations.set(userId, LocalDateTime.now().toString(), 30, TimeUnit.DAYS);
-  }
-
-  public void updateIdleUser(String userId) {
-    valueOperations.setIfPresent(userId, LocalDateTime.now().toString());
+    valueOperations.set("userId:" + userId, LocalDateTime.now().toString(), 30, TimeUnit.DAYS);
   }
 
   public void deleteIdleUser(String userId) {
-    redisTemplate.delete(userId);
+    redisTemplate.delete("userId:" + userId);
   }
 
   public String findLeaveDate(String userId) {
-    return valueOperations.get(userId);
+    return valueOperations.get("userId:" + userId);
   }
 }
