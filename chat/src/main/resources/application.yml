@@ -6,3 +6,23 @@ spring:
     prefix : classpath:/templates/
     suffix : .html
     cache : false
+
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: spring-boot-test
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+  data:
+    cassandra:
+      port: 9042
+      contact-points: 10.99.8.197
+      schemaAction: CREATE_IF_NOT_EXISTS
+      keyspace-name: test
+      local-datacenter: datacenter1
