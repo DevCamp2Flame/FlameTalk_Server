@@ -37,8 +37,7 @@ public class Profile extends BaseTime {
   @Convert(converter = StickerConverter.class)
   private Sticker sticker;
 
-  // TODO
-  @Column(columnDefinition = "BOOLEAN")
+  @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
   @NotNull
   private boolean isDefault;
 
