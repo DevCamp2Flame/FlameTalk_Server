@@ -30,7 +30,7 @@ public enum ErrorCode {
   // 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재
   DUPLICATE_PHONE_NUMBER(409, "CONFLICT", "이미 가입된 전화번호입니다."),
   DUPLICATE_EMAIL(409, "CONFLICT", "이미 가입된 이메일입니다."),
-
+  
   // 500 INTERNAL_SERVER_ERROR : 서버 오류
   INTERNAL_SERVER_ERROR(500, "SERVER_ERROR", "서버 오류입니다.");
 

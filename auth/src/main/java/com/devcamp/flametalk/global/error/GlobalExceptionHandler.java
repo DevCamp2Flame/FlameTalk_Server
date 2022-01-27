@@ -26,6 +26,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   protected ResponseEntity<ErrorResponse> handleCustomException(CustomException e) {
     log.error("[HandleCustomException] " + e.getErrorCode());
     return ErrorResponse.toResponseEntity(e.getHttpStatus(), e.getErrorCode());
+
   }
 
   @ExceptionHandler({SignatureException.class, MalformedJwtException.class})
