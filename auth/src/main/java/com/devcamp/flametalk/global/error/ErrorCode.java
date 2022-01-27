@@ -2,7 +2,6 @@ package com.devcamp.flametalk.global.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.http.HttpStatus;
 
 /**
  * 모든 예외 케이스를 관리하는 열거형 클래스입니다.
@@ -13,7 +12,6 @@ public enum ErrorCode {
 
   // 307 TEMPORARY_REDIRECT : 임시 이동
   REDIRECT_TO_LOGIN(307, "TEMPORARY_REDIRECT", "다시 로그인 하세요. /api/auth/signin"),
-  REDIRECT_TO_TOKEN(307, "TEMPORARY_REDIRECT", "토큰을 다시 발급하세요. /api/auth/token"),
 
   // 400 BAD_REQUEST : 잘못된 요청
   MISMATCH_PASSWORD(400, "BAD_REQUEST", "비밀번호가 일치하지 않습니다."),
@@ -33,7 +31,8 @@ public enum ErrorCode {
   DUPLICATE_PHONE_NUMBER(409, "CONFLICT", "이미 가입된 전화번호입니다."),
   DUPLICATE_EMAIL(409, "CONFLICT", "이미 가입된 이메일입니다."),
 
-  INTERNAL_SERVER_ERROR(500, "SERVER ERROR", "서버 오류입니다.");
+  // 500 INTERNAL_SERVER_ERROR : 서버 오류
+  INTERNAL_SERVER_ERROR(500, "SERVER_ERROR", "서버 오류입니다.");
 
   private final int status;
   private final String error;
