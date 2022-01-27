@@ -1,0 +1,27 @@
+#server:
+#  port: 8080
+
+spring:
+  application:
+    name: chat-api  # ???? ??? ???? ?? ??
+  profiles:
+    active:
+      default
+  cloud:
+    config:
+      enabled: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:${MYSQL_PORT}/flametalk_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+      use-new-id-generator-mappings: false
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
