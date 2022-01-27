@@ -3,6 +3,7 @@ package com.devcamp.flametalk.domain.profile.dto;
 import com.devcamp.flametalk.domain.profile.domain.Profile;
 import com.devcamp.flametalk.domain.profile.domain.Sticker;
 import com.devcamp.flametalk.domain.user.domain.User;
+import java.util.List;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +21,7 @@ public class ProfileRequest {
   private String imageUrl;
   private String bgImageUrl;
   private String description;
-  private Sticker sticker;
+  private List<Sticker> sticker;
 
   @NotNull
   private boolean isDefault;

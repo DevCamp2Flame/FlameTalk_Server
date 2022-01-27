@@ -3,6 +3,7 @@ package com.devcamp.flametalk.domain.profile.dto;
 import com.devcamp.flametalk.domain.profile.domain.Profile;
 import com.devcamp.flametalk.domain.profile.domain.Sticker;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -16,7 +17,7 @@ public class ProfileDetailResponse {
   private Long id;
   private String imageUrl;
   private String bgImageUrl;
-  private Sticker sticker;
+  private List<Sticker> sticker;
   private String description;
   private boolean isDefault;
   private LocalDateTime updatedDate;

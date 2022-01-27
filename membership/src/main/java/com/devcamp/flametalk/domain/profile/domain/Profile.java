@@ -2,6 +2,7 @@ package com.devcamp.flametalk.domain.profile.domain;
 
 import com.devcamp.flametalk.domain.model.BaseTime;
 import com.devcamp.flametalk.domain.user.domain.User;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
@@ -33,9 +34,8 @@ public class Profile extends BaseTime {
 
   private String description;
 
-  // TODO: List 저장으로 변경
   @Convert(converter = StickerConverter.class)
-  private Sticker sticker;
+  private List<Sticker> sticker;
 
   @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
   @NotNull
@@ -57,7 +57,7 @@ public class Profile extends BaseTime {
    * @param user        프로필에 해당하는 유저
    */
   @Builder
-  public Profile(long id, String imageUrl, String bgImageUrl, Sticker sticker, String description,
+  public Profile(long id, String imageUrl, String bgImageUrl, List<Sticker> sticker, String description,
       boolean isDefault, User user) {
     this.id = id;
     this.imageUrl = imageUrl;
