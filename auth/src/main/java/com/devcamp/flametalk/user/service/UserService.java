@@ -25,6 +25,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -49,7 +50,7 @@ public class UserService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
     return userRepository.findById(userId).orElseThrow(
-        () -> new CustomException(USER_NOT_FOUND));
+        () -> new CustomException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
   }
 
   /**
@@ -60,7 +61,7 @@ public class UserService implements UserDetailsService {
    */
   public SignUpResponseDto signUp(SignUpRequestDto signUpRequestDto) {
     if (userRepository.findByPhoneNumber(signUpRequestDto.getPhoneNumber()).isPresent()) {
-      throw new CustomException(DUPLICATE_PHONE_NUMBER);
+      throw new CustomException(HttpStatus.CONFLICT, DUPLICATE_PHONE_NUMBER);
     }
 
     String password = "";
@@ -89,12 +90,12 @@ public class UserService implements UserDetailsService {
   public SignInResponseDto signIn(SignInRequestDto signInRequestDto) {
     // 등록된 사용자가 아님
     User user = userRepository.findByEmail(signInRequestDto.getEmail())
-        .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
 
     // 비밀번호 불일치
     if (signInRequestDto.getSocial().equals(Social.LOGIN.getName()) && !passwordEncoder.matches(
         signInRequestDto.getPassword(), user.getPassword())) {
-      throw new CustomException(MISMATCH_PASSWORD);
+      throw new CustomException(HttpStatus.BAD_REQUEST, MISMATCH_PASSWORD);
     }
 
     // 상태가 LEAVE 이면서 캐시에 데이터가 존재하면 유휴 기간. 유휴 기간에 재로그인하면 active 상태로 변경
@@ -105,7 +106,7 @@ public class UserService implements UserDetailsService {
         user.activeStatus();
         userRepository.save(user);
       } else {
-        throw new CustomException(LEAVE_USER);
+        throw new CustomException(HttpStatus.BAD_REQUEST, LEAVE_USER);
       }
     }
 
@@ -124,11 +125,11 @@ public class UserService implements UserDetailsService {
    */
   public String leave(String token) {
     if (!jwtTokenProvider.isEqualPrevTokenForAccess(token)) {
-      new CustomException(INVALID_TOKEN);
+      throw new CustomException(HttpStatus.UNAUTHORIZED, INVALID_TOKEN);
     }
 
     User user = userRepository.findById(jwtTokenProvider.getUserId(token))
-        .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
 
     // 비활성 상태로 변경
     user.inactiveStatus();
@@ -149,7 +150,7 @@ public class UserService implements UserDetailsService {
    */
   public RenewTokenDto renewToken(String accessToken, String refreshToken) {
     User user = userRepository.findById(jwtTokenProvider.getUserId(refreshToken))
-        .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
 
     Map<String, String> tokens = jwtTokenProvider.renewToken(accessToken, refreshToken);
 
@@ -164,7 +165,7 @@ public class UserService implements UserDetailsService {
    */
   public Boolean checkEmail(String email) {
     if (userRepository.findByEmail(email).isPresent()) {
-      throw new CustomException(DUPLICATE_EMAIL);
+      throw new CustomException(HttpStatus.CONFLICT, DUPLICATE_EMAIL);
     }
     return true;
   }
