@@ -53,9 +53,10 @@ public class ProfileController {
    * @return 프로필 상세 정보
    */
   @GetMapping("/{profileId}")
-  public ResponseEntity<SingleDataResponse> findProfile(@PathVariable Long profileId) {
+  public ResponseEntity<SingleDataResponse<ProfileDetailResponse>> findProfile(
+      @PathVariable Long profileId) {
     ProfileDetailResponse profileDetail = profileService.findProfile(profileId);
-    SingleDataResponse<ProfileDetailResponse> response = new SingleDataResponse(
+    SingleDataResponse<ProfileDetailResponse> response = new SingleDataResponse<>(
         ProfileResponse.PROFILE_DETAIL_SUCCESS, profileDetail);
     log.info("read profile" + response.getData().toString());
     return ResponseEntity.ok().body(response);
