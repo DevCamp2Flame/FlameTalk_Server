@@ -69,15 +69,31 @@ public class FileService {
    *
    * @param id DB에 저장된 파일 ID
    */
+  @Transactional
   public void deleteById(Long id) {
     File file = fileRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(FILE_NOT_FOUND));
     fileRepository.deleteById(id);
+    removeS3File(file);
+  }
 
+  /**
+   * url에 해당하는 파일을 DB 에서 삭제하고 해당 파일을 S3에서도 삭제합니다.
+   *
+   * @param url DB에 저장된 파일 URL
+   */
+  @Transactional
+  public void deleteByUrl(String url) {
+    File file = fileRepository.findByUrl(url)
+        .orElseThrow(() -> new EntityNotFoundException(FILE_NOT_FOUND));
+    fileRepository.delete(file);
+    removeS3File(file);
+  }
+
+  private void removeS3File(File file) {
     String fileKey = Optional.ofNullable(file.getChatroom())
         .map(chatroom -> "chatroom/" + chatroom.getId() + "/")
         .orElse("profile/") + file.getTitle() + "." + file.getExtension();
-
     s3Util.deleteS3File(fileKey);
   }
 }

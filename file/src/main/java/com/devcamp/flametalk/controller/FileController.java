@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -81,6 +82,22 @@ public class FileController {
   public ResponseEntity<CommonResponse> deleteById(@PathVariable Long fileId) {
     fileService.deleteById(fileId);
     log.info("[File Deleted] fileId: {}", fileId);
+
+    CommonResponse response = new CommonResponse();
+    response.success(FileResponseMessage.FILE_DELETE_SUCCESS.getMessage());
+    return ResponseEntity.ok().body(response);
+  }
+
+  /**
+   * 요청받은 url에 해당하는 파일을 삭제합니다.
+   *
+   * @param fileUrl DB에 저장된 파일 ID
+   * @return 삭제 결과에 따른 응답 정보
+   */
+  @DeleteMapping
+  public ResponseEntity<CommonResponse> deleteByUrl(@RequestParam String fileUrl) {
+    fileService.deleteByUrl(fileUrl);
+    log.info("[File Deleted] fileId: {}", fileUrl);
 
     CommonResponse response = new CommonResponse();
     response.success(FileResponseMessage.FILE_DELETE_SUCCESS.getMessage());
