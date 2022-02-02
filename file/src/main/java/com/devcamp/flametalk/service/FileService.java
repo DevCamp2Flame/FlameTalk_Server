@@ -38,7 +38,7 @@ public class FileService {
    * @throws IOException File 처리 실패한 경우
    */
   @Transactional
-  public Long create(MultipartFile file, String chatroomId) throws IOException {
+  public FileDetailResponse create(MultipartFile file, String chatroomId) throws IOException {
     Optional<Chatroom> chatroom = Optional.ofNullable(chatroomId)
         .map(id -> chatroomRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException(CHATROOM_NOT_FOUND)));
@@ -49,7 +49,7 @@ public class FileService {
     uploadFile.updateUrl(s3Util.upload(uploadFile, dirName));
 
     File savedFile = fileRepository.save(uploadFile.toFile());
-    return savedFile.getId();
+    return new FileDetailResponse(savedFile);
   }
 
   /**

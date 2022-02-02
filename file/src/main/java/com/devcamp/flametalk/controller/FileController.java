@@ -40,17 +40,17 @@ public class FileController {
    * @throws IOException File 처리 실패한 경우
    */
   @PostMapping
-  public ResponseEntity<CommonResponse> create(@RequestParam(name = "file") MultipartFile file,
+  public ResponseEntity<SingleDataResponse> create(@RequestParam(name = "file") MultipartFile file,
       @RequestParam(required = false, name = "chatroomId") String chatroomId)
       throws IOException {
-    Long id = fileService.create(file, chatroomId);
-    log.info("[File Saved] " + id);
+    FileDetailResponse fileDetail = fileService.create(file, chatroomId);
+    log.info("[File Saved] " + fileDetail.toString());
 
     //TODO: Exception 처리
 
-    CommonResponse response = new CommonResponse();
+    SingleDataResponse response = new SingleDataResponse(fileDetail);
     response.success(FileResponseMessage.FILE_CREATE_SUCCESS.getMessage());
-    return ResponseEntity.created(URI.create("api/file/" + id)).body(response);
+    return ResponseEntity.created(URI.create("api/file/" + fileDetail.getFileId())).body(response);
   }
 
   /**
