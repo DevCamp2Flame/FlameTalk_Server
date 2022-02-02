@@ -40,17 +40,18 @@ public class FileController {
    * @throws IOException File 처리 실패한 경우
    */
   @PostMapping
-  public ResponseEntity<CommonResponse> create(@RequestParam(name = "file") MultipartFile file,
+  public ResponseEntity<SingleDataResponse<FileDetailResponse>> create(
+      @RequestParam(name = "file") MultipartFile file,
       @RequestParam(required = false, name = "chatroomId") String chatroomId)
       throws IOException {
-    Long id = fileService.create(file, chatroomId);
-    log.info("[File Saved] " + id);
+    FileDetailResponse fileDetail = fileService.create(file, chatroomId);
+    log.info("[File Saved] " + fileDetail.toString());
 
     //TODO: Exception 처리
 
-    CommonResponse response = new CommonResponse();
+    SingleDataResponse<FileDetailResponse> response = new SingleDataResponse<>(fileDetail);
     response.success(FileResponseMessage.FILE_CREATE_SUCCESS.getMessage());
-    return ResponseEntity.created(URI.create("api/file/" + id)).body(response);
+    return ResponseEntity.created(URI.create("api/file/" + fileDetail.getFileId())).body(response);
   }
 
   /**
@@ -60,11 +61,12 @@ public class FileController {
    * @return 파일 상세 정보
    */
   @GetMapping("/{fileId}")
-  public ResponseEntity<SingleDataResponse> findById(@PathVariable Long fileId) {
+  public ResponseEntity<SingleDataResponse<FileDetailResponse>> findById(
+      @PathVariable Long fileId) {
     FileDetailResponse fileDetail = fileService.findById(fileId);
     log.info("[File Searched]" + fileDetail.toString());
 
-    SingleDataResponse response = new SingleDataResponse(fileDetail);
+    SingleDataResponse<FileDetailResponse> response = new SingleDataResponse<>(fileDetail);
     response.success(FileResponseMessage.FILE_DETAIL_SUCCESS.getMessage());
     return ResponseEntity.ok().body(response);
   }
