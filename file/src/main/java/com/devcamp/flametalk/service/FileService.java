@@ -61,9 +61,7 @@ public class FileService {
   public FileDetailResponse findById(Long id) {
     File file = fileRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(FILE_NOT_FOUND));
-
-    FileDetailResponse fileDetail = new FileDetailResponse(file);
-    return fileDetail;
+    return new FileDetailResponse(file);
   }
 
   /**
