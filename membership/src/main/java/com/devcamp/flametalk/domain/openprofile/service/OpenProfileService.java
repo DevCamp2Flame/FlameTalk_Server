@@ -5,10 +5,12 @@ import com.devcamp.flametalk.domain.openprofile.domain.OpenProfileRepository;
 import com.devcamp.flametalk.domain.openprofile.dto.OpenProfileCreateRequest;
 import com.devcamp.flametalk.domain.openprofile.dto.OpenProfileDetailResponse;
 import com.devcamp.flametalk.domain.openprofile.dto.OpenProfileUpdateRequest;
+import com.devcamp.flametalk.domain.openprofile.dto.OpenProfilesResponse;
 import com.devcamp.flametalk.domain.user.domain.User;
 import com.devcamp.flametalk.domain.user.domain.UserRepository;
 import com.devcamp.flametalk.global.error.ErrorCode;
 import com.devcamp.flametalk.global.error.exception.EntityNotFoundException;
+import java.util.List;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -51,6 +53,19 @@ public class OpenProfileService {
     OpenProfile openProfile = openProfileRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(ErrorCode.OPEN_PROFILE_NOT_FOUND));
     return OpenProfileDetailResponse.from(openProfile);
+  }
+
+  /**
+   * 유저 id에 해당하는 요청된 오픈 프로필 리스트를 조회합니다.
+   *
+   * @param id 유저 id
+   * @return 오픈 프로필 리스트 정보
+   */
+  public OpenProfilesResponse findByUserId(String id) {
+    User user = userRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(ErrorCode.USER_NOT_FOUND));
+    List<OpenProfile> openProfiles = openProfileRepository.getAllByOpenProfileUser(user);
+    return OpenProfilesResponse.of(user, OpenProfileDetailResponse.createList(openProfiles));
   }
 
   /**

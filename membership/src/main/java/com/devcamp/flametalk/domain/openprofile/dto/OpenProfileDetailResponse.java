@@ -2,6 +2,8 @@ package com.devcamp.flametalk.domain.openprofile.dto;
 
 import com.devcamp.flametalk.domain.openprofile.domain.OpenProfile;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -36,5 +38,18 @@ public class OpenProfileDetailResponse {
         openProfile.getCreatedAt(),
         openProfile.getUpdatedAt()
     );
+  }
+
+  /**
+   * OpenProfile 리스트를 통해 OpenProfileDetailResponse 리스트를 생성합니다.
+   *
+   * @param openProfiles OpenProfile 리스트
+   * @return OpenProfileDetailResponse 리스트
+   */
+  public static List<OpenProfileDetailResponse> createList(List<OpenProfile> openProfiles) {
+    List<OpenProfileDetailResponse> openProfileDetails = new ArrayList<>();
+    openProfiles.forEach(
+        openProfile -> openProfileDetails.add(OpenProfileDetailResponse.from(openProfile)));
+    return openProfileDetails;
   }
 }

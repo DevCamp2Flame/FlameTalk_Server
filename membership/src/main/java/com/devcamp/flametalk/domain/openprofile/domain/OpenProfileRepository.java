@@ -1,5 +1,7 @@
 package com.devcamp.flametalk.domain.openprofile.domain;
 
+import com.devcamp.flametalk.domain.user.domain.User;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -7,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface OpenProfileRepository extends JpaRepository<OpenProfile, Long> {
 
+  List<OpenProfile> getAllByOpenProfileUser(User user);
 }

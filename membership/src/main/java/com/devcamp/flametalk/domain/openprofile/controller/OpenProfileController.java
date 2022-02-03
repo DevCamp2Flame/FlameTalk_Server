@@ -4,6 +4,7 @@ import com.devcamp.flametalk.domain.openprofile.domain.OpenProfileResponse;
 import com.devcamp.flametalk.domain.openprofile.dto.OpenProfileCreateRequest;
 import com.devcamp.flametalk.domain.openprofile.dto.OpenProfileDetailResponse;
 import com.devcamp.flametalk.domain.openprofile.dto.OpenProfileUpdateRequest;
+import com.devcamp.flametalk.domain.openprofile.dto.OpenProfilesResponse;
 import com.devcamp.flametalk.domain.openprofile.service.OpenProfileService;
 import com.devcamp.flametalk.global.common.CommonResponse;
 import com.devcamp.flametalk.global.common.SingleDataResponse;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -67,6 +69,22 @@ public class OpenProfileController {
     response.success(OpenProfileResponse.OPEN_PROFILE_READ_SUCCESS.getMessage(),
         openProfileDetail);
     log.info("find open profile by id {} ", openProfileDetail.getOpenProfileId());
+    return ResponseEntity.ok().body(response);
+  }
+
+  /**
+   * 유저의 오픈 프로필을 모두 조회합니다.
+   *
+   * @param userId 오픈 프로필을 조회할 유저 id
+   * @return 유저 정보와 오픈 프로필 리스트
+   */
+  @GetMapping
+  public ResponseEntity<SingleDataResponse<OpenProfilesResponse>> findByUserId(
+      @RequestHeader String userId) {
+    OpenProfilesResponse openProfiles = openProfileService.findByUserId(userId);
+    SingleDataResponse<OpenProfilesResponse> response = new SingleDataResponse<>();
+    response.success(OpenProfileResponse.OPEN_PROFILES_SUCCESS.getMessage(), openProfiles);
+    log.info("find open profiles by user id {} ", openProfiles.getUserId());
     return ResponseEntity.ok().body(response);
   }
 
