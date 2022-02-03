@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,4 +38,22 @@ public class OpenProfile extends BaseTime {
   @ManyToOne
   @JoinColumn(name = "user_id")
   private User openProfileUser;
+
+  /**
+   * OpenProfile 엔티티의 빌더입니다.
+   *
+   * @param id          오픈 프로필 id
+   * @param nickname    오픈 프로필 닉네임
+   * @param imageUrl    오픈 프로필 사진 S3 URL
+   * @param description 오픈 프로필 상태 메세지
+   * @param user        오픈 프로필에 해당하는 유저
+   */
+  @Builder
+  public OpenProfile(Long id, String nickname, String imageUrl, String description, User user) {
+    this.id = id;
+    this.nickname = nickname;
+    this.imageUrl = imageUrl;
+    this.description = description;
+    this.openProfileUser = user;
+  }
 }
