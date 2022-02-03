@@ -1,7 +1,5 @@
 package com.devcamp.flametalk.cassandra;
 
-import static org.springframework.data.cassandra.config.SchemaAction.CREATE_IF_NOT_EXISTS;
-
 import com.datastax.oss.driver.api.core.CqlSession;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +23,7 @@ public class CassandraConfig {
   public CqlSessionFactoryBean session() {
 
     CqlSessionFactoryBean session = new CqlSessionFactoryBean();
-    session.setContactPoints("10.99.8.197");
+    session.setContactPoints("127.0.0.1");
     session.setKeyspaceName("test");
     session.setLocalDatacenter("datacenter1");
     session.setPort(9042);

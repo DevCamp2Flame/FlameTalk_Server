@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,12 +24,9 @@ public class RoomController {
 
   private final ChatroomService chatroomService;
 
+  // todo : 다롬님이 하기
 //  @GetMapping(value = "/rooms")
-//  public ModelAndView rooms() {
-//    log.info("# All Chat Rooms");
-//    ModelAndView mv = new ModelAndView("chat/rooms");
-//
-//    List<> repository.findAllRooms());
+//  public ResponseEntity<DefaultResponse<ChatroomFindAllResponse>> findAllRoom() {
 //
 //    return mv;
 //  }
@@ -44,13 +40,5 @@ public class RoomController {
 
     return DefaultResponse.toResponseEntity(CREATED, CREATED_CHATROOM,
         chatroomService.create(chatroomCreateRequest));
-  }
-
-  // 채팅방 조회
-  @GetMapping("/room")
-  public void getRoom(String roomId, Model model) {
-    log.info("# get Chat Room, roomID : " + roomId);
-
-//    model.addAttribute("room", repository.findRoomById(roomId));
   }
 }

@@ -22,7 +22,7 @@ spring:
   data:
     cassandra:
       port: 9042
-      contact-points: 10.99.8.197
+      contact-points: 127.0.0.1 # 10.99.8.197
       schemaAction: CREATE_IF_NOT_EXISTS
       keyspace-name: test
       local-datacenter: datacenter1
