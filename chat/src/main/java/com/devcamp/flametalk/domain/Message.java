@@ -5,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
+@ToString
 @Builder
 @Data
 @AllArgsConstructor
@@ -22,6 +24,8 @@ public class Message {
   
   @Column
   private String sender_id;
+
+  // todo : nickname
 
   @Column
   private String room_id;
