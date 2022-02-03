@@ -42,6 +42,18 @@ public class OpenProfileService {
   }
 
   /**
+   * id에 해당하는 오픈 프로필의 상세정보를 조회합니다.
+   *
+   * @param id DB에 저장된 오픈 프로필 ID
+   * @return 조회된 오픈 프로필 상세 정보
+   */
+  public OpenProfileDetailResponse findById(Long id) {
+    OpenProfile openProfile = openProfileRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(ErrorCode.OPEN_PROFILE_NOT_FOUND));
+    return OpenProfileDetailResponse.from(openProfile);
+  }
+
+  /**
    * DB에 저장된 오픈 프로필 정보를 업데이트합니다.
    *
    * @param id      업데이트할 오픈 프로필 id

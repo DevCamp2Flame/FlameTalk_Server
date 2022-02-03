@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -53,6 +54,23 @@ public class OpenProfileController {
   }
 
   /**
+   * id에 해당하는 오픈 프로필을 조회합니다.
+   *
+   * @param openProfileId 조회할 오픈 프로필 id
+   * @return 오픈 프로필 상세 정보
+   */
+  @GetMapping("/{openProfileId}")
+  public ResponseEntity<SingleDataResponse<OpenProfileDetailResponse>> findById(
+      @PathVariable Long openProfileId) {
+    OpenProfileDetailResponse openProfileDetail = openProfileService.findById(openProfileId);
+    SingleDataResponse<OpenProfileDetailResponse> response = new SingleDataResponse<>();
+    response.success(OpenProfileResponse.OPEN_PROFILE_READ_SUCCESS.getMessage(),
+        openProfileDetail);
+    log.info("find open profile by id {} ", openProfileDetail.getOpenProfileId());
+    return ResponseEntity.ok().body(response);
+  }
+
+  /**
    * 오픈 프로필을 수정합니다.
    *
    * @param openProfileId 수정할 오픈 프로필 id
@@ -80,7 +98,7 @@ public class OpenProfileController {
   @DeleteMapping("/{openProfileId}")
   public ResponseEntity<CommonResponse> deleteById(@PathVariable Long openProfileId) {
     openProfileService.deleteById(openProfileId);
-    log.info("delete feed {}", openProfileId);
+    log.info("delete open profile {}", openProfileId);
 
     CommonResponse response = new CommonResponse();
     response.success(OpenProfileResponse.OPEN_PROFILE_DELETE_SUCCESS.getMessage());
