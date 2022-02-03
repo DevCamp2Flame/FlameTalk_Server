@@ -42,9 +42,6 @@ public class User {
   private short status;
 
   @NotNull
-  private boolean emailCheck;
-
-  @NotNull
   private String region;
 
   @NotNull

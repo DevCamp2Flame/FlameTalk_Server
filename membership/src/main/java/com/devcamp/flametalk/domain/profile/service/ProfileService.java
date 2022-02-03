@@ -1,5 +1,6 @@
 package com.devcamp.flametalk.domain.profile.service;
 
+import com.devcamp.flametalk.domain.feed.domain.FeedRepository;
 import com.devcamp.flametalk.domain.profile.domain.Profile;
 import com.devcamp.flametalk.domain.profile.domain.ProfileRepository;
 import com.devcamp.flametalk.domain.profile.dto.ProfileDetailResponse;
@@ -21,6 +22,7 @@ public class ProfileService {
 
   private final ProfileRepository profileRepository;
   private final UserRepository userRepository;
+  private final FeedRepository feedRepository;
 
   /**
    * 프로필을 DB에 생성합니다.
@@ -35,7 +37,19 @@ public class ProfileService {
 
     Profile profile = request.toProfile(user);
     profileRepository.save(profile);
+
+    saveProfileToFeed(request, profile);
+
     return profile.getId();
+  }
+
+  private void saveProfileToFeed(ProfileRequest request, Profile profile) {
+    if (request.getImageUrl() != null) {
+      feedRepository.save(request.imageToFeed(profile));
+    }
+    if (request.getBgImageUrl() != null) {
+      feedRepository.save(request.bgImageToFeed(profile));
+    }
   }
 
   /**

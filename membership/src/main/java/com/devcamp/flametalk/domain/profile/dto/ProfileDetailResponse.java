@@ -19,7 +19,7 @@ public class ProfileDetailResponse {
   private String bgImageUrl;
   private List<Sticker> sticker;
   private String description;
-  private boolean isDefault;
+  private Boolean isDefault;
   private LocalDateTime updatedDate;
 
   /**
@@ -35,7 +35,7 @@ public class ProfileDetailResponse {
         profile.getBgImageUrl(),
         profile.getSticker(),
         profile.getDescription(),
-        profile.isDefault(),
+        profile.getIsDefault(),
         profile.getUpdatedAt());
   }
 }
