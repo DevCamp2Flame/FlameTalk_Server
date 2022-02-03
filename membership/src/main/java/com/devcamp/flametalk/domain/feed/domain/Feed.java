@@ -2,6 +2,7 @@ package com.devcamp.flametalk.domain.feed.domain;
 
 import com.devcamp.flametalk.domain.model.BaseTime;
 import com.devcamp.flametalk.domain.profile.domain.Profile;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -31,7 +32,7 @@ public class Feed extends BaseTime {
   @NotNull
   private Boolean isBackground;
 
-  @NotNull
+  @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
   private Boolean isLock;
 
   @ManyToOne
@@ -54,5 +55,9 @@ public class Feed extends BaseTime {
     this.isBackground = isBackground;
     this.isLock = isLock;
     this.profile = profile;
+  }
+
+  public void reverseLock() {
+    this.isLock = !isLock;
   }
 }

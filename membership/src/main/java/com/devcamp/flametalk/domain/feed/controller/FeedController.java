@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +24,22 @@ import org.springframework.web.bind.annotation.RestController;
 public class FeedController {
 
   private final FeedService feedService;
+
+  /**
+   * 요청받은 id에 해당하는 피드 사진의 공개 여부를 반전시킵니다.
+   *
+   * @param feedId 피드 id
+   * @return 공개 여부 결과에 따른 응답 정보
+   */
+  @PutMapping("/lock/{feedId}")
+  public ResponseEntity<CommonResponse> updateLock(@PathVariable Long feedId) {
+    feedService.updateLock(feedId);
+    log.info("update feed lock {}", feedId);
+
+    CommonResponse response = new CommonResponse();
+    response.success(FeedResponse.FEED_REVERSE_LOCK_SUCCESS.getMessage());
+    return ResponseEntity.ok().body(response);
+  }
 
   /**
    * 요청받은 id에 해당하는 피드를 삭제합니다.

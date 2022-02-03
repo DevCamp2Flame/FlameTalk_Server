@@ -29,4 +29,16 @@ public class FeedService {
         .orElseThrow(() -> new EntityNotFoundException(FEED_NOT_FOUND));
     feedRepository.delete(feed);
   }
+
+  /**
+   * id에 해당하는 피드 사진의 공개여부를 업데이트합니다.
+   *
+   * @param id 피드 id
+   */
+  @Transactional
+  public void updateLock(Long id) {
+    Feed feed = feedRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(FEED_NOT_FOUND));
+    feed.reverseLock();
+  }
 }
