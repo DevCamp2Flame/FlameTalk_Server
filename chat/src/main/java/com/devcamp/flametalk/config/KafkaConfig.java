@@ -1,6 +1,6 @@
 package com.devcamp.flametalk.config;
 
-import com.devcamp.flametalk.model.ChattingMessage;
+import com.devcamp.flametalk.domain.Message;
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;
 import org.apache.kafka.common.serialization.IntegerDeserializer;
@@ -23,13 +23,13 @@ public class KafkaConfig {
 
   //Sender config
   @Bean
-  public ProducerFactory<String, ChattingMessage> producerFactory() {
+  public ProducerFactory<String, Message> producerFactory() {
     return new DefaultKafkaProducerFactory<>(producerConfigs(), null,
-        new JsonSerializer<ChattingMessage>());
+        new JsonSerializer<Message>());
   }
 
   @Bean
-  public KafkaTemplate<String, ChattingMessage> kafkaTemplate() {
+  public KafkaTemplate<String, Message> kafkaTemplate() {
     return new KafkaTemplate<>(producerFactory());
   }
 
@@ -45,16 +45,16 @@ public class KafkaConfig {
 
   //Receiver config
   @Bean
-  public ConcurrentKafkaListenerContainerFactory<String, ChattingMessage> kafkaListenerContainerFactory() {
-    ConcurrentKafkaListenerContainerFactory<String, ChattingMessage> factory = new ConcurrentKafkaListenerContainerFactory<>();
+  public ConcurrentKafkaListenerContainerFactory<String, Message> kafkaListenerContainerFactory() {
+    ConcurrentKafkaListenerContainerFactory<String, Message> factory = new ConcurrentKafkaListenerContainerFactory<>();
     factory.setConsumerFactory(consumerFactory());
     return factory;
   }
 
   @Bean
-  public ConsumerFactory<String, ChattingMessage> consumerFactory() {
+  public ConsumerFactory<String, Message> consumerFactory() {
     return new DefaultKafkaConsumerFactory<>(consumerConfigs(), null,
-        new JsonDeserializer<>(ChattingMessage.class));
+        new JsonDeserializer<>(Message.class));
   }
 
   @Bean

@@ -17,7 +17,7 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
   public void registerStompEndpoints(StompEndpointRegistry registry) {
     registry
         .addEndpoint("/stomp/chat") // websocket 핸드쉐이크 커넥션을 생성할 경로
-        .setAllowedOrigins("http://localhost:8080")
+        .setAllowedOriginPatterns("*")
         .withSockJS();
   }
 
