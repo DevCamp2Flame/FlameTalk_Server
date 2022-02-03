@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.domain.profile.dto;
+package com.devcamp.flametalk.global.common;
 
 import com.devcamp.flametalk.domain.profile.domain.ProfileResponse;
 import lombok.AllArgsConstructor;

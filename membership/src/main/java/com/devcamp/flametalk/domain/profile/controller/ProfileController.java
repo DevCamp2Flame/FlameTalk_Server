@@ -1,10 +1,10 @@
 package com.devcamp.flametalk.domain.profile.controller;
 
 import com.devcamp.flametalk.domain.profile.domain.ProfileResponse;
-import com.devcamp.flametalk.domain.profile.dto.CommonResponse;
+import com.devcamp.flametalk.global.common.CommonResponse;
 import com.devcamp.flametalk.domain.profile.dto.ProfileDetailResponse;
 import com.devcamp.flametalk.domain.profile.dto.ProfileRequest;
-import com.devcamp.flametalk.domain.profile.dto.SingleDataResponse;
+import com.devcamp.flametalk.global.common.SingleDataResponse;
 import com.devcamp.flametalk.domain.profile.service.ProfileService;
 import java.net.URI;
 import javax.validation.Valid;

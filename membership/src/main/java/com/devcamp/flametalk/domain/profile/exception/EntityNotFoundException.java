@@ -1,6 +1,6 @@
-package com.devcamp.flametalk.domain.profile.error.exception;
+package com.devcamp.flametalk.domain.profile.exception;
 
-import com.devcamp.flametalk.domain.profile.error.ErrorCode;
+import com.devcamp.flametalk.global.error.ErrorCode;
 import lombok.Getter;
 
 /**

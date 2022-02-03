@@ -1,10 +1,10 @@
-package com.devcamp.flametalk.domain.profile.error;
+package com.devcamp.flametalk.global.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * 모든 예외를 관리하는 Enum 입니다.
+ * membership 서버의 모든 예외를 관리하는 Enum 입니다.
  */
 @AllArgsConstructor
 @Getter

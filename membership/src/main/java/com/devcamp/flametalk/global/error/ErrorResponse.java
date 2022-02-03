@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.domain.profile.error;
+package com.devcamp.flametalk.global.error;
 
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
