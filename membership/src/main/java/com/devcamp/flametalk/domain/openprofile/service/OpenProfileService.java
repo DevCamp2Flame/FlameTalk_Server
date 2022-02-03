@@ -58,4 +58,16 @@ public class OpenProfileService {
     OpenProfile updatedOpenProfile = openProfile.update(requestOpenProfile);
     return OpenProfileDetailResponse.from(updatedOpenProfile);
   }
+
+  /**
+   * id에 해당하는 오픈 프로필을 삭제합니다.
+   *
+   * @param id 오픈 프로필 id
+   */
+  @Transactional
+  public void deleteById(Long id) {
+    OpenProfile openProfile = openProfileRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(ErrorCode.OPEN_PROFILE_NOT_FOUND));
+    openProfileRepository.delete(openProfile);
+  }
 }

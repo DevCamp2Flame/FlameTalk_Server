@@ -10,7 +10,8 @@ import lombok.Getter;
 @Getter
 public enum OpenProfileResponse {
   OPEN_PROFILE_CREATE_SUCCESS(201, "오픈 프로필 생성 성공"),
-  OPEN_PROFILE_UPDATE_SUCCESS(200, "오픈 프로필 수정 성공");
+  OPEN_PROFILE_UPDATE_SUCCESS(200, "오픈 프로필 수정 성공"),
+  OPEN_PROFILE_DELETE_SUCCESS(200, "오픈 프로필 삭제 성공");
 
   private final int status;
   private final String message;

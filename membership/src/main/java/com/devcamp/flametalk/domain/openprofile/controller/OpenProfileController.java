@@ -5,6 +5,7 @@ import com.devcamp.flametalk.domain.openprofile.dto.OpenProfileCreateRequest;
 import com.devcamp.flametalk.domain.openprofile.dto.OpenProfileDetailResponse;
 import com.devcamp.flametalk.domain.openprofile.dto.OpenProfileUpdateRequest;
 import com.devcamp.flametalk.domain.openprofile.service.OpenProfileService;
+import com.devcamp.flametalk.global.common.CommonResponse;
 import com.devcamp.flametalk.global.common.SingleDataResponse;
 import java.net.URI;
 import javax.validation.Valid;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -66,6 +68,22 @@ public class OpenProfileController {
     response.success(OpenProfileResponse.OPEN_PROFILE_UPDATE_SUCCESS.getMessage(),
         openProfileDetail);
     log.info("update open profile {} ", openProfileDetail.getOpenProfileId());
+    return ResponseEntity.ok().body(response);
+  }
+
+  /**
+   * 요청받은 id에 해당하는 오픈 프로필을 삭제합니다.
+   *
+   * @param openProfileId 오픈 프로필 id
+   * @return 삭제 결과에 따른 응답 정보
+   */
+  @DeleteMapping("/{openProfileId}")
+  public ResponseEntity<CommonResponse> deleteById(@PathVariable Long openProfileId) {
+    openProfileService.deleteById(openProfileId);
+    log.info("delete feed {}", openProfileId);
+
+    CommonResponse response = new CommonResponse();
+    response.success(OpenProfileResponse.OPEN_PROFILE_DELETE_SUCCESS.getMessage());
     return ResponseEntity.ok().body(response);
   }
 }
