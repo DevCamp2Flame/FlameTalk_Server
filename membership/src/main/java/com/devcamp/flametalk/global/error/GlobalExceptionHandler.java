@@ -1,6 +1,6 @@
 package com.devcamp.flametalk.global.error;
 
-import com.devcamp.flametalk.domain.profile.exception.EntityNotFoundException;
+import com.devcamp.flametalk.global.error.exception.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
