@@ -1,5 +1,7 @@
 package com.devcamp.flametalk.domain.feed.domain;
 
+import com.devcamp.flametalk.domain.profile.domain.Profile;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -7,4 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface FeedRepository extends JpaRepository<Feed, Long> {
 
+  List<Feed> getAllByProfile(Profile profile);
+
+  List<Feed> getAllByProfileAndIsBackground(Profile profile, Boolean isBackground);
 }

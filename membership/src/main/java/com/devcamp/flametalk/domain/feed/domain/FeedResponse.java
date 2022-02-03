@@ -9,6 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum FeedResponse {
+  FEEDS_SUCCESS(200, "피드 리스트 조회 성공"),
   FEED_DELETE_SUCCESS(200, "피드 삭제 성공"),
   FEED_REVERSE_LOCK_SUCCESS(200, "피드 사진 공개 여부 변환 성공");
 

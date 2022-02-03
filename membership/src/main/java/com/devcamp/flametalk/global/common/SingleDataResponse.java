@@ -19,4 +19,9 @@ public class SingleDataResponse<T> extends CommonResponse {
     super(response.getStatus(), response.getMessage());
     this.data = data;
   }
+
+  public void success(String message, T data) {
+    this.success(message);
+    this.data = data;
+  }
 }

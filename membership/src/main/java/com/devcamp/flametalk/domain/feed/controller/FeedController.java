@@ -1,16 +1,20 @@
 package com.devcamp.flametalk.domain.feed.controller;
 
 import com.devcamp.flametalk.domain.feed.domain.FeedResponse;
+import com.devcamp.flametalk.domain.feed.dto.FeedsResponse;
 import com.devcamp.flametalk.domain.feed.service.FeedService;
 import com.devcamp.flametalk.global.common.CommonResponse;
+import com.devcamp.flametalk.global.common.SingleDataResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -24,6 +28,26 @@ import org.springframework.web.bind.annotation.RestController;
 public class FeedController {
 
   private final FeedService feedService;
+
+  /**
+   * 프로필에 해당하는 피드를 모두 조회합니다.
+   *
+   * @param profileId    조회할 프로필 id
+   * @param isBackground 배경사진 여부
+   * @return 프로필 정보와 피드 리스트
+   */
+  @GetMapping
+  public ResponseEntity<SingleDataResponse<FeedsResponse>> findFeeds(@RequestParam Long profileId,
+      @RequestParam(required = false) Boolean isBackground) {
+
+    // TODO: api gateway 적용 이후 header userId로 isLock 판별
+
+    FeedsResponse feeds = feedService.findFeeds(profileId, isBackground);
+    SingleDataResponse<FeedsResponse> response = new SingleDataResponse<>();
+    response.success(FeedResponse.FEEDS_SUCCESS.getMessage(), feeds);
+    log.info("read feeds {}", response.toString());
+    return ResponseEntity.ok().body(response);
+  }
 
   /**
    * 요청받은 id에 해당하는 피드 사진의 공개 여부를 반전시킵니다.
