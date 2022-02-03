@@ -9,7 +9,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum OpenProfileResponse {
-  OPEN_PROFILE_CREATE_SUCCESS(201, "오픈 프로필 생성 성공");
+  OPEN_PROFILE_CREATE_SUCCESS(201, "오픈 프로필 생성 성공"),
+  OPEN_PROFILE_UPDATE_SUCCESS(200, "오픈 프로필 수정 성공");
 
   private final int status;
   private final String message;

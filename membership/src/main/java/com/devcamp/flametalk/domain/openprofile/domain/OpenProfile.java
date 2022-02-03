@@ -56,4 +56,18 @@ public class OpenProfile extends BaseTime {
     this.description = description;
     this.openProfileUser = user;
   }
+
+  /**
+   * 오픈 프로필 엔티티를 업데이트합니다.
+   *
+   * @param updatedOpenProfile 업데이트될 오픈 프로필
+   * @return 업데이트된 오픈 프로필
+   */
+  public OpenProfile update(OpenProfile updatedOpenProfile) {
+    this.nickname = updatedOpenProfile.nickname;
+    this.imageUrl = updatedOpenProfile.imageUrl;
+    this.description = updatedOpenProfile.description;
+
+    return this;
+  }
 }
