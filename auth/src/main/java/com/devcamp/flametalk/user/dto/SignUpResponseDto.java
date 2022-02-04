@@ -3,10 +3,12 @@ package com.devcamp.flametalk.user.dto;
 import com.devcamp.flametalk.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * 회원가입 응답 Dto 입니다.
  */
+@NoArgsConstructor
 @Getter
 public class SignUpResponseDto {
 

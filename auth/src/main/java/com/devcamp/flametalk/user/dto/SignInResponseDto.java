@@ -4,10 +4,12 @@ import com.devcamp.flametalk.user.domain.User;
 import java.util.Map;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * 로그인 응답 Dto 입니다.
  */
+@NoArgsConstructor
 @Getter
 public class SignInResponseDto {
 

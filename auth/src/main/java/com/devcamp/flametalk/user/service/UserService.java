@@ -1,21 +1,30 @@
 package com.devcamp.flametalk.user.service;
 
-import static com.devcamp.flametalk.global.error.ErrorCode.DUPLICATE_EMAIL;
-import static com.devcamp.flametalk.global.error.ErrorCode.DUPLICATE_PHONE_NUMBER;
-import static com.devcamp.flametalk.global.error.ErrorCode.INVALID_TOKEN;
-import static com.devcamp.flametalk.global.error.ErrorCode.LEAVE_USER;
-import static com.devcamp.flametalk.global.error.ErrorCode.MISMATCH_PASSWORD;
-import static com.devcamp.flametalk.global.error.ErrorCode.USER_NOT_FOUND;
+import static com.devcamp.flametalk.global.error.ErrorCode.USER_NOT_FOUND_BY_TOKEN;
+import static com.devcamp.flametalk.global.response.StatusCode.CREATED_TOKEN;
+import static com.devcamp.flametalk.global.response.StatusCode.CREATED_USER;
+import static com.devcamp.flametalk.global.response.StatusCode.DUPLICATE_EMAIL;
+import static com.devcamp.flametalk.global.response.StatusCode.DUPLICATE_PHONE_NUMBER;
+import static com.devcamp.flametalk.global.response.StatusCode.INVALID_TOKEN;
+import static com.devcamp.flametalk.global.response.StatusCode.LEAVE_USER;
+import static com.devcamp.flametalk.global.response.StatusCode.MISMATCH_PASSWORD;
+import static com.devcamp.flametalk.global.response.StatusCode.REDIRECT_TO_LOGIN;
+import static com.devcamp.flametalk.global.response.StatusCode.SUCCESS_LEAVE;
+import static com.devcamp.flametalk.global.response.StatusCode.SUCCESS_LOGIN;
+import static com.devcamp.flametalk.global.response.StatusCode.USER_NOT_FOUND;
+import static com.devcamp.flametalk.global.response.StatusCode.VALID_EMAIL;
 
 import com.devcamp.flametalk.device.Device;
 import com.devcamp.flametalk.device.DeviceRepository;
 import com.devcamp.flametalk.global.error.exception.CustomException;
+import com.devcamp.flametalk.global.response.DefaultResponse;
 import com.devcamp.flametalk.global.util.JwtTokenProvider;
 import com.devcamp.flametalk.user.domain.Social;
 import com.devcamp.flametalk.user.domain.Status;
 import com.devcamp.flametalk.user.domain.User;
 import com.devcamp.flametalk.user.domain.UserRedisRepository;
 import com.devcamp.flametalk.user.domain.UserRepository;
+import com.devcamp.flametalk.user.dto.GatewayUserDto;
 import com.devcamp.flametalk.user.dto.RenewTokenDto;
 import com.devcamp.flametalk.user.dto.SignInRequestDto;
 import com.devcamp.flametalk.user.dto.SignInResponseDto;
@@ -26,6 +35,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -49,8 +59,8 @@ public class UserService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-    return userRepository.findById(userId).orElseThrow(
-        () -> new CustomException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
+    return userRepository.findById(userId)
+        .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, USER_NOT_FOUND_BY_TOKEN));
   }
 
   /**
@@ -59,9 +69,11 @@ public class UserService implements UserDetailsService {
    * @param signUpRequestDto 회원가입 요청 dto
    * @return 생성된 사용자 정보
    */
-  public SignUpResponseDto signUp(SignUpRequestDto signUpRequestDto) {
+  public ResponseEntity<DefaultResponse<SignUpResponseDto>> signUp(
+      SignUpRequestDto signUpRequestDto) {
     if (userRepository.findByPhoneNumber(signUpRequestDto.getPhoneNumber()).isPresent()) {
-      throw new CustomException(HttpStatus.CONFLICT, DUPLICATE_PHONE_NUMBER);
+      return DefaultResponse.toResponseEntity(HttpStatus.OK, DUPLICATE_PHONE_NUMBER,
+          new SignUpResponseDto());
     }
 
     String password = "";
@@ -78,7 +90,8 @@ public class UserService implements UserDetailsService {
         .build()
     );
 
-    return new SignUpResponseDto(user);
+    return DefaultResponse.toResponseEntity(HttpStatus.OK, CREATED_USER,
+        new SignUpResponseDto(user));
   }
 
   /**
@@ -87,15 +100,20 @@ public class UserService implements UserDetailsService {
    * @param signInRequestDto 사용자 로그인 정보
    * @return 사용자 정보와 토큰 정보
    */
-  public SignInResponseDto signIn(SignInRequestDto signInRequestDto) {
+  public ResponseEntity<DefaultResponse<SignInResponseDto>> signIn(
+      SignInRequestDto signInRequestDto) {
     // 등록된 사용자가 아님
-    User user = userRepository.findByEmail(signInRequestDto.getEmail())
-        .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
+    User user = userRepository.findByEmail(signInRequestDto.getEmail()).orElse(null);
+    if (user == null) {
+      return DefaultResponse.toResponseEntity(HttpStatus.OK, USER_NOT_FOUND,
+          new SignInResponseDto());
+    }
 
     // 비밀번호 불일치
     if (signInRequestDto.getSocial().equals(Social.LOGIN.getName()) && !passwordEncoder.matches(
         signInRequestDto.getPassword(), user.getPassword())) {
-      throw new CustomException(HttpStatus.BAD_REQUEST, MISMATCH_PASSWORD);
+      return DefaultResponse.toResponseEntity(HttpStatus.OK, MISMATCH_PASSWORD,
+          new SignInResponseDto());
     }
 
     // 상태가 LEAVE 이면서 캐시에 데이터가 존재하면 유휴 기간. 유휴 기간에 재로그인하면 active 상태로 변경
@@ -106,7 +124,7 @@ public class UserService implements UserDetailsService {
         user.activeStatus();
         userRepository.save(user);
       } else {
-        throw new CustomException(HttpStatus.BAD_REQUEST, LEAVE_USER);
+        return DefaultResponse.toResponseEntity(HttpStatus.OK, LEAVE_USER, new SignInResponseDto());
       }
     }
 
@@ -114,7 +132,8 @@ public class UserService implements UserDetailsService {
         user.getNickname(),
         user.getStatus().getName(), signInRequestDto.getDeviceId());
 
-    return new SignInResponseDto(user, tokens);
+    return DefaultResponse.toResponseEntity(HttpStatus.OK, SUCCESS_LOGIN,
+        new SignInResponseDto(user, tokens));
   }
 
   /**
@@ -123,13 +142,15 @@ public class UserService implements UserDetailsService {
    * @param token accessToken 만료 기간 1시간
    * @return 탈퇴 완료 메시지
    */
-  public String leave(String token) {
+  public ResponseEntity<DefaultResponse<String>> leave(String token) {
     if (!jwtTokenProvider.isEqualPrevTokenForAccess(token)) {
-      throw new CustomException(HttpStatus.UNAUTHORIZED, INVALID_TOKEN);
+      return DefaultResponse.toResponseEntity(HttpStatus.OK, INVALID_TOKEN, "");
     }
 
-    User user = userRepository.findById(jwtTokenProvider.getUserId(token))
-        .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
+    User user = userRepository.findById(jwtTokenProvider.getUserId(token)).orElse(null);
+    if (user == null) {
+      return DefaultResponse.toResponseEntity(HttpStatus.OK, USER_NOT_FOUND, "");
+    }
 
     // 비활성 상태로 변경
     user.inactiveStatus();
@@ -138,7 +159,8 @@ public class UserService implements UserDetailsService {
     // 유저 캐싱
     userRedisRepository.saveIdleUser(user.getId());
 
-    return user.getNickname() + "님 30일 이내에 재접속하면 탈퇴되지 않습니다.";
+    return DefaultResponse.toResponseEntity(HttpStatus.OK, SUCCESS_LEAVE,
+        user.getNickname() + "님 30일 이내에 재접속하면 탈퇴되지 않습니다.");
   }
 
   /**
@@ -148,25 +170,59 @@ public class UserService implements UserDetailsService {
    * @param refreshToken refreshToken 만료 기간 2주
    * @return 갱신된 토큰
    */
-  public RenewTokenDto renewToken(String accessToken, String refreshToken) {
-    User user = userRepository.findById(jwtTokenProvider.getUserId(refreshToken))
-        .orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, USER_NOT_FOUND));
+  public ResponseEntity<DefaultResponse<RenewTokenDto>> renewToken(String accessToken,
+      String refreshToken) {
+    User user = userRepository.findById(jwtTokenProvider.getUserId(refreshToken)).orElse(null);
+    if (user == null) {
+      return DefaultResponse.toResponseEntity(HttpStatus.OK, USER_NOT_FOUND, new RenewTokenDto());
+    }
 
     Map<String, String> tokens = jwtTokenProvider.renewToken(accessToken, refreshToken);
+    if (tokens == null) {
+      return DefaultResponse.toResponseEntity(HttpStatus.OK, REDIRECT_TO_LOGIN,
+          new RenewTokenDto());
+    }
 
-    return new RenewTokenDto(user, tokens);
+    return DefaultResponse.toResponseEntity(HttpStatus.OK, CREATED_TOKEN,
+        new RenewTokenDto(user, tokens));
   }
 
   /**
    * 회원가입할 때 중복된 이메일이 있는지 확인합니다.
    *
    * @param email 이메일
-   * @return 중복된 이메일이 아니라면 true, 회원가입된 이메일이라면 error
+   * @return 중복된 이메일이 아니라면 true, 회원가입된 이메일이라면 false
    */
-  public Boolean checkEmail(String email) {
+  public ResponseEntity<DefaultResponse<Boolean>> checkEmail(String email) {
     if (userRepository.findByEmail(email).isPresent()) {
-      throw new CustomException(HttpStatus.CONFLICT, DUPLICATE_EMAIL);
+      return DefaultResponse.toResponseEntity(HttpStatus.OK, DUPLICATE_EMAIL, false);
     }
-    return true;
+    return DefaultResponse.toResponseEntity(HttpStatus.OK, VALID_EMAIL, true);
+  }
+
+  /**
+   * Gateway 에서 요청한 토큰이 올바른 토큰인지 확인하고, 토큰 정보와 일치하는 사용자 정보를 가져오기 위한 메소드입니다.
+   *
+   * @param token accessToken
+   * @return GatewayUserDto or null
+   */
+  public GatewayUserDto getUserIfPresent(String token) {
+    // 올바른 토큰인지 확인
+    if (!jwtTokenProvider.validateToken(token)) {
+      return null;
+    }
+
+    // token DB 에 저장된 토큰 내용과 일치하는지 확인
+    if (!jwtTokenProvider.isEqualPrevTokenForAccess(token)) {
+      return null;
+    }
+
+    // 토큰 정보와 일치하는 사용자가 있는지 확인
+    User user = userRepository.findById(jwtTokenProvider.getUserId(token)).orElse(null);
+    if (user == null) {
+      return null;
+    }
+
+    return new GatewayUserDto(user.getId(), jwtTokenProvider.getDeviceId(token));
   }
 }

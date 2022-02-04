@@ -31,10 +31,6 @@ public enum ErrorCode {
   USER_NOT_FOUND(404, "NOT_FOUND", "해당 사용자 정보를 찾을 수 없습니다."),
   TOKEN_NOT_FOUND(404, "NOT_FOUND", "저장된 토큰을 찾을 수 없습니다."),
 
-  // 409 CONFLICT : Resource 의 현재 상태와 충돌. 보통 중복된 데이터 존재
-  DUPLICATE_PHONE_NUMBER(409, "CONFLICT", "이미 가입된 전화번호입니다."),
-  DUPLICATE_EMAIL(409, "CONFLICT", "이미 가입된 이메일입니다."),
-
   INTERNAL_SERVER_ERROR(500, "SERVER ERROR", "서버 오류입니다.");
 
   private final int status;

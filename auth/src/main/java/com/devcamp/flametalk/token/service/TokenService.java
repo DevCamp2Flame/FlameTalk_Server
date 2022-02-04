@@ -1,11 +1,7 @@
 package com.devcamp.flametalk.token.service;
 
-import static com.devcamp.flametalk.global.error.ErrorCode.TOKEN_NOT_FOUND;
-
-import com.devcamp.flametalk.global.error.exception.CustomException;
 import com.devcamp.flametalk.token.domain.TokenRedisRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 /**
@@ -56,9 +52,8 @@ public class TokenService {
     String prevAccessToken = tokenRedisRepository.findToken(userId, deviceId, "accessToken");
 
     if (prevAccessToken == null) {
-      throw new CustomException(HttpStatus.NOT_FOUND, TOKEN_NOT_FOUND);
+      return false;
     }
-
     return prevAccessToken.equals(accessToken);
   }
 
@@ -75,9 +70,8 @@ public class TokenService {
     String prevRefreshToken = tokenRedisRepository.findToken(userId, deviceId, "refreshToken");
 
     if (prevRefreshToken == null) {
-      throw new CustomException(HttpStatus.NOT_FOUND, TOKEN_NOT_FOUND);
+      return false;
     }
-
     return prevRefreshToken.equals(refreshToken);
   }
 
