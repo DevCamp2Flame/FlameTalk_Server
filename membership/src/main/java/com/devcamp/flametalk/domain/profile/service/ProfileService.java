@@ -1,13 +1,18 @@
 package com.devcamp.flametalk.domain.profile.service;
 
+import com.devcamp.flametalk.domain.feed.domain.FeedRepository;
 import com.devcamp.flametalk.domain.profile.domain.Profile;
 import com.devcamp.flametalk.domain.profile.domain.ProfileRepository;
 import com.devcamp.flametalk.domain.profile.dto.ProfileDetailResponse;
 import com.devcamp.flametalk.domain.profile.dto.ProfileRequest;
-import com.devcamp.flametalk.domain.profile.error.ErrorCode;
-import com.devcamp.flametalk.domain.profile.error.exception.EntityNotFoundException;
+import com.devcamp.flametalk.domain.profile.dto.ProfileSimpleResponse;
+import com.devcamp.flametalk.domain.profile.dto.ProfilesResponse;
 import com.devcamp.flametalk.domain.user.domain.User;
 import com.devcamp.flametalk.domain.user.domain.UserRepository;
+import com.devcamp.flametalk.global.error.ErrorCode;
+import com.devcamp.flametalk.global.error.exception.EntityNotFoundException;
+import com.devcamp.flametalk.global.error.exception.ForbiddenException;
+import java.util.List;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +26,7 @@ public class ProfileService {
 
   private final ProfileRepository profileRepository;
   private final UserRepository userRepository;
+  private final FeedRepository feedRepository;
 
   /**
    * 프로필을 DB에 생성합니다.
@@ -35,7 +41,19 @@ public class ProfileService {
 
     Profile profile = request.toProfile(user);
     profileRepository.save(profile);
+
+    saveProfileToFeed(request, profile);
+
     return profile.getId();
+  }
+
+  private void saveProfileToFeed(ProfileRequest request, Profile profile) {
+    if (request.getImageUrl() != null) {
+      feedRepository.save(request.imageToFeed(profile));
+    }
+    if (request.getBgImageUrl() != null) {
+      feedRepository.save(request.bgImageToFeed(profile));
+    }
   }
 
   /**
@@ -48,6 +66,13 @@ public class ProfileService {
     Profile profile = profileRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(ErrorCode.PROFILE_NOT_FOUND));
     return ProfileDetailResponse.from(profile);
+  }
+
+  public ProfilesResponse findByUserId(String id) {
+    User user = userRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(ErrorCode.USER_NOT_FOUND));
+    List<Profile> profiles = profileRepository.getAllByUser(user);
+    return ProfilesResponse.of(user, ProfileSimpleResponse.createList(profiles));
   }
 
   /**
@@ -67,5 +92,20 @@ public class ProfileService {
     Profile requestProfile = request.toProfile(user);
     Profile updatedProfile = profile.update(requestProfile);
     return updatedProfile.getId();
+  }
+
+  /**
+   * id에 해당하는 프로필을 삭제합니다. 해당 프로필을 참조하는 피드도 삭제됩니다.
+   *
+   * @param id 프로필 id
+   */
+  @Transactional
+  public void deleteById(Long id) {
+    Profile profile = profileRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(ErrorCode.PROFILE_NOT_FOUND));
+    if (Boolean.TRUE.equals(profile.getIsDefault())) {
+      throw new ForbiddenException(ErrorCode.DELETE_FORBIDDEN_PROFILE);
+    }
+    profileRepository.delete(profile);
   }
 }

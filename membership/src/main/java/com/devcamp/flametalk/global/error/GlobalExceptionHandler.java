@@ -1,6 +1,7 @@
-package com.devcamp.flametalk.domain.profile.error;
+package com.devcamp.flametalk.global.error;
 
-import com.devcamp.flametalk.domain.profile.error.exception.EntityNotFoundException;
+import com.devcamp.flametalk.global.error.exception.EntityNotFoundException;
+import com.devcamp.flametalk.global.error.exception.ForbiddenException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 /**
- * 프로젝트 전역에 발생하는 Exception Handler 입니다.
+ * membership 서버 전역에 발생하는 Exception Handler 입니다.
  */
 @Slf4j
 @ControllerAdvice
@@ -33,10 +34,17 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(EntityNotFoundException.class)
-  protected ResponseEntity<ErrorResponse> handleBusinessException(EntityNotFoundException e) {
+  protected ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException e) {
     log.error("[Entity Not Found Exception]" + e.getMessage());
     ErrorResponse response = ErrorResponse.from(e.getErrorCode());
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+  }
+
+  @ExceptionHandler(ForbiddenException.class)
+  protected ResponseEntity<ErrorResponse> handleForbiddenException(ForbiddenException e) {
+    log.error("[Forbidden Exception]" + e.getMessage());
+    ErrorResponse response = ErrorResponse.from(e.getErrorCode());
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
   }
 
   @ExceptionHandler(Exception.class)

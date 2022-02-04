@@ -14,12 +14,13 @@ import lombok.Getter;
 @Getter
 public class ProfileDetailResponse {
 
-  private Long id;
+  private Long profileId;
+  private String nickname;
   private String imageUrl;
   private String bgImageUrl;
   private List<Sticker> sticker;
   private String description;
-  private boolean isDefault;
+  private Boolean isDefault;
   private LocalDateTime updatedDate;
 
   /**
@@ -31,11 +32,12 @@ public class ProfileDetailResponse {
   public static ProfileDetailResponse from(Profile profile) {
     return new ProfileDetailResponse(
         profile.getId(),
+        profile.getUser().getNickname(),
         profile.getImageUrl(),
         profile.getBgImageUrl(),
         profile.getSticker(),
         profile.getDescription(),
-        profile.isDefault(),
+        profile.getIsDefault(),
         profile.getUpdatedAt());
   }
 }
