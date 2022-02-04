@@ -5,11 +5,14 @@ import com.devcamp.flametalk.domain.profile.domain.Profile;
 import com.devcamp.flametalk.domain.profile.domain.ProfileRepository;
 import com.devcamp.flametalk.domain.profile.dto.ProfileDetailResponse;
 import com.devcamp.flametalk.domain.profile.dto.ProfileRequest;
+import com.devcamp.flametalk.domain.profile.dto.ProfileSimpleResponse;
+import com.devcamp.flametalk.domain.profile.dto.ProfilesResponse;
 import com.devcamp.flametalk.domain.user.domain.User;
 import com.devcamp.flametalk.domain.user.domain.UserRepository;
 import com.devcamp.flametalk.global.error.ErrorCode;
 import com.devcamp.flametalk.global.error.exception.EntityNotFoundException;
 import com.devcamp.flametalk.global.error.exception.ForbiddenException;
+import java.util.List;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -63,6 +66,13 @@ public class ProfileService {
     Profile profile = profileRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(ErrorCode.PROFILE_NOT_FOUND));
     return ProfileDetailResponse.from(profile);
+  }
+
+  public ProfilesResponse findByUserId(String id) {
+    User user = userRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(ErrorCode.USER_NOT_FOUND));
+    List<Profile> profiles = profileRepository.getAllByUser(user);
+    return ProfilesResponse.of(user, ProfileSimpleResponse.createList(profiles));
   }
 
   /**

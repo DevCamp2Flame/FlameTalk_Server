@@ -3,6 +3,7 @@ package com.devcamp.flametalk.domain.profile.controller;
 import com.devcamp.flametalk.domain.profile.domain.ProfileResponse;
 import com.devcamp.flametalk.domain.profile.dto.ProfileDetailResponse;
 import com.devcamp.flametalk.domain.profile.dto.ProfileRequest;
+import com.devcamp.flametalk.domain.profile.dto.ProfilesResponse;
 import com.devcamp.flametalk.domain.profile.service.ProfileService;
 import com.devcamp.flametalk.global.common.CommonResponse;
 import com.devcamp.flametalk.global.common.SingleDataResponse;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -60,6 +62,22 @@ public class ProfileController {
     SingleDataResponse<ProfileDetailResponse> response = new SingleDataResponse<>(
         ProfileResponse.PROFILE_DETAIL_SUCCESS, profileDetail);
     log.info("read profile" + response.getData().toString());
+    return ResponseEntity.ok().body(response);
+  }
+
+  /**
+   * 유저의 프로필을 모두 조회합니다.
+   *
+   * @param userId 프로필을 조회할 유저 id
+   * @return 유저 정보와 보유한  프로필 리스트
+   */
+  @GetMapping
+  public ResponseEntity<SingleDataResponse<ProfilesResponse>> findProfile(
+      @RequestHeader String userId) {
+    ProfilesResponse profiles = profileService.findByUserId(userId);
+    SingleDataResponse<ProfilesResponse> response = new SingleDataResponse<>();
+    response.success(ProfileResponse.PROFILES_SUCCESS.getMessage(), profiles);
+    log.info("read profiles by user id {} ", profiles.getUserId());
     return ResponseEntity.ok().body(response);
   }
 
