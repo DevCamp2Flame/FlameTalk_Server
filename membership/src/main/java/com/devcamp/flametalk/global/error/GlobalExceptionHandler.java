@@ -1,6 +1,7 @@
 package com.devcamp.flametalk.global.error;
 
 import com.devcamp.flametalk.global.error.exception.EntityNotFoundException;
+import com.devcamp.flametalk.global.error.exception.ForbiddenException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,10 +34,17 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(EntityNotFoundException.class)
-  protected ResponseEntity<ErrorResponse> handleBusinessException(EntityNotFoundException e) {
+  protected ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException e) {
     log.error("[Entity Not Found Exception]" + e.getMessage());
     ErrorResponse response = ErrorResponse.from(e.getErrorCode());
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+  }
+
+  @ExceptionHandler(ForbiddenException.class)
+  protected ResponseEntity<ErrorResponse> handleForbiddenException(ForbiddenException e) {
+    log.error("[Forbidden Exception]" + e.getMessage());
+    ErrorResponse response = ErrorResponse.from(e.getErrorCode());
+    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
   }
 
   @ExceptionHandler(Exception.class)

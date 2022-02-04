@@ -11,7 +11,8 @@ import lombok.Getter;
 public enum ProfileResponse {
   PROFILE_CREATE_SUCCESS(201, "프로필 생성 성공"),
   PROFILE_DETAIL_SUCCESS(200, "프로필 조회 성공"),
-  PROFILE_UPDATE_SUCCESS(200, "프로필 수정 성공");
+  PROFILE_UPDATE_SUCCESS(200, "프로필 수정 성공"),
+  PROFILE_DELETE_SUCCESS(200, "프로필 삭제 성공");
 
   private final int status;
   private final String message;

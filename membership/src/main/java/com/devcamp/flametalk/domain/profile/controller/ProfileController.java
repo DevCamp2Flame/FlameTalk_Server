@@ -1,11 +1,11 @@
 package com.devcamp.flametalk.domain.profile.controller;
 
 import com.devcamp.flametalk.domain.profile.domain.ProfileResponse;
-import com.devcamp.flametalk.global.common.CommonResponse;
 import com.devcamp.flametalk.domain.profile.dto.ProfileDetailResponse;
 import com.devcamp.flametalk.domain.profile.dto.ProfileRequest;
-import com.devcamp.flametalk.global.common.SingleDataResponse;
 import com.devcamp.flametalk.domain.profile.service.ProfileService;
+import com.devcamp.flametalk.global.common.CommonResponse;
+import com.devcamp.flametalk.global.common.SingleDataResponse;
 import java.net.URI;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -76,5 +76,21 @@ public class ProfileController {
     Long updatedId = profileService.updateProfile(profileId, request);
     log.info("update " + request.getUserId() + " user profile:" + updatedId);
     return ResponseEntity.ok().body(CommonResponse.from(ProfileResponse.PROFILE_UPDATE_SUCCESS));
+  }
+
+  /**
+   * 요청받은 id에 해당하는 프로필을 삭제합니다.
+   *
+   * @param profileId 프로필 id
+   * @return 삭제 결과에 따른 응답 정보
+   */
+  @DeleteMapping("/{profileId}")
+  public ResponseEntity<CommonResponse> deleteById(@PathVariable Long profileId) {
+    profileService.deleteById(profileId);
+    log.info("delete profile {}", profileId);
+
+    CommonResponse response = new CommonResponse();
+    response.success(ProfileResponse.PROFILE_DELETE_SUCCESS.getMessage());
+    return ResponseEntity.ok().body(response);
   }
 }

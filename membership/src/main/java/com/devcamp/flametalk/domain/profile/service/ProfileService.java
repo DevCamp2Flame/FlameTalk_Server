@@ -5,10 +5,11 @@ import com.devcamp.flametalk.domain.profile.domain.Profile;
 import com.devcamp.flametalk.domain.profile.domain.ProfileRepository;
 import com.devcamp.flametalk.domain.profile.dto.ProfileDetailResponse;
 import com.devcamp.flametalk.domain.profile.dto.ProfileRequest;
-import com.devcamp.flametalk.global.error.ErrorCode;
-import com.devcamp.flametalk.global.error.exception.EntityNotFoundException;
 import com.devcamp.flametalk.domain.user.domain.User;
 import com.devcamp.flametalk.domain.user.domain.UserRepository;
+import com.devcamp.flametalk.global.error.ErrorCode;
+import com.devcamp.flametalk.global.error.exception.EntityNotFoundException;
+import com.devcamp.flametalk.global.error.exception.ForbiddenException;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -81,5 +82,20 @@ public class ProfileService {
     Profile requestProfile = request.toProfile(user);
     Profile updatedProfile = profile.update(requestProfile);
     return updatedProfile.getId();
+  }
+
+  /**
+   * id에 해당하는 프로필을 삭제합니다. 해당 프로필을 참조하는 피드도 삭제됩니다.
+   *
+   * @param id 프로필 id
+   */
+  @Transactional
+  public void deleteById(Long id) {
+    Profile profile = profileRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(ErrorCode.PROFILE_NOT_FOUND));
+    if (Boolean.TRUE.equals(profile.getIsDefault())) {
+      throw new ForbiddenException(ErrorCode.DELETE_FORBIDDEN_PROFILE);
+    }
+    profileRepository.delete(profile);
   }
 }
