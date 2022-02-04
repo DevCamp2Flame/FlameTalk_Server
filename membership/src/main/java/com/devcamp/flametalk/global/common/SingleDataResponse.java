@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.domain.profile.dto;
+package com.devcamp.flametalk.global.common;
 
 import com.devcamp.flametalk.domain.profile.domain.ProfileResponse;
 import lombok.Getter;
@@ -17,6 +17,11 @@ public class SingleDataResponse<T> extends CommonResponse {
 
   public SingleDataResponse(ProfileResponse response, T data) {
     super(response.getStatus(), response.getMessage());
+    this.data = data;
+  }
+
+  public void success(String message, T data) {
+    this.success(message);
     this.data = data;
   }
 }

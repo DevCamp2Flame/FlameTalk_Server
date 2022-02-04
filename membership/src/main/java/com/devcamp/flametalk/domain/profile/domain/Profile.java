@@ -1,7 +1,9 @@
 package com.devcamp.flametalk.domain.profile.domain;
 
+import com.devcamp.flametalk.domain.feed.domain.Feed;
 import com.devcamp.flametalk.domain.model.BaseTime;
 import com.devcamp.flametalk.domain.user.domain.User;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Convert;
@@ -11,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,11 +42,14 @@ public class Profile extends BaseTime {
 
   @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
   @NotNull
-  private boolean isDefault;
+  private Boolean isDefault;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
   private User user;
+
+  @OneToMany(mappedBy = "profile")
+  private List<Feed> feeds = new ArrayList<>();
 
   /**
    * Profile 엔티티의 빌더입니다.
@@ -57,8 +63,8 @@ public class Profile extends BaseTime {
    * @param user        프로필에 해당하는 유저
    */
   @Builder
-  public Profile(long id, String imageUrl, String bgImageUrl, List<Sticker> sticker, String description,
-      boolean isDefault, User user) {
+  public Profile(long id, String imageUrl, String bgImageUrl, List<Sticker> sticker,
+      String description, boolean isDefault, User user) {
     this.id = id;
     this.imageUrl = imageUrl;
     this.bgImageUrl = bgImageUrl;
