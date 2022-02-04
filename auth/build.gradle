@@ -38,8 +38,7 @@ dependencies {
     implementation 'mysql:mysql-connector-java'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-//    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-//    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-ribbon:2.2.10.RELEASE'
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
     // spring-boot-mail 을 사용하면 JavaMailSender Bean을 생성할 필요 없이, 자동으로 생성이 된다.
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.5.1'

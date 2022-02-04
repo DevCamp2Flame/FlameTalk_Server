@@ -1,8 +1,5 @@
 package com.devcamp.flametalk.global.util;
 
-import static com.devcamp.flametalk.global.error.ErrorCode.REDIRECT_TO_LOGIN;
-
-import com.devcamp.flametalk.global.error.exception.CustomException;
 import com.devcamp.flametalk.token.service.TokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -156,7 +153,7 @@ public class JwtTokenProvider {
         || !tokenService.isEqualPrevTokenForAccess(userId, deviceId, prevAccessToken)
         || !tokenService.isEqualPrevTokenForRefresh(userId, deviceId, prevRefreshToken)) {
       tokenService.delete(userId, deviceId);
-      throw new CustomException(HttpStatus.TEMPORARY_REDIRECT, REDIRECT_TO_LOGIN);
+      return null;
     }
 
     Date now = new Date();
@@ -186,7 +183,7 @@ public class JwtTokenProvider {
     return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
   }
 
-  private String getDeviceId(String token) {
+  public String getDeviceId(String token) {
     return (String) Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody()
         .get(deviceId);
   }

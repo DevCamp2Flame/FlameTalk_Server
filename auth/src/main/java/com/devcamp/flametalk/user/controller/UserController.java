@@ -1,12 +1,7 @@
 package com.devcamp.flametalk.user.controller;
 
-import static com.devcamp.flametalk.global.response.StatusCode.CREATED_TOKEN;
-import static com.devcamp.flametalk.global.response.StatusCode.CREATED_USER;
-import static com.devcamp.flametalk.global.response.StatusCode.SUCCESS_LEAVE_USER;
-import static com.devcamp.flametalk.global.response.StatusCode.SUCCESS_LOGIN;
-import static com.devcamp.flametalk.global.response.StatusCode.VALID_EMAIL;
-
 import com.devcamp.flametalk.global.response.DefaultResponse;
+import com.devcamp.flametalk.user.dto.GatewayUserDto;
 import com.devcamp.flametalk.user.dto.RenewTokenDto;
 import com.devcamp.flametalk.user.dto.SignInRequestDto;
 import com.devcamp.flametalk.user.dto.SignInResponseDto;
@@ -14,7 +9,6 @@ import com.devcamp.flametalk.user.dto.SignUpRequestDto;
 import com.devcamp.flametalk.user.dto.SignUpResponseDto;
 import com.devcamp.flametalk.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,37 +32,35 @@ public class UserController {
   @PostMapping("/signup")
   public ResponseEntity<DefaultResponse<SignUpResponseDto>> signUp(
       @RequestBody SignUpRequestDto signUpRequestDto) {
-    return DefaultResponse.toResponseEntity(HttpStatus.OK, CREATED_USER,
-        userService.signUp(signUpRequestDto));
+    return userService.signUp(signUpRequestDto);
   }
 
   @PostMapping("/signin")
   public ResponseEntity<DefaultResponse<SignInResponseDto>> signIn(
       @RequestBody SignInRequestDto signInRequestDto) {
-    return DefaultResponse.toResponseEntity(HttpStatus.OK, SUCCESS_LOGIN,
-        userService.signIn(signInRequestDto));
+    return userService.signIn(signInRequestDto);
   }
-
-  // todo: 이메일 인증 GetMapping
 
   @DeleteMapping("/leave")
   public ResponseEntity<DefaultResponse<String>> leave(
       @RequestHeader("ACCESS-TOKEN") String token) {
-    return DefaultResponse.toResponseEntity(HttpStatus.OK, SUCCESS_LEAVE_USER,
-        userService.leave(token));
+    return userService.leave(token);
   }
 
   @GetMapping("/token")
   public ResponseEntity<DefaultResponse<RenewTokenDto>> renewToken(
       @RequestHeader("ACCESS-TOKEN") String accessToken,
       @RequestHeader("REFRESH-TOKEN") String refreshToken) {
-    return DefaultResponse.toResponseEntity(HttpStatus.OK, CREATED_TOKEN,
-        userService.renewToken(accessToken, refreshToken));
+    return userService.renewToken(accessToken, refreshToken);
   }
 
   @GetMapping("/check")
   public ResponseEntity<DefaultResponse<Boolean>> checkEmail(@RequestParam("email") String email) {
-    return DefaultResponse.toResponseEntity(HttpStatus.OK, VALID_EMAIL,
-        userService.checkEmail(email));
+    return userService.checkEmail(email);
+  }
+
+  @GetMapping("/user")
+  public GatewayUserDto getUserIfPresent(@RequestHeader("ACCESS-TOKEN") String token) {
+    return userService.getUserIfPresent(token);
   }
 }
