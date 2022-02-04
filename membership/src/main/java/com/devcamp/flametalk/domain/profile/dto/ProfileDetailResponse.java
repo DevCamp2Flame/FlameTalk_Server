@@ -14,7 +14,8 @@ import lombok.Getter;
 @Getter
 public class ProfileDetailResponse {
 
-  private Long id;
+  private Long profileId;
+  private String nickname;
   private String imageUrl;
   private String bgImageUrl;
   private List<Sticker> sticker;
@@ -31,6 +32,7 @@ public class ProfileDetailResponse {
   public static ProfileDetailResponse from(Profile profile) {
     return new ProfileDetailResponse(
         profile.getId(),
+        profile.getUser().getNickname(),
         profile.getImageUrl(),
         profile.getBgImageUrl(),
         profile.getSticker(),
