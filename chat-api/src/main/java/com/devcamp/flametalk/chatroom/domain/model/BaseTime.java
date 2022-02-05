@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.chatapi.domain;
+package com.devcamp.flametalk.chatroom.domain.model;
 
 import java.time.LocalDateTime;
 import javax.persistence.Column;
@@ -15,7 +15,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class BaseTimeEntity {
+public abstract class BaseTime {
 
   @CreatedDate
   @Column(nullable = false, columnDefinition = "DATETIME")

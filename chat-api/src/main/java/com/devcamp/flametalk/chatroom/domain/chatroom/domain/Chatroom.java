@@ -1,25 +1,26 @@
-package com.devcamp.flametalk.chatapi.domain;
+package com.devcamp.flametalk.chatroom.domain.chatroom.domain;
 
+import com.devcamp.flametalk.chatroom.domain.model.BaseTime;
+import com.devcamp.flametalk.chatroom.domain.user.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import lombok.AllArgsConstructor;
+import javax.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
-public class Chatroom extends BaseTimeEntity {
+public class Chatroom extends BaseTime {
 
   @Id
   @GeneratedValue(generator = "UUID")
@@ -27,19 +28,30 @@ public class Chatroom extends BaseTimeEntity {
       name = "UUID",
       strategy = "org.hibernate.id.UUIDGenerator"
   )
-  @Column(columnDefinition = "VARCHAR(36)")
+  @Column(length = 36)
   private String id;
 
-  // todo : userId 와 연관관계 만들기
-  @Column(nullable = false, columnDefinition = "VARCHAR(20)")
-  private String hostId;
-
-  @Column(nullable = false, columnDefinition = "INT")
-  private Integer count;
+  @NotNull
+  private int count;
 
   @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
   private boolean isOpen;
 
+  private String url;
+
+  @ManyToOne
+  @JoinColumn(name = "host_id")
+  private User hostUser;
+
   @OneToMany(mappedBy = "chatroom")
   private List<UserChatroom> userChatrooms = new ArrayList<>();
+
+  @Builder
+  public Chatroom(String id, int count, boolean isOpen, String url, User hostUser) {
+    this.id = id;
+    this.count = count;
+    this.isOpen = isOpen;
+    this.url = url;
+    this.hostUser = hostUser;
+  }
 }

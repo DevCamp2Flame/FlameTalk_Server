@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.chatapi.dto;
+package com.devcamp.flametalk.chatroom.domain.chatroom.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,5 +1,6 @@
-package com.devcamp.flametalk.chatapi.domain;
+package com.devcamp.flametalk.chatroom.domain.chatroom.domain;
 
+import com.devcamp.flametalk.chatroom.domain.model.BaseTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class UserChatroom extends BaseTimeEntity {
+public class UserChatroom extends BaseTime {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

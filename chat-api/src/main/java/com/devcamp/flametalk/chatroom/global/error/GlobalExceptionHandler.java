@@ -1,8 +1,8 @@
-package com.devcamp.flametalk.chatapi.error;
+package com.devcamp.flametalk.chatroom.global.error;
 
-import static com.devcamp.flametalk.chatapi.error.ErrorCode.INTERNAL_SERVER_ERROR;
+import static com.devcamp.flametalk.chatroom.global.error.ErrorCode.INTERNAL_SERVER_ERROR;
 
-import com.devcamp.flametalk.chatapi.error.exception.CustomException;
+import com.devcamp.flametalk.chatroom.global.error.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

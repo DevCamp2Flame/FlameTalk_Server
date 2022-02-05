@@ -1,11 +1,11 @@
-package com.devcamp.flametalk.chatapi.service;
+package com.devcamp.flametalk.chatroom.domain.chatroom.service;
 
-import com.devcamp.flametalk.chatapi.domain.Chatroom;
-import com.devcamp.flametalk.chatapi.domain.ChatroomRepository;
-import com.devcamp.flametalk.chatapi.domain.UserChatroom;
-import com.devcamp.flametalk.chatapi.domain.UserChatroomRepository;
-import com.devcamp.flametalk.chatapi.dto.ChatroomCreateRequest;
-import com.devcamp.flametalk.chatapi.dto.ChatroomCreateResponse;
+import com.devcamp.flametalk.chatroom.domain.chatroom.domain.Chatroom;
+import com.devcamp.flametalk.chatroom.domain.chatroom.domain.ChatroomRepository;
+import com.devcamp.flametalk.chatroom.domain.chatroom.domain.UserChatroom;
+import com.devcamp.flametalk.chatroom.domain.chatroom.domain.UserChatroomRepository;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateRequest;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateResponse;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +21,7 @@ public class ChatroomService {
   public ChatroomCreateResponse create(ChatroomCreateRequest request) {
 
     // 채팅방 생성
-    Chatroom chatroom = chatroomRepository.save(Chatroom.builder()
-        .hostId(request.getHostId())
-        .count(request.getUsers().size())
-        .isOpen(request.getIsOpen())
-        .build());
+    Chatroom chatroom = chatroomRepository.save(request.toChatroom());
 
     // 유저-채팅 row 생성
     // todo : findById 로 user 찾고 검증 후 user 에 추가

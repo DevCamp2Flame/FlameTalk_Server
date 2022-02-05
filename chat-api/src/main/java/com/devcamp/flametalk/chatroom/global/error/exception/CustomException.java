@@ -1,6 +1,6 @@
-package com.devcamp.flametalk.chatapi.error.exception;
+package com.devcamp.flametalk.chatroom.global.error.exception;
 
-import com.devcamp.flametalk.chatapi.error.ErrorCode;
+import com.devcamp.flametalk.chatroom.global.error.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

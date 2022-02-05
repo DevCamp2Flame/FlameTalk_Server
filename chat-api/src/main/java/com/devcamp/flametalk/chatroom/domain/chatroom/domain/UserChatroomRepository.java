@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.chatapi.domain;
+package com.devcamp.flametalk.chatroom.domain.chatroom.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.chatapi.error;
+package com.devcamp.flametalk.chatroom.global.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

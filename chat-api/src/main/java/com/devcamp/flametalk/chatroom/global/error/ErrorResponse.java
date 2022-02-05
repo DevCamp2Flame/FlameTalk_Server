@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.chatapi.error;
+package com.devcamp.flametalk.chatroom.global.error;
 
 import java.time.LocalDateTime;
 import lombok.Builder;

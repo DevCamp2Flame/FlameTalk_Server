@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.chatapi.response;
+package com.devcamp.flametalk.chatroom.global.common;
 
 import lombok.Builder;
 import lombok.Data;
