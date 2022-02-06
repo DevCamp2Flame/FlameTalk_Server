@@ -1,6 +1,7 @@
 package com.devcamp.flametalk.domain.feed.controller;
 
 import com.devcamp.flametalk.domain.feed.domain.FeedResponse;
+import com.devcamp.flametalk.domain.feed.dto.FeedDetailResponse;
 import com.devcamp.flametalk.domain.feed.dto.FeedsResponse;
 import com.devcamp.flametalk.domain.feed.service.FeedService;
 import com.devcamp.flametalk.global.common.CommonResponse;
@@ -53,15 +54,15 @@ public class FeedController {
    * 요청받은 id에 해당하는 피드 사진의 공개 여부를 반전시킵니다.
    *
    * @param feedId 피드 id
-   * @return 공개 여부 결과에 따른 응답 정보
+   * @return 공개 여부 결과에 따른 응답 정보와 업데이트된 피드 객체
    */
   @PutMapping("/lock/{feedId}")
-  public ResponseEntity<CommonResponse> updateLock(@PathVariable Long feedId) {
-    feedService.updateLock(feedId);
-    log.info("update feed lock {}", feedId);
-
-    CommonResponse response = new CommonResponse();
-    response.success(FeedResponse.FEED_REVERSE_LOCK_SUCCESS.getMessage());
+  public ResponseEntity<SingleDataResponse<FeedDetailResponse>> updateLock(
+      @PathVariable Long feedId) {
+    FeedDetailResponse feedDetail = feedService.updateLock(feedId);
+    log.info("update feed lock {}", feedDetail.toString());
+    SingleDataResponse<FeedDetailResponse> response = new SingleDataResponse<>();
+    response.success(FeedResponse.FEED_REVERSE_LOCK_SUCCESS.getMessage(), feedDetail);
     return ResponseEntity.ok().body(response);
   }
 

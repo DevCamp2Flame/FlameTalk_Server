@@ -36,7 +36,7 @@ public class ProfileController {
   private final ProfileService profileService;
 
   /**
-   * 유저 본인의 프로필을 수정합니다.
+   * 유저 본인의 프로필을 생성합니다.
    *
    * @param request 등록할 프로필 JSON 데이터
    * @return 성공한 경우 DB에 저장된 id로 uri 생성
@@ -73,7 +73,7 @@ public class ProfileController {
    */
   @GetMapping
   public ResponseEntity<SingleDataResponse<ProfilesResponse>> findProfile(
-      @RequestHeader String userId) {
+      @RequestHeader("USER-ID") String userId) {
     ProfilesResponse profiles = profileService.findByUserId(userId);
     SingleDataResponse<ProfilesResponse> response = new SingleDataResponse<>();
     response.success(ProfileResponse.PROFILES_SUCCESS.getMessage(), profiles);
