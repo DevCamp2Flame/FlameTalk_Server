@@ -1,6 +1,7 @@
 package com.devcamp.flametalk.chatroom.domain.chatroom.service;
 
 import static com.devcamp.flametalk.chatroom.global.error.ErrorCode.HOST_USER_CONFLICT_EXCEPTION;
+import static com.devcamp.flametalk.chatroom.global.error.ErrorCode.USER_CHATROOM_NOT_FOUND;
 import static com.devcamp.flametalk.chatroom.global.error.ErrorCode.USER_NOT_FOUND;
 
 import com.devcamp.flametalk.chatroom.domain.chatroom.domain.Chatroom;
@@ -9,7 +10,10 @@ import com.devcamp.flametalk.chatroom.domain.chatroom.domain.UserChatroom;
 import com.devcamp.flametalk.chatroom.domain.chatroom.domain.UserChatroomRepository;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateResponse;
-import com.devcamp.flametalk.chatroom.domain.friend.domain.FriendRepository;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ProfileSimpleResponse;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomDetailResponse;
+import com.devcamp.flametalk.chatroom.domain.file.domain.File;
+import com.devcamp.flametalk.chatroom.domain.profile.domain.Profile;
 import com.devcamp.flametalk.chatroom.domain.profile.domain.ProfileRepository;
 import com.devcamp.flametalk.chatroom.domain.user.domain.User;
 import com.devcamp.flametalk.chatroom.domain.user.domain.UserRepository;
@@ -18,9 +22,13 @@ import com.devcamp.flametalk.chatroom.global.error.exception.EntityNotFoundExcep
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * 채팅방 관련 API 로직을 관리하는 Service 입니다.
+ */
 @RequiredArgsConstructor
 @Service
 public class ChatroomService {
@@ -28,10 +36,16 @@ public class ChatroomService {
   private final ChatroomRepository chatroomRepository;
   private final UserChatroomRepository userChatroomRepository;
   private final UserRepository userRepository;
-  private final FriendRepository friendRepository;
   private final ProfileRepository profileRepository;
 
-  // 채팅방 생성
+  /**
+   * 채팅방을 DB에 생성합니다. 채팅방에 초대된 유저들의 userChatroom 까지 DB에 생성됩니다.
+   *
+   * @param userId  채팅방 개설자
+   * @param request 생성할 채팅방 정보
+   * @return 생성된 채팅방 기본 정보
+   */
+  @Transactional
   public ChatroomCreateResponse save(String userId, ChatroomCreateRequest request) {
     User hostUser = validateUser(userId, request.getHostId());
 
@@ -65,10 +79,6 @@ public class ChatroomService {
         defaultTitle.add(user.get().getNickname());
 
         // TODO: [FRIEND SERVER] 친구가 나에게 보여주는 프로필이 기본인지 멀티 프로필인지 확인
-//        Profile profile = Optional.ofNullable(
-//                friendRepository.findByUserAndFriendUser(user.get(), hostUser))
-//            .map(Friend::getAssignedProfile)
-//            .orElse(profileRepository.findByUserAndIsDefault(user.get(), Boolean.TRUE));
 
         defaultThumbnail.add(
             profileRepository.findByUserAndIsDefault(user.get(), Boolean.TRUE).getImageUrl());
@@ -95,8 +105,43 @@ public class ChatroomService {
     if (!userId.equals(hostId)) {
       throw new ConflictException(HOST_USER_CONFLICT_EXCEPTION);
     }
-    User user = userRepository.findById(userId)
+    return userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
-    return user;
+  }
+
+  /**
+   * id에 해당하는 유저의 채팅방 상세 정보를 조회합니다.
+   *
+   * @param id 유저 채팅방 id
+   * @return 조회된 유저 채팅방 상세 정보
+   */
+  @Transactional
+  public UserChatroomDetailResponse findByUserChatroomId(Long id) {
+    UserChatroom userChatroom = userChatroomRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(USER_CHATROOM_NOT_FOUND));
+    Profile userProfile = profileRepository.findByUserAndIsDefault(userChatroom.getUser(), true);
+
+    // TODO: 멀티프로필(친구 서버) 적용
+    // TODO: 오픈 채팅방의 경우 고려
+    List<UserChatroom> friendChatrooms = userChatroomRepository.findAllByChatroom(
+        userChatroom.getChatroom());
+    List<Profile> friendProfiles = new ArrayList<>();
+    friendChatrooms.forEach(friendChatroom -> {
+      User user = friendChatroom.getUser();
+      Profile friendProfile = profileRepository.findByUserAndIsDefault(user, true);
+      friendProfiles.add(friendProfile);
+    });
+
+    List<File> files = userChatroom.getChatroom().getFiles();
+    List<String> fileUrls = new ArrayList<>();
+    files.forEach(file -> {
+      if (fileUrls.size() > 4) {
+        return;
+      }
+      fileUrls.add(file.getUrl());
+    });
+
+    return UserChatroomDetailResponse.of(userChatroom, userProfile,
+        ProfileSimpleResponse.createList(friendProfiles), fileUrls);
   }
 }

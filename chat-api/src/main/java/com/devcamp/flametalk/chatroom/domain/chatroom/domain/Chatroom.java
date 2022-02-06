@@ -1,5 +1,6 @@
 package com.devcamp.flametalk.chatroom.domain.chatroom.domain;
 
+import com.devcamp.flametalk.chatroom.domain.file.domain.File;
 import com.devcamp.flametalk.chatroom.domain.model.BaseTime;
 import com.devcamp.flametalk.chatroom.domain.user.domain.User;
 import java.util.ArrayList;
@@ -17,6 +18,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
+/**
+ * Chatroom 엔티티입니다.
+ */
 @Getter
 @NoArgsConstructor
 @Entity
@@ -46,6 +50,18 @@ public class Chatroom extends BaseTime {
   @OneToMany(mappedBy = "chatroom")
   private List<UserChatroom> userChatrooms = new ArrayList<>();
 
+  @OneToMany(mappedBy = "chatroom")
+  private List<File> files = new ArrayList<>();
+
+  /**
+   * Chatroom 엔티티의 빌더입니다.
+   *
+   * @param id       채팅방 id
+   * @param count    채팅방 인원 수
+   * @param isOpen   오픈 채팅방 여부
+   * @param url      오픈 채팅방의 url
+   * @param hostUser 채팅방을 개설한 User
+   */
   @Builder
   public Chatroom(String id, int count, boolean isOpen, String url, User hostUser) {
     this.id = id;

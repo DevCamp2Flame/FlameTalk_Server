@@ -1,24 +1,27 @@
 package com.devcamp.flametalk.chatroom.domain.chatroom.controller;
 
-import static com.devcamp.flametalk.chatroom.global.common.Status.CREATED_CHATROOM;
-import static org.springframework.http.HttpStatus.CREATED;
-
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ResponseType;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomDetailResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.service.ChatroomService;
 import com.devcamp.flametalk.chatroom.global.common.SingleDataResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Log4j2
+/**
+ * 채팅 API 처리 컨트롤러입니다. 채팅방과 관련된 HTTP 요청을 처리합니다.
+ */
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping(value = "/api/chatroom")
@@ -27,10 +30,11 @@ public class ChatRoomController {
   private final ChatroomService chatroomService;
 
   /**
-   * 새로운 채팅방을 개설합니다.
+   * 유저가 새로운 채팅방을 생성합니다.
    *
-   * @param request
-   * @return
+   * @param userId  로그인한 유저 id
+   * @param request 생성하고자하는 채팅방 데이터
+   * @return 생성된 채팅방에 대한 정보
    */
   @PostMapping
   public ResponseEntity<SingleDataResponse<ChatroomCreateResponse>> create(
@@ -42,10 +46,20 @@ public class ChatRoomController {
     return ResponseEntity.ok().body(response);
   }
 
-  // todo : 다롬님이 하기
-//  @GetMapping(value = "/rooms")
-//  public ResponseEntity<DefaultResponse<ChatroomFindAllResponse>> findAllRoom() {
-//
-//    return mv;
-//  }
+  /**
+   * 유저가 참여중인 채팅방에 대한 상세정보를 조회합니다.
+   *
+   * @param userChatroomId 유저가 참여중인 채팅방 id
+   * @return 채팅방 상세 정보
+   */
+  @GetMapping(value = "/{userChatroomId}")
+  public ResponseEntity<SingleDataResponse<UserChatroomDetailResponse>> findByUserChatroomId(
+      @PathVariable Long userChatroomId) {
+    UserChatroomDetailResponse userChatroomDetail = chatroomService.findByUserChatroomId(
+        userChatroomId);
+    SingleDataResponse<UserChatroomDetailResponse> response = new SingleDataResponse<>();
+    response.success(ResponseType.CHATROOM_DETAIL_SUCCESS.getMessage(), userChatroomDetail);
+    log.info("find user chatroom by id " + userChatroomDetail.toString());
+    return ResponseEntity.ok().body(response);
+  }
 }

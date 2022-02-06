@@ -13,6 +13,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * UserChatroom 엔티티입니다.
+ */
 @NoArgsConstructor
 @Getter
 @Entity
@@ -41,6 +44,17 @@ public class UserChatroom extends BaseTime {
   @JoinColumn(name = "user_id")
   private User user;
 
+  /**
+   * UserChatroom 엔티티의 빌더입니다.
+   *
+   * @param id                유저 채팅방 id
+   * @param title             유저가 설정한 채팅방의 제목
+   * @param lastReadMessageId 유저가 채팅방에서 마지막으로 확인한 채팅 메세지
+   * @param imageUrl          유저가 설정한 채팅방의 썸네일 이미지
+   * @param inputLock         유저의 채팅방 잠금 여부
+   * @param chatroom          유저 채팅방이 참조하는 채팅방
+   * @param user              유저 채팅방에 해당하는 유저
+   */
   @Builder
   public UserChatroom(Long id, String title, String lastReadMessageId, String imageUrl,
       Boolean inputLock, Chatroom chatroom, User user) {

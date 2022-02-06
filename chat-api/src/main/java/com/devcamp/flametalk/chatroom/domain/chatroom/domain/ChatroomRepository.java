@@ -2,9 +2,9 @@ package com.devcamp.flametalk.chatroom.domain.chatroom.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+/**
+ * Chatroom 엔티티의 저장소 Repository 입니다.
+ */
 public interface ChatroomRepository extends JpaRepository<Chatroom, String> {
 
-  // 채팅방 생성순서 최근 순으로 반환
-
-  // findRoomById
 }
