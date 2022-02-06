@@ -206,4 +206,22 @@ public class ChatroomService {
         .orElseThrow(() -> new EntityNotFoundException(USER_CHATROOM_NOT_FOUND));
     userChatroom.close(request.getLastReadMessageId());
   }
+
+  /**
+   * DB에 저장된 유저 채팅방을 삭제합니다. 해당 이벤트로 채팅방의 인원이 0명이라면 채팅방도 삭제합니다.
+   *
+   * @param id 유저 채팅방 id
+   */
+  @Transactional
+  public void deleteUserChatroomById(Long id) {
+    UserChatroom userChatroom = userChatroomRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(USER_CHATROOM_NOT_FOUND));
+    userChatroomRepository.delete(userChatroom);
+
+    Chatroom chatroom = userChatroom.getChatroom();
+    chatroom.leave();
+    if (chatroom.getCount() == 0) {
+      chatroomRepository.delete(chatroom);
+    }
+  }
 }

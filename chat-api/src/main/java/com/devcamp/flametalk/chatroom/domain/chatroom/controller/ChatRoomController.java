@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -99,6 +100,21 @@ public class ChatRoomController {
     CommonResponse response = new CommonResponse();
     response.success(ResponseType.USER_CHATROOM_CLOSE_SUCCESS.getMessage());
     log.info("close user chatroom" + request.getUserChatroomId());
+    return ResponseEntity.ok().body(response);
+  }
+
+  /**
+   * 요청받은 id에 해당하는 유저 채팅방을 삭제합니다.
+   *
+   * @param userChatroomId 유저 채팅방 id
+   * @return 삭제 결과에 따른 응답 정보
+   */
+  @DeleteMapping("{userChatroomId}")
+  public ResponseEntity<CommonResponse> closeUserChatroom(@PathVariable Long userChatroomId) {
+    chatroomService.deleteUserChatroomById(userChatroomId);
+    CommonResponse response = new CommonResponse();
+    response.success(ResponseType.USER_CHATROOM_DELETE_SUCCESS.getMessage());
+    log.info("delete user chatroom" + userChatroomId);
     return ResponseEntity.ok().body(response);
   }
 }

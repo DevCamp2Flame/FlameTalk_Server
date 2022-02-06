@@ -70,4 +70,8 @@ public class Chatroom extends BaseTime {
     this.url = url;
     this.hostUser = hostUser;
   }
+
+  public void leave() {
+    this.count--;
+  }
 }
