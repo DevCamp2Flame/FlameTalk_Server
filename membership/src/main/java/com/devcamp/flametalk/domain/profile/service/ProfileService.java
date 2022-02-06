@@ -39,7 +39,7 @@ public class ProfileService {
   public Long save(ProfileRequest request) {
     User user = userRepository.findById(request.getUserId())
         .orElseThrow(() -> new EntityNotFoundException(ErrorCode.USER_NOT_FOUND));
-    if (profileRepository.existsByUserAndIsDefault(user, true)) {
+    if (request.isDefault() && profileRepository.existsByUserAndIsDefault(user, true)) {
       throw new EntityExistsException(ErrorCode.DEFAULT_PROFILE_EXIST);
     }
 
