@@ -73,7 +73,7 @@ public class ProfileController {
    */
   @GetMapping
   public ResponseEntity<SingleDataResponse<ProfilesResponse>> findProfile(
-      @RequestHeader String userId) {
+      @RequestHeader("USER-ID") String userId) {
     ProfilesResponse profiles = profileService.findByUserId(userId);
     SingleDataResponse<ProfilesResponse> response = new SingleDataResponse<>();
     response.success(ProfileResponse.PROFILES_SUCCESS.getMessage(), profiles);
