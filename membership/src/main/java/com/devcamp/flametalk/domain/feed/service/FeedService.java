@@ -61,11 +61,13 @@ public class FeedService {
    * id에 해당하는 피드 사진의 공개여부를 업데이트합니다.
    *
    * @param id 피드 id
+   * @return 업데이트된 피드 객체
    */
   @Transactional
-  public void updateLock(Long id) {
+  public FeedDetailResponse updateLock(Long id) {
     Feed feed = feedRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(FEED_NOT_FOUND));
     feed.reverseLock();
+    return FeedDetailResponse.from(feed);
   }
 }
