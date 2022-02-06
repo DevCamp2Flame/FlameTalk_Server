@@ -66,4 +66,19 @@ public class UserChatroom extends BaseTime {
     this.chatroom = chatroom;
     this.user = user;
   }
+
+  /**
+   * UserChatroom 엔티티를 업데이트합니다.
+   *
+   * @param updateUserChatroom 업데이트될 유저 채팅방
+   * @return 업데이트된 유저 채팅방
+   */
+  public UserChatroom update(UserChatroom updateUserChatroom) {
+    this.title = updateUserChatroom.title;
+    this.lastReadMessageId = updateUserChatroom.lastReadMessageId;
+    this.imageUrl = updateUserChatroom.imageUrl;
+    this.inputLock = updateUserChatroom.inputLock;
+
+    return this;
+  }
 }

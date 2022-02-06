@@ -12,6 +12,8 @@ import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ProfileSimpleResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomDetailResponse;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomSimpleResponse;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomUpdateRequest;
 import com.devcamp.flametalk.chatroom.domain.file.domain.File;
 import com.devcamp.flametalk.chatroom.domain.profile.domain.Profile;
 import com.devcamp.flametalk.chatroom.domain.profile.domain.ProfileRepository;
@@ -143,5 +145,52 @@ public class ChatroomService {
 
     return UserChatroomDetailResponse.of(userChatroom, userProfile,
         ProfileSimpleResponse.createList(friendProfiles), fileUrls);
+  }
+
+  /**
+   * DB에 저장된 유저 채팅방 정보를 업데이트합니다.
+   *
+   * @param id      유저 채팅방 id
+   * @param request 업데이트할 유저 채팅방 정보
+   * @return 업데이트된 유저 채팅방 정보
+   */
+  @Transactional
+  public UserChatroomSimpleResponse updateUserChatroom(Long id, UserChatroomUpdateRequest request) {
+    UserChatroom userChatroom = userChatroomRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(USER_CHATROOM_NOT_FOUND));
+
+    UserChatroom requestUserChatroom = request.toUserChatroom(userChatroom);
+    UserChatroom updatedUserChatroom = userChatroom.update(requestUserChatroom);
+
+    UserChatroomSimpleResponse response = UserChatroomSimpleResponse.from(updatedUserChatroom);
+
+    if (response.getThumbnail() == null) { // 채팅방 사진을 지정하지 않은 경우 유저들의 프로필로 생성
+      response.updateDefaultThumbnail(makeDefaultChatroomThumbnail(userChatroom.getChatroom()));
+    }
+    if (response.getTitle() == null) { // 채팅방 이름을 지정하지 않은 경우 유저들의 닉네임으로 생성
+      response.updateDefaultTitle(makeDefaultChatroomTitle(userChatroom.getChatroom()));
+    }
+    return response;
+  }
+
+  private String makeDefaultChatroomTitle(Chatroom chatroom) {
+    List<UserChatroom> userChatrooms = userChatroomRepository.findAllByChatroom(chatroom);
+    List<String> nicknames = new ArrayList<>();
+    userChatrooms.forEach(userChatroom ->
+        nicknames.add(userChatroom.getUser().getNickname()));
+    return String.join(", ", nicknames);
+  }
+
+  private List<String> makeDefaultChatroomThumbnail(Chatroom chatroom) {
+    List<UserChatroom> userChatrooms = userChatroomRepository.findAllByChatroom(chatroom);
+    List<String> imageUrls = new ArrayList<>();
+    for (UserChatroom userChatroom : userChatrooms) {
+      if (imageUrls.size() > 4) {
+        break;
+      }
+      imageUrls.add(
+          profileRepository.findByUserAndIsDefault(userChatroom.getUser(), true).getImageUrl());
+    }
+    return imageUrls;
   }
 }

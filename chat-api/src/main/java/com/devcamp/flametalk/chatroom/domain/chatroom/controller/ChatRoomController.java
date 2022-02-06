@@ -4,6 +4,8 @@ import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ResponseType;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomDetailResponse;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomSimpleResponse;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomUpdateRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.service.ChatroomService;
 import com.devcamp.flametalk.chatroom.global.common.SingleDataResponse;
 import javax.validation.Valid;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +55,7 @@ public class ChatRoomController {
    * @param userChatroomId 유저가 참여중인 채팅방 id
    * @return 채팅방 상세 정보
    */
-  @GetMapping(value = "/{userChatroomId}")
+  @GetMapping("/{userChatroomId}")
   public ResponseEntity<SingleDataResponse<UserChatroomDetailResponse>> findByUserChatroomId(
       @PathVariable Long userChatroomId) {
     UserChatroomDetailResponse userChatroomDetail = chatroomService.findByUserChatroomId(
@@ -60,6 +63,24 @@ public class ChatRoomController {
     SingleDataResponse<UserChatroomDetailResponse> response = new SingleDataResponse<>();
     response.success(ResponseType.CHATROOM_DETAIL_SUCCESS.getMessage(), userChatroomDetail);
     log.info("find user chatroom by id " + userChatroomDetail.toString());
+    return ResponseEntity.ok().body(response);
+  }
+
+  /**
+   * 유저 채팅방 정보를 수정합니다.
+   *
+   * @param userChatroomId 유저 채팅방 id
+   * @param request        수정할 유저 채팅방 JSON 데이터
+   * @return 수정된 유저 채팅방 단순 정보
+   */
+  @PutMapping("/{userChatroomId}")
+  public ResponseEntity<SingleDataResponse<UserChatroomSimpleResponse>> updateUserChatroom(
+      @PathVariable Long userChatroomId, @RequestBody @Valid UserChatroomUpdateRequest request) {
+    UserChatroomSimpleResponse userChatroom = chatroomService.updateUserChatroom(userChatroomId,
+        request);
+    SingleDataResponse<UserChatroomSimpleResponse> response = new SingleDataResponse<>();
+    response.success(ResponseType.CHATROOM_UPDATE_SUCCESS.getMessage(), userChatroom);
+    log.info("find user chatroom by id " + userChatroom.toString());
     return ResponseEntity.ok().body(response);
   }
 }
