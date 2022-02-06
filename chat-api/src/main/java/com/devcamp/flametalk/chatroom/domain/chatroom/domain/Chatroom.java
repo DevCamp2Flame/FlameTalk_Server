@@ -1,7 +1,7 @@
 package com.devcamp.flametalk.chatroom.domain.chatroom.domain;
 
 import com.devcamp.flametalk.chatroom.domain.model.BaseTime;
-import com.devcamp.flametalk.chatroom.domain.user.User;
+import com.devcamp.flametalk.chatroom.domain.user.domain.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
@@ -35,7 +35,7 @@ public class Chatroom extends BaseTime {
   private int count;
 
   @Column(nullable = false, columnDefinition = "TINYINT", length = 1)
-  private boolean isOpen;
+  private Boolean isOpen;
 
   private String url;
 

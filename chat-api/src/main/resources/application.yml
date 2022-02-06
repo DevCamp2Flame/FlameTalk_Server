@@ -1,21 +1,20 @@
-#server:
-#  port: 8080
+server:
+  port: 8086
 
 spring:
   application:
-    name: chat-api  # ???? ??? ???? ?? ??
+    name: chatroom
   profiles:
     active:
       default
-  cloud:
-    config:
-      enabled: true
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:${MYSQL_PORT}/flametalk_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: ${MYSQL_USER}
-    password: ${MYSQL_PASSWORD}
+    url: jdbc:mysql://localhost:3306/flametalk_db?serverTimezone=UTC&characterEncoding=UTF-8
+    username: flame
+    password: flame123!@#
+
+
 
   jpa:
     open-in-view: false
