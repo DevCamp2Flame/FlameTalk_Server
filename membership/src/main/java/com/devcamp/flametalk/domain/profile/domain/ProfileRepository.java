@@ -10,4 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
   List<Profile> getAllByUser(User user);
+
+  boolean existsByUserAndIsDefault(User user, boolean isDefault);
 }

@@ -1,5 +1,6 @@
 package com.devcamp.flametalk.global.error;
 
+import com.devcamp.flametalk.global.error.exception.EntityExistsException;
 import com.devcamp.flametalk.global.error.exception.EntityNotFoundException;
 import com.devcamp.flametalk.global.error.exception.ForbiddenException;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,13 @@ public class GlobalExceptionHandler {
     log.error("[Missing Servlet RequestPart Exception]" + e);
     ErrorResponse response = ErrorResponse.from(ErrorCode.BAD_REQUEST);
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+  }
+
+  @ExceptionHandler(EntityExistsException.class)
+  protected ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityExistsException e) {
+    log.error("[Entity Exists Exception]" + e.getMessage());
+    ErrorResponse response = ErrorResponse.from(e.getErrorCode());
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
   }
 
   @ExceptionHandler(EntityNotFoundException.class)
