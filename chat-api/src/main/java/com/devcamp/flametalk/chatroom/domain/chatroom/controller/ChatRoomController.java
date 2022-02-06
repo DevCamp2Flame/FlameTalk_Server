@@ -3,10 +3,12 @@ package com.devcamp.flametalk.chatroom.domain.chatroom.controller;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ResponseType;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomCloseRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomDetailResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomSimpleResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomUpdateRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.service.ChatroomService;
+import com.devcamp.flametalk.chatroom.global.common.CommonResponse;
 import com.devcamp.flametalk.chatroom.global.common.SingleDataResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -81,6 +83,22 @@ public class ChatRoomController {
     SingleDataResponse<UserChatroomSimpleResponse> response = new SingleDataResponse<>();
     response.success(ResponseType.CHATROOM_UPDATE_SUCCESS.getMessage(), userChatroom);
     log.info("find user chatroom by id " + userChatroom.toString());
+    return ResponseEntity.ok().body(response);
+  }
+
+  /**
+   * 유저가 확인한 채팅방의 마지막 메세지 정보를 갱신합니다.
+   *
+   * @param request 갱신될 유저 채팅방 정보
+   * @return 갱신 결과에 따른 응답 정보
+   */
+  @PutMapping("/close")
+  public ResponseEntity<CommonResponse> closeUserChatroom(
+      @RequestBody @Valid UserChatroomCloseRequest request) {
+    chatroomService.closeUserChatroom(request);
+    CommonResponse response = new CommonResponse();
+    response.success(ResponseType.USER_CHATROOM_CLOSE_SUCCESS.getMessage());
+    log.info("close user chatroom" + request.getUserChatroomId());
     return ResponseEntity.ok().body(response);
   }
 }

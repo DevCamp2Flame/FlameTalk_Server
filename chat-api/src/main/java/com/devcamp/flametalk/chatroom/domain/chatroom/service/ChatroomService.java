@@ -11,6 +11,7 @@ import com.devcamp.flametalk.chatroom.domain.chatroom.domain.UserChatroomReposit
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ProfileSimpleResponse;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomCloseRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomDetailResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomSimpleResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomUpdateRequest;
@@ -192,5 +193,17 @@ public class ChatroomService {
           profileRepository.findByUserAndIsDefault(userChatroom.getUser(), true).getImageUrl());
     }
     return imageUrls;
+  }
+
+  /**
+   * DB에 저장된 유저 채팅방의 마지막 확인 메세지 값을 업데이트합니다.
+   *
+   * @param request 업데이트할 유저 채팅방 정보
+   */
+  @Transactional
+  public void closeUserChatroom(UserChatroomCloseRequest request) {
+    UserChatroom userChatroom = userChatroomRepository.findById(request.getUserChatroomId())
+        .orElseThrow(() -> new EntityNotFoundException(USER_CHATROOM_NOT_FOUND));
+    userChatroom.close(request.getLastReadMessageId());
   }
 }

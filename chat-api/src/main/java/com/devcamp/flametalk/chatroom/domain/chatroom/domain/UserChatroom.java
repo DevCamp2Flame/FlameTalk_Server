@@ -81,4 +81,8 @@ public class UserChatroom extends BaseTime {
 
     return this;
   }
+
+  public void close(String lastReadMessageId) {
+    this.lastReadMessageId = lastReadMessageId;
+  }
 }
