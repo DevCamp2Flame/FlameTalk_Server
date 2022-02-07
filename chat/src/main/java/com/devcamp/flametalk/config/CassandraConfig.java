@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.cassandra;
+package com.devcamp.flametalk.config;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import org.springframework.context.annotation.Bean;

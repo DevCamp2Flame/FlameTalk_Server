@@ -1,22 +1,21 @@
-//package com.devcamp.flametalk.service;
-//
-//import com.devcamp.flametalk.model.ChattingMessage;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.kafka.core.KafkaTemplate;
-//import org.springframework.stereotype.Component;
-//
-//@Component
-//public class Sender {
-//
-//  private static final Logger LOGGER = LoggerFactory.getLogger(Sender.class);
-//
-//  @Autowired
-//  private KafkaTemplate<String, ChattingMessage> kafkaTemplate;
-//
-//  public void send(String topic, ChattingMessage data) {
-//    LOGGER.info("sending data='{}' to topic='{}'", data, topic);
-//    kafkaTemplate.send(topic, data); // send to react clients via websocket(STOMP)
-//  }
-//}
+package com.devcamp.flametalk.service;
+
+import com.devcamp.flametalk.domain.Message;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Component;
+
+@Slf4j
+@RequiredArgsConstructor
+@Component
+public class Sender {
+
+  // pub
+  private final KafkaTemplate<String, Message> kafkaTemplate;
+
+  public void send(String topic, Message data) {
+    log.info("sending data='{}' to topic='{}'", data, topic);
+    kafkaTemplate.send(topic, data); // send to clients via websocket(STOMP)
+  }
+}
