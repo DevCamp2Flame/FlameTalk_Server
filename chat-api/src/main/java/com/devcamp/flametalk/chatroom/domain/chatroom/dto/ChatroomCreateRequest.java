@@ -26,9 +26,6 @@ public class ChatroomCreateRequest {
   @NotNull
   private List<String> users;
 
-  @NotNull
-  private String lastReadMessageId;
-
   @Length(max = 50)
   private String title;
 
