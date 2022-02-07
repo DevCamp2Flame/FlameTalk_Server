@@ -39,7 +39,7 @@ public class KafkaConfig {
         .put("bootstrap.servers", "localhost:9092") //kafka server ip & port
         .put("key.serializer", IntegerSerializer.class)
         .put("value.serializer", JsonSerializer.class) //Object json parser
-        .put("group.id", "spring-boot-test") // chatting  group id
+        .put("group.id", "devcamp-flame") // chatting  group id
         .build();
   }
 
@@ -63,7 +63,7 @@ public class KafkaConfig {
         .put("bootstrap.servers", "localhost:9092")
         .put("key.deserializer", IntegerDeserializer.class)
         .put("value.deserializer", JsonDeserializer.class)
-        .put("group.id", "spring-boot-test")
+        .put("group.id", "devcamp-flame")
         .build();
   }
 }

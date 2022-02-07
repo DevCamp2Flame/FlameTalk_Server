@@ -15,20 +15,23 @@ import lombok.NoArgsConstructor;
 public class MessageRequest {
 
   public enum MessageType {
-    ENTER, TALK
+    INVITE, ENTER, TALK
   }
   private MessageType type;
   private String room_id;
   private String sender_id;
   private String nickname;
   private String contents;
+  private String file_url;
 
   public Message toEntity() {
     return Message.builder()
         .message_id(Generators.timeBasedGenerator().generate().toString())
         .sender_id(this.sender_id)
+        .nickname(this.nickname)
         .room_id(this.room_id)
         .contents(this.contents)
+        .file_url(file_url)
         .created_at(LocalDateTime.now())
         .build();
   }

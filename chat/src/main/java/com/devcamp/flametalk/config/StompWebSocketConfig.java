@@ -27,11 +27,11 @@ public class StompWebSocketConfig implements WebSocketMessageBrokerConfigurer {
         /*
          publish - /app 경로로 시작하는 STOMP 메세지의 destination 헤더는 @MessageMapping 메서드로 라우팅.
          */
-        .setApplicationDestinationPrefixes("/pub") // "/app"
+        .setApplicationDestinationPrefixes("/pub") // 메시지 발행 요청 "/app"
         /*
           subscribe - destination 헤더가 /topic 또는 /queue 로 시작한다면, 메시지 브로커로 바로(직접) 라우팅.
                       topic 은 1:N, queue 는 1:1
          */
-        .enableSimpleBroker("/sub"); // "/topic", "queue";
+        .enableSimpleBroker("/sub"); // 메시지 구독 요청 "/topic", "queue";
   }
 }

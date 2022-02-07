@@ -25,13 +25,17 @@ public class Message {
   @Column
   private String sender_id;
 
-  // todo : nickname
+  @Column
+  private String nickname;
 
   @Column
   private String room_id;
 
   @Column
   private String contents;
+
+  @Column
+  private String file_url;
 
   @Column
   private LocalDateTime created_at;
