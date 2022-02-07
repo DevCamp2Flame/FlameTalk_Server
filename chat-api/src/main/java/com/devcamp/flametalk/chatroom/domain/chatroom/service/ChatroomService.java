@@ -133,6 +133,9 @@ public class ChatroomService {
     List<Profile> friendProfiles = new ArrayList<>();
     friendChatrooms.forEach(friendChatroom -> {
       User user = friendChatroom.getUser();
+      if (user.getId().equals(userChatroom.getUser().getId())) {
+        return;
+      }
       Profile friendProfile = profileRepository.findByUserAndIsDefault(user, true);
       friendProfiles.add(friendProfile);
     });
