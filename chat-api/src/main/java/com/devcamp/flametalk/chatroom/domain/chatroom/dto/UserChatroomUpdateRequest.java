@@ -1,7 +1,6 @@
 package com.devcamp.flametalk.chatroom.domain.chatroom.dto;
 
 import com.devcamp.flametalk.chatroom.domain.chatroom.domain.UserChatroom;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,10 +12,6 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 @Getter
 public class UserChatroomUpdateRequest {
-
-  @NotNull
-  @NotBlank
-  private String lastReadMessageId;
 
   @NotNull
   private Boolean inputLock;
@@ -35,7 +30,6 @@ public class UserChatroomUpdateRequest {
   public UserChatroom toUserChatroom(UserChatroom userChatroom) {
     return UserChatroom.builder()
         .title(title)
-        .lastReadMessageId(lastReadMessageId)
         .imageUrl(imageUrl)
         .inputLock(inputLock)
         .chatroom(userChatroom.getChatroom())
