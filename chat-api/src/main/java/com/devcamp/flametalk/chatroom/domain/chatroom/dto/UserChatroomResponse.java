@@ -14,7 +14,8 @@ import lombok.Getter;
 @Getter
 public class UserChatroomResponse {
 
-  private Long id;
+  private String chatroomId;
+  private Long userChatroomId;
   private String title;
   private List<String> thumbnail;
   private String lastReadMessage;
@@ -31,6 +32,7 @@ public class UserChatroomResponse {
     List<String> thumbnail = Optional.ofNullable(userChatroom.getImageUrl()).map(Arrays::asList)
         .orElse(null);
     return new UserChatroomResponse(
+        userChatroom.getChatroom().getId(),
         userChatroom.getId(),
         userChatroom.getTitle(),
         thumbnail,
