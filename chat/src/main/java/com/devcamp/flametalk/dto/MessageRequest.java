@@ -22,8 +22,7 @@ public class MessageRequest {
   private String sender_id;
   private String nickname;
   private String contents;
-
-  private String fileUrl;
+  private String file_url;
 
   public Message toEntity() {
     return Message.builder()
@@ -32,6 +31,7 @@ public class MessageRequest {
         .nickname(this.nickname)
         .room_id(this.room_id)
         .contents(this.contents)
+        .file_url(file_url)
         .created_at(LocalDateTime.now())
         .build();
   }
