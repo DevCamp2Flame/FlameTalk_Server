@@ -2,6 +2,7 @@ package com.devcamp.flametalk.chatroom.domain.chatroom.controller;
 
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateResponse;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomsResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ResponseType;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomCloseRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomDetailResponse;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 채팅 API 처리 컨트롤러입니다. 채팅방과 관련된 HTTP 요청을 처리합니다.
@@ -66,6 +68,22 @@ public class ChatRoomController {
     SingleDataResponse<UserChatroomDetailResponse> response = new SingleDataResponse<>();
     response.success(ResponseType.CHATROOM_DETAIL_SUCCESS.getMessage(), userChatroomDetail);
     log.info("find user chatroom by id " + userChatroomDetail.toString());
+    return ResponseEntity.ok().body(response);
+  }
+
+  /**
+   * 유저가 참여중인 모든 채팅방에 대한 일부 정보를 조회합니다.
+   * @param userId 유저 id
+   * @param isOpen 오픈 채팅방 여부
+   * @return 채팅방 부분 정보에 대한 리스트
+   */
+  @GetMapping
+  public ResponseEntity<SingleDataResponse<ChatroomsResponse>> findAllByUserId(
+      @RequestHeader("USER-ID") String userId, @RequestParam boolean isOpen) {
+    ChatroomsResponse chatrooms = chatroomService.findAllByUserId(userId, isOpen);
+    SingleDataResponse<ChatroomsResponse> response = new SingleDataResponse<>();
+    response.success(ResponseType.USER_CHATROOMS_SUCCESS.getMessage(), chatrooms);
+    log.info("find all by user id" + chatrooms.toString());
     return ResponseEntity.ok().body(response);
   }
 

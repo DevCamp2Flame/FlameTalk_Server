@@ -10,9 +10,11 @@ import com.devcamp.flametalk.chatroom.domain.chatroom.domain.UserChatroom;
 import com.devcamp.flametalk.chatroom.domain.chatroom.domain.UserChatroomRepository;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateResponse;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomsResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ProfileSimpleResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomCloseRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomDetailResponse;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomSimpleResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomUpdateRequest;
 import com.devcamp.flametalk.chatroom.domain.file.domain.File;
@@ -146,6 +148,36 @@ public class ChatroomService {
 
     return UserChatroomDetailResponse.of(userChatroom, userProfile,
         ProfileSimpleResponse.createList(friendProfiles), fileUrls);
+  }
+
+  /**
+   * 유저가 참여중인 채팅방 리스트를 조회합니다.
+   *
+   * @param userId 유저 id
+   * @param isOpen 오픈 채팅방 여부
+   * @return 유저가 참여중인 채팅방 일부 정보에 대한 리스트
+   */
+  public ChatroomsResponse findAllByUserId(String userId, boolean isOpen) {
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
+    List<UserChatroom> userChatrooms = userChatroomRepository.findAllByUser(user);
+    List<UserChatroomResponse> userChatroomResponses = new ArrayList<>();
+
+    userChatrooms.forEach(userChatroom -> {
+      Chatroom chatroom = userChatroom.getChatroom();
+      if ((chatroom.getIsOpen() && isOpen) || (!chatroom.getIsOpen() && !isOpen)) {
+        UserChatroomResponse response = UserChatroomResponse.of(userChatroom);
+        if (response.getThumbnail() == null) { // 채팅방 사진을 지정하지 않은 경우 유저들의 프로필로 생성
+          response.updateDefaultThumbnail(makeDefaultChatroomThumbnail(userChatroom.getChatroom()));
+        }
+        if (response.getTitle() == null) { // 채팅방 이름을 지정하지 않은 경우 유저들의 닉네임으로 생성
+          response.updateDefaultTitle(makeDefaultChatroomTitle(userChatroom.getChatroom()));
+        }
+        userChatroomResponses.add(response);
+      }
+    });
+
+    return ChatroomsResponse.of(userId, userChatroomResponses);
   }
 
   /**
