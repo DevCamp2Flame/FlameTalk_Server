@@ -79,8 +79,12 @@ public class AddRequestHeaderFilter extends
   private Mono<Void> customError(ServerWebExchange exchange) {
     ServerHttpResponse response = exchange.getResponse();
     response.setStatusCode(HttpStatus.OK);
-    byte[] bytes = "Invalid Token".getBytes(StandardCharsets.UTF_8);
-    response.getHeaders().setContentType(MediaType.TEXT_PLAIN);
+    String message = "{\n"
+        + "    \"status\": 302,\n"
+        + "    \"messsage\": \"Invalid Token\"\n"
+        + "}";
+    byte[] bytes = message.getBytes(StandardCharsets.UTF_8);
+    response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
     return response.writeWith(Mono.just(response.bufferFactory().wrap(bytes)));
   }
 }
