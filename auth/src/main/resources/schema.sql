@@ -9,24 +9,24 @@ USE `flametalk_db`;
 -- -----------------------------------------------------
 -- Table `flametalk_db`.`user`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `flametalk_db`.`user`;
+
 CREATE TABLE IF NOT EXISTS `flametalk_db`.`user`
 (
-    `id`                   VARCHAR(20)  NOT NULL,
-    `email`                VARCHAR(320) NOT NULL,
-    `password`             VARCHAR(60)  NULL,
-    `nickname`             VARCHAR(20)  NOT NULL,
-    `phone_number`         VARCHAR(13)  NOT NULL,
-    `birthday`             VARCHAR(10)  NOT NULL,
-    `social`               TINYINT      NOT NULL,
-    `status`               TINYINT      NOT NULL,
-    `region`               VARCHAR(2)   NOT NULL,
-    `language`             VARCHAR(3)   NOT NULL,
-    `last_read_message_id` VARCHAR(45)  NULL,
-    `created_at`           DATETIME     NOT NULL,
-    `updated_at`           DATETIME     NOT NULL,
+    `id`           VARCHAR(20)  NOT NULL,
+    `email`        VARCHAR(320) NOT NULL,
+    `password`     VARCHAR(60)  NULL,
+    `nickname`     VARCHAR(20)  NOT NULL,
+    `phone_number` VARCHAR(13)  NOT NULL,
+    `birthday`     VARCHAR(10)  NOT NULL,
+    `social`       TINYINT      NOT NULL,
+    `status`       TINYINT      NOT NULL,
+    `region`       VARCHAR(2)   NOT NULL,
+    `language`     VARCHAR(3)   NOT NULL,
+    `created_at`   DATETIME     NOT NULL,
+    `updated_at`   DATETIME     NOT NULL,
     PRIMARY KEY (`id`),
-    UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
-    UNIQUE INDEX `phone_number_UNIQUE` (`phone_number` ASC) VISIBLE
+    UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE
 )
     ENGINE = InnoDB;
 
@@ -34,6 +34,8 @@ CREATE TABLE IF NOT EXISTS `flametalk_db`.`user`
 -- -----------------------------------------------------
 -- Table `flametalk_db`.`device`
 -- -----------------------------------------------------
+DROP TABLE IF EXISTS `flametalk_db`.`device`;
+
 CREATE TABLE IF NOT EXISTS `flametalk_db`.`device`
 (
     `id`                 BIGINT       NOT NULL AUTO_INCREMENT,
@@ -43,10 +45,36 @@ CREATE TABLE IF NOT EXISTS `flametalk_db`.`device`
     `cur_max_message_id` VARCHAR(45)  NULL,
     `created_at`         DATETIME     NOT NULL,
     `updated_at`         DATETIME     NOT NULL,
-    `accessed_at`        DATETIME     NULL,
     PRIMARY KEY (`id`),
     INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
     CONSTRAINT `device_user_id`
+        FOREIGN KEY (`user_id`)
+            REFERENCES `flametalk_db`.`user` (`id`)
+            ON DELETE NO ACTION
+            ON UPDATE NO ACTION
+)
+    ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `flametalk_db`.`profile`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `flametalk_db`.`profile`;
+
+CREATE TABLE IF NOT EXISTS `flametalk_db`.`profile`
+(
+    `id`           BIGINT      NOT NULL AUTO_INCREMENT,
+    `user_id`      VARCHAR(20) NOT NULL,
+    `image_url`    BLOB        NULL,
+    `bg_image_url` BLOB        NULL,
+    `sticker`      JSON        NULL,
+    `description`  VARCHAR(60) NULL,
+    `is_default`   TINYINT     NOT NULL,
+    `created_at`   DATETIME    NOT NULL,
+    `updated_at`   DATETIME    NOT NULL,
+    PRIMARY KEY (`id`),
+    INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
+    CONSTRAINT `profile_user_id`
         FOREIGN KEY (`user_id`)
             REFERENCES `flametalk_db`.`user` (`id`)
             ON DELETE NO ACTION
