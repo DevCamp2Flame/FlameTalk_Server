@@ -16,7 +16,6 @@ public class UserChatroomSimpleResponse {
 
   private Long userChatroomId;
   private String title;
-  private String lastReadMessageId;
   private List<String> thumbnail;
   private Boolean inputLock;
 
@@ -32,7 +31,6 @@ public class UserChatroomSimpleResponse {
     return new UserChatroomSimpleResponse(
         userChatroom.getId(),
         userChatroom.getTitle(),
-        userChatroom.getLastReadMessageId(),
         thumbnail,
         userChatroom.getInputLock()
     );
