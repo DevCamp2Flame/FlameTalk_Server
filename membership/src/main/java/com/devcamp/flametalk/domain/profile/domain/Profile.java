@@ -1,6 +1,7 @@
 package com.devcamp.flametalk.domain.profile.domain;
 
 import com.devcamp.flametalk.domain.feed.domain.Feed;
+import com.devcamp.flametalk.domain.friend.domain.Friend;
 import com.devcamp.flametalk.domain.model.BaseTime;
 import com.devcamp.flametalk.domain.user.domain.User;
 import java.util.ArrayList;
@@ -50,6 +51,9 @@ public class Profile extends BaseTime {
 
   @OneToMany(mappedBy = "profile")
   private List<Feed> feeds = new ArrayList<>();
+
+  @OneToMany(mappedBy = "profile")
+  private List<Friend> friends;
 
   /**
    * Profile 엔티티의 빌더입니다.
