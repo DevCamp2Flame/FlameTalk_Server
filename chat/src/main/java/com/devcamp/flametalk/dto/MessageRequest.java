@@ -28,6 +28,7 @@ public class MessageRequest {
   public Message toEntity() {
     return Message.builder()
         .message_id(Generators.timeBasedGenerator().generate().toString())
+        .message_type(this.type.name())
         .sender_id(this.sender_id)
         .nickname(this.nickname)
         .room_id(this.room_id)
