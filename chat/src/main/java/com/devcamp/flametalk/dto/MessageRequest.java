@@ -17,6 +17,7 @@ public class MessageRequest {
   public enum MessageType {
     INVITE, ENTER, TALK
   }
+
   private MessageType type;
   private String room_id;
   private String sender_id;

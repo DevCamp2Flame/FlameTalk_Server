@@ -31,14 +31,7 @@ dependencies {
 	implementation 'org.springframework.data:spring-data-jpa:2.6.0'
 	implementation 'com.fasterxml.uuid:java-uuid-generator:4.0.1'
 
-	implementation 'org.springframework.boot:spring-boot-starter-freemarker'
-	implementation 'org.webjars.bower:bootstrap:4.3.1'
-	implementation 'org.webjars.bower:vue:2.5.16'
-	implementation 'org.webjars.bower:axios:0.17.1'
-	implementation 'org.webjars:sockjs-client:1.1.2'
-	implementation 'org.webjars:stomp-websocket:2.3.3-1'
-	implementation 'com.google.code.gson:gson:2.8.0'
-
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

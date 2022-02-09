@@ -1,6 +1,7 @@
 package com.devcamp.flametalk.config;
 
 import com.datastax.oss.driver.api.core.CqlSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.cassandra.SessionFactory;
@@ -16,23 +17,27 @@ import org.springframework.data.cassandra.core.mapping.SimpleUserTypeResolver;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
 @Configuration
-@EnableCassandraRepositories(basePackages = { "com.devcamp.flametalk.domain" })
+@RequiredArgsConstructor
+@EnableCassandraRepositories(basePackages = {"com.devcamp.flametalk.domain"})
 public class CassandraConfig {
+
+  private final CassandraProperties cassandraProperties;
 
   @Bean
   public CqlSessionFactoryBean session() {
 
     CqlSessionFactoryBean session = new CqlSessionFactoryBean();
-    session.setContactPoints("127.0.0.1");
-    session.setKeyspaceName("test");
-    session.setLocalDatacenter("datacenter1");
-    session.setPort(9042);
+    session.setContactPoints(cassandraProperties.getContactPoints());
+    session.setKeyspaceName(cassandraProperties.getKeyspaceName());
+    session.setLocalDatacenter(cassandraProperties.getLocalDatacenter());
+    session.setPort(cassandraProperties.getPort());
 
     return session;
   }
 
   @Bean
-  public SessionFactoryFactoryBean sessionFactory(CqlSession session, CassandraConverter converter) {
+  public SessionFactoryFactoryBean sessionFactory(CqlSession session,
+      CassandraConverter converter) {
 
     SessionFactoryFactoryBean sessionFactory = new SessionFactoryFactoryBean();
     sessionFactory.setSession(session);
@@ -57,7 +62,8 @@ public class CassandraConfig {
   }
 
   @Bean
-  public CassandraOperations cassandraTemplate(SessionFactory sessionFactory, CassandraConverter converter) {
+  public CassandraOperations cassandraTemplate(SessionFactory sessionFactory,
+      CassandraConverter converter) {
     return new CassandraTemplate(sessionFactory, converter);
   }
 }
