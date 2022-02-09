@@ -23,6 +23,9 @@ public class Message {
   private String message_id;
   
   @Column
+  private String message_type;
+
+  @Column
   private String sender_id;
 
   @Column
