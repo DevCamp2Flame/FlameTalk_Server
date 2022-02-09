@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.token.domain;
+package com.devcamp.flametalk.domain.token.domain;
 
 import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;

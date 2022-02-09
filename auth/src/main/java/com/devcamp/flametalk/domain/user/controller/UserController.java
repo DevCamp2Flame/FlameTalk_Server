@@ -1,13 +1,13 @@
-package com.devcamp.flametalk.user.controller;
+package com.devcamp.flametalk.domain.user.controller;
 
+import com.devcamp.flametalk.domain.user.dto.GatewayUserDto;
+import com.devcamp.flametalk.domain.user.dto.RenewTokenDto;
+import com.devcamp.flametalk.domain.user.dto.SignInRequestDto;
+import com.devcamp.flametalk.domain.user.dto.SignInResponseDto;
+import com.devcamp.flametalk.domain.user.dto.SignUpRequestDto;
+import com.devcamp.flametalk.domain.user.dto.SignUpResponseDto;
+import com.devcamp.flametalk.domain.user.service.UserService;
 import com.devcamp.flametalk.global.response.DefaultResponse;
-import com.devcamp.flametalk.user.dto.GatewayUserDto;
-import com.devcamp.flametalk.user.dto.RenewTokenDto;
-import com.devcamp.flametalk.user.dto.SignInRequestDto;
-import com.devcamp.flametalk.user.dto.SignInResponseDto;
-import com.devcamp.flametalk.user.dto.SignUpRequestDto;
-import com.devcamp.flametalk.user.dto.SignUpResponseDto;
-import com.devcamp.flametalk.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;

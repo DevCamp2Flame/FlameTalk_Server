@@ -1,6 +1,6 @@
-package com.devcamp.flametalk.token.service;
+package com.devcamp.flametalk.domain.token.service;
 
-import com.devcamp.flametalk.token.domain.TokenRedisRepository;
+import com.devcamp.flametalk.domain.token.domain.TokenRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

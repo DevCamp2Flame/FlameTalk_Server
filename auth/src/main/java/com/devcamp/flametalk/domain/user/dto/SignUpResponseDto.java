@@ -1,6 +1,6 @@
-package com.devcamp.flametalk.user.dto;
+package com.devcamp.flametalk.domain.user.dto;
 
-import com.devcamp.flametalk.user.domain.User;
+import com.devcamp.flametalk.domain.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

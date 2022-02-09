@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.user.dto;
+package com.devcamp.flametalk.domain.user.dto;
 
 import lombok.Getter;
 

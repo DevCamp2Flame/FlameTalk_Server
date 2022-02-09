@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.user.domain;
+package com.devcamp.flametalk.domain.user.domain;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;

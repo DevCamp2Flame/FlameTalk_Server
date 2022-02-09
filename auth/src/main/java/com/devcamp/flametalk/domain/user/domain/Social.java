@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.user.domain;
+package com.devcamp.flametalk.domain.user.domain;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

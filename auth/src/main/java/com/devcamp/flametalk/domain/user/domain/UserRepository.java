@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.user.domain;
+package com.devcamp.flametalk.domain.user.domain;
 
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
