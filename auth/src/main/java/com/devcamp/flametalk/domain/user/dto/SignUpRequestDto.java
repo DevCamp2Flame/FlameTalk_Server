@@ -1,8 +1,8 @@
-package com.devcamp.flametalk.user.dto;
+package com.devcamp.flametalk.domain.user.dto;
 
-import com.devcamp.flametalk.user.domain.Social;
-import com.devcamp.flametalk.user.domain.Status;
-import com.devcamp.flametalk.user.domain.User;
+import com.devcamp.flametalk.domain.user.domain.Social;
+import com.devcamp.flametalk.domain.user.domain.Status;
+import com.devcamp.flametalk.domain.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,7 +38,7 @@ public class SignUpRequestDto {
         .phoneNumber(this.phoneNumber)
         .birthday(this.birthday)
         .social(Social.stringToSocial(getSocial()))
-        .status(Status.GUEST)
+        .status(Status.USER)
         .region(this.region)
         .language(this.language)
         .build();

@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.user.domain;
+package com.devcamp.flametalk.domain.user.domain;
 
 import com.devcamp.flametalk.global.util.BaseTimeEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -64,10 +64,6 @@ public class User extends BaseTimeEntity implements UserDetails {
   @Column(nullable = false, columnDefinition = "VARCHAR(3)")
   private String language;
 
-  // 사용자 기기에서 가장 큰 curMaxMessageId 값 : 읽음 처리에 활용
-  @Column(columnDefinition = "VARCHAR(45)")
-  private String lastReadMessageId;
-
   // 해당 데이터를 테이블의 컬럼과 매핑 시키지 않는다.
   @Transient
   private Collection<SimpleGrantedAuthority> authorities;
@@ -101,7 +97,6 @@ public class User extends BaseTimeEntity implements UserDetails {
     this.language = language;
   }
 
-  // todo : 권한 반환
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return this.authorities;

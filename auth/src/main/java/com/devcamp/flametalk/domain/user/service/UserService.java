@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.user.service;
+package com.devcamp.flametalk.domain.user.service;
 
 import static com.devcamp.flametalk.global.error.ErrorCode.USER_NOT_FOUND_BY_TOKEN;
 import static com.devcamp.flametalk.global.response.StatusCode.CREATED_TOKEN;
@@ -14,22 +14,24 @@ import static com.devcamp.flametalk.global.response.StatusCode.SUCCESS_LOGIN;
 import static com.devcamp.flametalk.global.response.StatusCode.USER_NOT_FOUND;
 import static com.devcamp.flametalk.global.response.StatusCode.VALID_EMAIL;
 
-import com.devcamp.flametalk.device.Device;
-import com.devcamp.flametalk.device.DeviceRepository;
+import com.devcamp.flametalk.domain.device.domain.Device;
+import com.devcamp.flametalk.domain.device.domain.DeviceRepository;
+import com.devcamp.flametalk.domain.profile.Profile;
+import com.devcamp.flametalk.domain.profile.ProfileRepository;
+import com.devcamp.flametalk.domain.user.domain.Social;
+import com.devcamp.flametalk.domain.user.domain.Status;
+import com.devcamp.flametalk.domain.user.domain.User;
+import com.devcamp.flametalk.domain.user.domain.UserRedisRepository;
+import com.devcamp.flametalk.domain.user.domain.UserRepository;
+import com.devcamp.flametalk.domain.user.dto.GatewayUserDto;
+import com.devcamp.flametalk.domain.user.dto.RenewTokenDto;
+import com.devcamp.flametalk.domain.user.dto.SignInRequestDto;
+import com.devcamp.flametalk.domain.user.dto.SignInResponseDto;
+import com.devcamp.flametalk.domain.user.dto.SignUpRequestDto;
+import com.devcamp.flametalk.domain.user.dto.SignUpResponseDto;
 import com.devcamp.flametalk.global.error.exception.CustomException;
 import com.devcamp.flametalk.global.response.DefaultResponse;
 import com.devcamp.flametalk.global.util.JwtTokenProvider;
-import com.devcamp.flametalk.user.domain.Social;
-import com.devcamp.flametalk.user.domain.Status;
-import com.devcamp.flametalk.user.domain.User;
-import com.devcamp.flametalk.user.domain.UserRedisRepository;
-import com.devcamp.flametalk.user.domain.UserRepository;
-import com.devcamp.flametalk.user.dto.GatewayUserDto;
-import com.devcamp.flametalk.user.dto.RenewTokenDto;
-import com.devcamp.flametalk.user.dto.SignInRequestDto;
-import com.devcamp.flametalk.user.dto.SignInResponseDto;
-import com.devcamp.flametalk.user.dto.SignUpRequestDto;
-import com.devcamp.flametalk.user.dto.SignUpResponseDto;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +58,7 @@ public class UserService implements UserDetailsService {
   private final PasswordEncoder passwordEncoder;
   private final UserRedisRepository userRedisRepository;
   private final DeviceRepository deviceRepository;
+  private final ProfileRepository profileRepository;
 
   @Override
   public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
@@ -87,8 +90,13 @@ public class UserService implements UserDetailsService {
     deviceRepository.save(Device.builder()
         .user(user)
         .deviceId(signUpRequestDto.getDeviceId())
-        .build()
-    );
+        .build());
+
+    // default profile 추가
+    profileRepository.save(Profile.builder()
+        .isDefault(true)
+        .user(user)
+        .build());
 
     return DefaultResponse.toResponseEntity(HttpStatus.OK, CREATED_USER,
         new SignUpResponseDto(user));
