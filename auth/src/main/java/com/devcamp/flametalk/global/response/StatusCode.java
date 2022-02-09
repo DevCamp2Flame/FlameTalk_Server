@@ -14,6 +14,8 @@ public enum StatusCode {
   SUCCESS_READ_USER(200, "회원 정보 조회 성공"),
   SUCCESS_UPDATE_USER(200, "회원 정보 수정 성공"),
   SUCCESS_LEAVE(200, "회원 탈퇴 성공"),
+  SUCCESS_SAVE_TOKEN(200, "디바이스 토큰 저장 성공"),
+  SUCCESS_UPDATE_MESSAGEID(200, "디바이스에서 마지막으로 읽은 메시지 id 저장 성공"),
   VALID_EMAIL(200, "유효한 이메일"),
 
   // 201 CREATED : 새로운 리소스 생성
@@ -26,6 +28,7 @@ public enum StatusCode {
 
   // 400 BAD_REQUEST : 잘못된 요청
   MISMATCH_PASSWORD(400, "비밀번호가 일치하지 않습니다."),
+  MISMATCH_DEVICE(400, "등록된 기기가 아닙니다."),
   LEAVE_USER(400, "탈퇴한 사용자입니다."),
 
   // 401 UNAUTHORIZED : 권한 없음
