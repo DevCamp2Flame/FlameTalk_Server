@@ -24,7 +24,7 @@ public class ChatMessageController {
 
   @GetMapping("/history/{roomId}")
   public ResponseEntity<DefaultResponse<List<Message>>> getChattingHistory(
-      @PathVariable String roomId, @RequestParam(required = false) String lastReadMessageId, ) {
+      @PathVariable String roomId, @RequestParam(required = false) String lastReadMessageId) {
     return chatService.getMessage(roomId, lastReadMessageId);
   }
 }
