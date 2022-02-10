@@ -41,6 +41,11 @@ public class FriendController {
       @RequestHeader("USER-ID") String userId, @RequestBody @Valid FriendCreateRequest request) {
     FriendCreateResponse friend = friendService.save(userId, request);
     SingleDataResponse<FriendCreateResponse> response = new SingleDataResponse<>();
+    if (friend == null) {
+      response.fail(Status.FRIEND_NOT_FOUND, null);
+      log.info("cannot create friend with not founded user");
+      return ResponseEntity.ok().body(response);
+    }
     response.success(Status.CREATED_FRIEND.getMessage(), friend);
     log.info("create friend relation {} ", friend.getFriendId());
     return ResponseEntity.created(URI.create("/api/membership/friend" + friend.getFriendId()))

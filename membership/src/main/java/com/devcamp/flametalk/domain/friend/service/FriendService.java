@@ -38,8 +38,14 @@ public class FriendService {
   public FriendCreateResponse save(String userId, FriendCreateRequest request) {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+    // TODO: refactor
     User userFriend = userRepository.findByPhoneNumber(request.getPhoneNumber())
-        .orElseThrow(() -> new EntityNotFoundException(ErrorCode.PHONE_NUMBER_NOT_FOUND));
+        .orElse(null);
+    if (userFriend == null) {
+      return null;
+    }
+
     Profile assignedProfile = profileRepository.findById(request.getProfileId())
         .orElseThrow(() -> new EntityNotFoundException(ErrorCode.PROFILE_NOT_FOUND));
     if (friendRepository.existsByUserAndUserFriend(user, userFriend)) {
