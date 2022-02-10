@@ -16,7 +16,10 @@ public enum StatusCode {
   SUCCESS_EXIT(200, "채팅방 퇴장 기록 성공"),
 
   // 201 CREATED : 새로운 리소스 생성
-  SUCCESS_ENTER(201, "채팅방 입장 기록 성공");
+  SUCCESS_ENTER(201, "채팅방 입장 기록 성공"),
+
+  // 400 BAD_REQUEST : 잘못된 요청
+  MISMATCH_TYPE(400, "메시지 타입이 올바르지 않습니다.");
 
   private final int status;
   private final String message;

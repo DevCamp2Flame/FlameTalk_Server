@@ -1,6 +1,7 @@
 package com.devcamp.flametalk.presence.controller;
 
 import com.devcamp.flametalk.presence.repository.RedisRepository;
+import com.devcamp.flametalk.presence.service.PresenceService;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,10 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/presence")
 public class PresenceController {
 
-  private final RedisRepository repository;
+  private final PresenceService presenceService;
 
   @GetMapping("/{roomId}")
-  public Set<String> findInsideChatroomUser(@PathVariable String roomId) {
-    return repository.findInsideChatroomUser(roomId);
+  public Set<String> getInsideChatroomUser(@PathVariable String roomId) {
+    return presenceService.getInsideChatroomUser(roomId);
   }
 }
