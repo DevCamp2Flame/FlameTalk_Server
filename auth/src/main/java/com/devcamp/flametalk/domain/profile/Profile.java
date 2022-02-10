@@ -43,6 +43,7 @@ public class Profile extends BaseTimeEntity {
 
   @Builder
   public Profile(Boolean isDefault, User user) {
+    this.sticker = "";
     this.isDefault = isDefault;
     this.user = user;
   }
