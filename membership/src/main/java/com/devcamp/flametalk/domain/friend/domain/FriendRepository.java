@@ -1,5 +1,7 @@
 package com.devcamp.flametalk.domain.friend.domain;
 
+import com.devcamp.flametalk.domain.user.domain.User;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -7,4 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface FriendRepository extends JpaRepository<Friend, Long> {
 
+  Optional<Friend> findByUserAndUserFriend(User user, User friend);
+
+  boolean existsByUserAndUserFriend(User user, User friend);
 }
