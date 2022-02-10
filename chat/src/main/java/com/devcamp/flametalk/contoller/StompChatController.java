@@ -37,12 +37,6 @@ public class StompChatController {
     sender.send(TOPIC, message);
   }
 
-  // todo : chatting message api - param
-//  @RequestMapping("/history")
-//  public List<Message> getChattingHistory(@RequestParam String lastReadMessageId) {
-//    return chatService.getMessage(lastReadMessageId);
-//  }
-
   // todo : 파일 송신
 //  @MessageMapping("/chat/file")
 //  @SendTo("/sub/chat/room/{roomId}")
