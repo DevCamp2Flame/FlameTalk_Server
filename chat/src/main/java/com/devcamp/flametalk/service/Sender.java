@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
+/**
+ * 메시지 발행 역할을 합니다.
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Component

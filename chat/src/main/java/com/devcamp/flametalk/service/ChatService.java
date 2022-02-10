@@ -22,13 +22,20 @@ public class ChatService {
 
   private final MessageRepository messageRepository;
 
-  public ResponseEntity<DefaultResponse<List<Message>>> getMessage(String roomId, String lastReadMessageId) {
+  /**
+   * 채팅방 메시지 히스토리를 반환합니다.
+   *
+   * @param roomId            채팅방 id
+   * @param lastReadMessageId 마지막으로 읽은 메시지 id
+   * @return 메시지 히스토리
+   */
+  public ResponseEntity<DefaultResponse<List<Message>>> getChattingHistory(String roomId,
+      String lastReadMessageId) {
 
-//    List<Message> messages = messageRepository.findAll();
     List<Message> messages;
-    if(lastReadMessageId == null)
-      messages = messageRepository.findAll();
-    else {
+    if (lastReadMessageId == null) {
+      messages = messageRepository.findByRoomId(roomId);
+    } else {
       messages = messageRepository.findByRoomIdAndMessageId(roomId, lastReadMessageId);
     }
 

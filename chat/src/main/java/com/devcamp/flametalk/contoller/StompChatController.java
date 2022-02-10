@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 
+/**
+ * Websocket 채팅과 관련된 컨트롤러입니다.
+ */
 @Controller
 @RequiredArgsConstructor
 public class StompChatController {
@@ -17,15 +20,16 @@ public class StompChatController {
 
   private static final String TOPIC = "flametalk";
 
-  // client가 send 할 수 있는 경로
-  // stompConfig 에서 설정한 applicationDestinationPrefixes 와 @MessageMapping 경로가 병합됨
-  // "/pub/chat/message" 로 들어오는 메시지를 /chat/room/{roomId} 를 구독하고 있는 사람들에게 송신
+  /**
+   * /pub/chat/message 로 들어오는 메시지를 /chat/room/{roomId} 를 구독하고 있는 사람들에게 송신합니다.
+   *
+   * @param messageRequest message
+   */
   @MessageMapping(value = "/chat/message")
   public void message(MessageRequest messageRequest) {
-    if(MessageRequest.MessageType.INVITE.equals(messageRequest.getType())) {
+    if (MessageRequest.MessageType.INVITE.equals(messageRequest.getType())) {
       messageRequest.setContents(messageRequest.getNickname() + "님에 의해 초대되었습니다.");
-    }
-    else if (MessageRequest.MessageType.ENTER.equals(messageRequest.getType())) {
+    } else if (MessageRequest.MessageType.ENTER.equals(messageRequest.getType())) {
       messageRequest.setContents(messageRequest.getNickname() + "님이 채팅방에 참여하였습니다.");
     }
 
@@ -38,9 +42,9 @@ public class StompChatController {
   }
 
   // todo : 파일 송신
-//  @MessageMapping("/chat/file")
-//  @SendTo("/sub/chat/room/{roomId}")
-//  public Message sendFile(MessageRequest message) {
-//    return new Message(message.getFileName(), message.getRawData(), message.getUser());
-//  }
+  //  @MessageMapping("/chat/file")
+  //  @SendTo("/sub/chat/room/{roomId}")
+  //  public Message sendFile(MessageRequest message) {
+  //    return new Message(message.getRoomId(), message.getUser(), message.getFileUrl());
+  //  }
 }

@@ -26,6 +26,6 @@ public class ChatMessageController {
   public ResponseEntity<DefaultResponse<List<Message>>> getChattingHistory(
       @PathVariable String roomId, @RequestParam(required = false) String lastReadMessageId) {
     System.out.println("lastReadMessageId = " + lastReadMessageId);
-    return chatService.getMessage(roomId, lastReadMessageId);
+    return chatService.getChattingHistory(roomId, lastReadMessageId);
   }
 }

@@ -7,7 +7,7 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 /**
- * Stomp 를 사용하기 위한 설정 파일.
+ * Stomp 를 사용하기 위한 설정 파일입니다.
  */
 @Configuration
 @EnableWebSocketMessageBroker
