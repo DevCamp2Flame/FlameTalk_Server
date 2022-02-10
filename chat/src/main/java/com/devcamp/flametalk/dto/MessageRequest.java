@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class MessageRequest {
 
   public enum MessageType {
-    INVITE, ENTER, TALK
+    INVITE, ENTER, TALK, FILE
   }
 
   private MessageType type;
