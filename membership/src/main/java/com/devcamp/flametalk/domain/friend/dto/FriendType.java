@@ -25,13 +25,13 @@ public enum FriendType {
    * @return 친구 타입
    */
   public static FriendType of(Friend friend) {
-    if (friend.isBlocked()) {
+    if (Boolean.TRUE.equals(friend.getIsBlocked())) {
       return BLOCKED;
     }
-    if (friend.isHidden()) {
+    if (Boolean.TRUE.equals(friend.getIsHidden())) {
       return HIDDEN;
     }
-    if (friend.isMarked()) {
+    if (Boolean.TRUE.equals(friend.getIsMarked())) {
       return MARKED;
     }
     return DEFAULT;

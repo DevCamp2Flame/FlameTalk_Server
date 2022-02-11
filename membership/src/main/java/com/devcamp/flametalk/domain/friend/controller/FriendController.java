@@ -2,6 +2,7 @@ package com.devcamp.flametalk.domain.friend.controller;
 
 import com.devcamp.flametalk.domain.friend.dto.FriendCreateRequest;
 import com.devcamp.flametalk.domain.friend.dto.FriendCreateResponse;
+import com.devcamp.flametalk.domain.friend.dto.FriendResponse;
 import com.devcamp.flametalk.domain.friend.dto.FriendUpdateRequest;
 import com.devcamp.flametalk.domain.friend.dto.FriendUpdateResponse;
 import com.devcamp.flametalk.domain.friend.dto.FriendsCreateRequest;
@@ -10,18 +11,21 @@ import com.devcamp.flametalk.global.common.CommonResponse;
 import com.devcamp.flametalk.global.common.SingleDataResponse;
 import com.devcamp.flametalk.global.common.Status;
 import java.net.URI;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -75,6 +79,30 @@ public class FriendController {
     log.info("create friend relation {} ", friend.getFriendId());
     return ResponseEntity.created(URI.create("/api/membership/friend" + friend.getFriendId()))
         .body(response);
+  }
+
+  /**
+   * 유저가 추가한 모든 친구를 조회합니다.
+   *
+   * @param userId     유저 id
+   * @param isBirthday 생일 친구 조회 여부
+   * @param isMarked   관심 친구 조회 여부
+   * @param isHidden   숨김 친구 조회 여부
+   * @param isBlocked  차단 친구 조회 여부
+   * @return 유저의 친구 정보 리스트
+   */
+  @GetMapping
+  public ResponseEntity<SingleDataResponse<List<FriendResponse>>> findAll(
+      @RequestHeader("USER-ID") String userId, @RequestParam(required = false) boolean isBirthday,
+      @RequestParam(required = false) Boolean isMarked,
+      @RequestParam(required = false) Boolean isHidden,
+      @RequestParam(required = false) Boolean isBlocked) {
+    List<FriendResponse> friends = friendService
+        .findAll(userId, isBirthday, isMarked, isHidden, isBlocked);
+    SingleDataResponse<List<FriendResponse>> response = new SingleDataResponse<>();
+    response.success(Status.FRIENDS_SUCCESS.getMessage(), friends);
+    log.info("find friends by user id {} ", userId);
+    return ResponseEntity.ok().body(response);
   }
 
   /**

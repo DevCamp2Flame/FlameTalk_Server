@@ -31,13 +31,13 @@ public class Friend extends BaseTime {
   private Preview preview;
 
   @NotNull
-  private boolean isMarked;
+  private Boolean isMarked;
 
   @NotNull
-  private boolean isHidden;
+  private Boolean isHidden;
 
   @NotNull
-  private boolean isBlocked;
+  private Boolean isBlocked;
 
   @ManyToOne
   @JoinColumn(name = "user_id")

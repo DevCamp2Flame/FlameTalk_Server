@@ -5,6 +5,7 @@ import com.devcamp.flametalk.domain.friend.domain.FriendRepository;
 import com.devcamp.flametalk.domain.friend.domain.Preview;
 import com.devcamp.flametalk.domain.friend.dto.FriendCreateRequest;
 import com.devcamp.flametalk.domain.friend.dto.FriendCreateResponse;
+import com.devcamp.flametalk.domain.friend.dto.FriendResponse;
 import com.devcamp.flametalk.domain.friend.dto.FriendUpdateRequest;
 import com.devcamp.flametalk.domain.friend.dto.FriendUpdateResponse;
 import com.devcamp.flametalk.domain.friend.dto.FriendsCreateRequest;
@@ -16,8 +17,12 @@ import com.devcamp.flametalk.global.error.ErrorCode;
 import com.devcamp.flametalk.global.error.exception.EntityExistsException;
 import com.devcamp.flametalk.global.error.exception.EntityNotFoundException;
 import com.devcamp.flametalk.global.error.exception.ForbiddenException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -104,6 +109,58 @@ public class FriendService {
     }
 
     return FriendCreateResponse.of(friend, userFriendRelation);
+  }
+
+  /**
+   * 유저 id에 해당하는 친구 리스트를 조회합니다.
+   *
+   * @param userId     유저 id
+   * @param isBirthday 생일 친구 조회 여부
+   * @param isMarked   관심 친구 조회 여부
+   * @param isHidden   숨김 친구 조회 여부
+   * @param isBlocked  차단 친구 조회 여부
+   * @return
+   */
+  public List<FriendResponse> findAll(String userId, Boolean isBirthday, Boolean isMarked,
+      Boolean isHidden, Boolean isBlocked) {
+    User user = userRepository.findById(userId)
+        .orElseThrow(() -> new EntityNotFoundException(ErrorCode.USER_NOT_FOUND));
+
+    if (Boolean.TRUE.equals(isMarked)) {
+      List<Friend> markedFriends = friendRepository.findAllByUserAndIsMarked(user, true);
+      return toFriendResponse(markedFriends);
+    }
+
+    isHidden = Optional.ofNullable(isHidden).orElse(Boolean.FALSE);
+    isBlocked = Optional.ofNullable(isBlocked).orElse(Boolean.FALSE);
+    List<Friend> friends = friendRepository
+        .findAllByUserAndIsBlockedAndIsHidden(user, isBlocked, isHidden);
+
+    if (Boolean.TRUE.equals(isBirthday)) {
+      List<Friend> birthdaysFriends = findBirthdayFriend(friends);
+      return toFriendResponse(birthdaysFriends);
+    }
+    return toFriendResponse(friends);
+  }
+
+  private List<Friend> findBirthdayFriend(List<Friend> friends) {
+    String nowDateFormat = LocalDate.now().format(DateTimeFormatter.ofPattern("MM-dd"));
+    List<Friend> birthdayFriends = new ArrayList<>();
+    friends.forEach(friend -> {
+      if (friend.getUserFriend().getBirthday().substring(5).equals(nowDateFormat)) {
+        birthdayFriends.add(friend);
+      }
+    });
+    return birthdayFriends;
+  }
+
+  private List<FriendResponse> toFriendResponse(List<Friend> friends) {
+    List<FriendResponse> friendResponses = new ArrayList<>();
+    friends.forEach(friend -> friendResponses.add(
+        new FriendResponse(friend.getId(), friend.getUserFriend().getId(),
+            friend.getUserFriend().getNickname(), getFriendProfile(friend))));
+    Collections.sort(friendResponses);
+    return friendResponses;
   }
 
   /**
