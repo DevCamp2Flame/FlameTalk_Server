@@ -2,6 +2,7 @@ package com.devcamp.flametalk.chatroom.domain.chatroom.controller;
 
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateResponse;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomFilesResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomsResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ResponseType;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomCloseRequest;
@@ -11,6 +12,7 @@ import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomUpdateRequ
 import com.devcamp.flametalk.chatroom.domain.chatroom.service.ChatroomService;
 import com.devcamp.flametalk.chatroom.global.common.CommonResponse;
 import com.devcamp.flametalk.chatroom.global.common.SingleDataResponse;
+import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -73,6 +75,7 @@ public class ChatRoomController {
 
   /**
    * 유저가 참여중인 모든 채팅방에 대한 일부 정보를 조회합니다.
+   *
    * @param userId 유저 id
    * @param isOpen 오픈 채팅방 여부
    * @return 채팅방 부분 정보에 대한 리스트
@@ -84,6 +87,23 @@ public class ChatRoomController {
     SingleDataResponse<ChatroomsResponse> response = new SingleDataResponse<>();
     response.success(ResponseType.USER_CHATROOMS_SUCCESS.getMessage(), chatrooms);
     log.info("find all by user id" + chatrooms.toString());
+    return ResponseEntity.ok().body(response);
+  }
+
+  /**
+   * 채팅방에 업로드된 파일 정보 리스트를 조회합니다.
+   *
+   * @param chatroomId 채팅방 id
+   * @return 업로드된 파일 정보에 대한 리스트
+   */
+  @GetMapping("/file/{chatroomId}")
+  public ResponseEntity<SingleDataResponse<List<ChatroomFilesResponse>>> findAllFilesByChatroomId(
+      @PathVariable String chatroomId) {
+    List<ChatroomFilesResponse> chatroomFiles = chatroomService
+        .findAllFilesByChatroomId(chatroomId);
+    SingleDataResponse<List<ChatroomFilesResponse>> response = new SingleDataResponse<>();
+    response.success(ResponseType.CHATROOM_FILES_SUCCESS.getMessage(), chatroomFiles);
+    log.info("find all files uploaded in chatroom {}", chatroomId);
     return ResponseEntity.ok().body(response);
   }
 

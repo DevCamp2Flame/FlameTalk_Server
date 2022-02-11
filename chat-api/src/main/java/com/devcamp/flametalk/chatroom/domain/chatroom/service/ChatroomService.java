@@ -1,5 +1,6 @@
 package com.devcamp.flametalk.chatroom.domain.chatroom.service;
 
+import static com.devcamp.flametalk.chatroom.global.error.ErrorCode.CHATROOM_NOT_FOUND;
 import static com.devcamp.flametalk.chatroom.global.error.ErrorCode.HOST_USER_CONFLICT_EXCEPTION;
 import static com.devcamp.flametalk.chatroom.global.error.ErrorCode.USER_CHATROOM_NOT_FOUND;
 import static com.devcamp.flametalk.chatroom.global.error.ErrorCode.USER_NOT_FOUND;
@@ -10,6 +11,7 @@ import com.devcamp.flametalk.chatroom.domain.chatroom.domain.UserChatroom;
 import com.devcamp.flametalk.chatroom.domain.chatroom.domain.UserChatroomRepository;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateResponse;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomFilesResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomsResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ProfileSimpleResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomCloseRequest;
@@ -18,6 +20,7 @@ import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomSimpleResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomUpdateRequest;
 import com.devcamp.flametalk.chatroom.domain.file.domain.File;
+import com.devcamp.flametalk.chatroom.domain.file.domain.FileRepository;
 import com.devcamp.flametalk.chatroom.domain.profile.domain.Profile;
 import com.devcamp.flametalk.chatroom.domain.profile.domain.ProfileRepository;
 import com.devcamp.flametalk.chatroom.domain.user.domain.User;
@@ -25,6 +28,7 @@ import com.devcamp.flametalk.chatroom.domain.user.domain.UserRepository;
 import com.devcamp.flametalk.chatroom.global.error.exception.ConflictException;
 import com.devcamp.flametalk.chatroom.global.error.exception.EntityNotFoundException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -42,6 +46,7 @@ public class ChatroomService {
   private final UserChatroomRepository userChatroomRepository;
   private final UserRepository userRepository;
   private final ProfileRepository profileRepository;
+  private final FileRepository fileRepository;
 
   /**
    * 채팅방을 DB에 생성합니다. 채팅방에 초대된 유저들의 userChatroom 까지 DB에 생성됩니다.
@@ -181,6 +186,26 @@ public class ChatroomService {
     });
 
     return ChatroomsResponse.of(userId, userChatroomResponses);
+  }
+
+  /**
+   * 채팅방에 업르드된 파일 객체를 모두 조회합니다.
+   *
+   * @param id 채팅방 id
+   * @return 생성 시간 역순으로 정렬된 파일 정보 리스트
+   */
+  public List<ChatroomFilesResponse> findAllFilesByChatroomId(String id) {
+    // TODO: 파일 서버로 로직 분리 or 파일 서버 호출
+    Chatroom chatroom = chatroomRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(CHATROOM_NOT_FOUND));
+
+    List<File> chatroomFiles = fileRepository.findAllByChatroom(chatroom);
+    List<ChatroomFilesResponse> response = new ArrayList<>();
+    chatroomFiles.forEach(file ->
+        response.add(new ChatroomFilesResponse(file.getId(), file.getUrl(), file.getTitle(),
+            file.getExtension(), file.getCreatedAt())));
+    Collections.sort(response);
+    return response;
   }
 
   /**
