@@ -11,6 +11,8 @@ import lombok.Getter;
 public enum Status {
 
   // 200 OK : 성공
+  UPDATED_FRIEND(200, "친구 관계 수정 성공"),
+
   // 201 CREATED : 새로운 리소스 생성
   CREATED_FRIEND(201, "친구 추가 성공"),
   CREATED_CONTACT_FRIENDS(201, "연락처 전체 친구 추가 성공"),

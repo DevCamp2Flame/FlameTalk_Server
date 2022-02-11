@@ -2,6 +2,8 @@ package com.devcamp.flametalk.domain.friend.controller;
 
 import com.devcamp.flametalk.domain.friend.dto.FriendCreateRequest;
 import com.devcamp.flametalk.domain.friend.dto.FriendCreateResponse;
+import com.devcamp.flametalk.domain.friend.dto.FriendUpdateRequest;
+import com.devcamp.flametalk.domain.friend.dto.FriendUpdateResponse;
 import com.devcamp.flametalk.domain.friend.dto.FriendsCreateRequest;
 import com.devcamp.flametalk.domain.friend.service.FriendService;
 import com.devcamp.flametalk.global.common.CommonResponse;
@@ -14,7 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -71,5 +75,22 @@ public class FriendController {
     log.info("create friend relation {} ", friend.getFriendId());
     return ResponseEntity.created(URI.create("/api/membership/friend" + friend.getFriendId()))
         .body(response);
+  }
+
+  /**
+   * 친구 관계를 수정합니다.
+   *
+   * @param friendId 수정할 친구관계 id
+   * @param request  수정될 친구 관계 JSON 데이터
+   * @return 수정된 친구 관계 JSON 데이터
+   */
+  @PutMapping("/{friendId}")
+  public ResponseEntity<SingleDataResponse<FriendUpdateResponse>> update(
+      @PathVariable Long friendId, @RequestBody @Valid FriendUpdateRequest request) {
+    FriendUpdateResponse updatedFriend = friendService.update(friendId, request);
+    SingleDataResponse<FriendUpdateResponse> response = new SingleDataResponse<>();
+    response.success(Status.UPDATED_FRIEND.getMessage(), updatedFriend);
+    log.info("update friend relation {}", updatedFriend.getFriendId());
+    return ResponseEntity.ok().body(response);
   }
 }

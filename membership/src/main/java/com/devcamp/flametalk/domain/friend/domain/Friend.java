@@ -75,4 +75,19 @@ public class Friend extends BaseTime {
     this.userFriend = userFriend;
     this.profile = profile;
   }
+
+  /**
+   * 친구 엔티티를 업데이트합니다.
+   *
+   * @param updatedFriend 업데이트 될 친구 관계 정보
+   * @return 업데이트된 친구 관계
+   */
+  public Friend update(Friend updatedFriend) {
+    this.preview = updatedFriend.preview;
+    this.isMarked = updatedFriend.isMarked;
+    this.isHidden = updatedFriend.isHidden;
+    this.isBlocked = updatedFriend.isBlocked;
+    this.profile = updatedFriend.profile;
+    return this;
+  }
 }
