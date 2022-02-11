@@ -22,7 +22,7 @@
 
 ## 4. Project Info
 
-### 0) Version Info
+### 📚 0) Version Info
 
 |   IDE    | Version |
 |:--------:|:-------:| 
@@ -43,8 +43,6 @@
 | cassandra |        4.0.1         |
 |   redis   |       3.0.504        |
 
-<br/>
-
 ### 📚 1) Library
 
 |     Libraby      | Version  | Description            |
@@ -60,8 +58,16 @@
 
 ### 📚 2) Requirements Spec
 
-- f
-- 1
+- 로그인, 회원가입
+- JWT 기반 사용자 인증
+- 프로필 생성 및 수정
+- 멀티 프로필, 오픈 프로필 생성 및 관리
+- 친구 목록, 생일인 친구 목록 불러오기
+- 친구 차단, 숨김 설정
+- 채팅, 오픈 채팅
+- 파일 송수신
+- N 디바이스 지원
+
 
 ## 3. Architecture
 ![image](https://user-images.githubusercontent.com/44438366/153452515-2cb8d453-2086-49b9-bc71-271e6b072b70.png)
@@ -399,8 +405,8 @@
     // build
     ./gradlew/build
     
-여기까지 완료하면 /auth/build/libs 에 jar 파일이 만들어진다. </br>
-jar 파일을 실행하면 spring boot 를 실행할 수 있다.
+여기까지 완료하면 /auth/build/libs 에 jar 파일이 만들어집니다. </br>
+jar 파일을 실행하면 spring boot 를 실행할 수 있습니다.
     
 ### MySQL user 생성
     
@@ -423,10 +429,10 @@ jar 파일을 실행하면 spring boot 를 실행할 수 있다.
 **참고**
     
 Mac 환경에서는 ! 때문에 문제가 됨.
-이때는 유저 굳이 생성하지 않고, root, admin 등 본인의 mysql 계정을 사용해도 됨.
+이때는 유저 굳이 생성하지 않고, root, admin 등 본인의 mysql 계정을 사용해도 됩니다.
     
 이때는 아래 프로젝트 실행 단계에서 --MYSQL_USER={본인 계정} --MYSQL_PASSWORD={계정
-    비밀번호} 로 치환하고, JWT_SECRET 부분에도 특수문자를 지우고 실행하면 된다.
+    비밀번호} 로 치환하고, JWT_SECRET 부분에도 특수문자를 지우고 실행하면 됩니다.
     
 ### 프로젝트 실행
     
@@ -437,7 +443,14 @@ Mac 환경에서는 ! 때문에 문제가 됨.
     --REDIS_PORT=6379 --APP_NAME=flametalk1.gmail.com
     --APP_PASSWORD=cnrdmzaaebhkqhgh
     
-프로젝트 실행하면 808X 포트로 서버가 실행되고, localhost:808X 으로 접속하면 서버에
-    request 를 보낼 수 있다.
+프로젝트 실행하면 808X 포트로 서버가 실행되고, localhost:808X 으로 서버에
+    request 를 보낼 수 있습니다.
+
+### API Gateway 를 통해 서버 호출하기
+
+eureka → 테스트할 서버 실행 (auth, membership, file, ... ) → gateway 순서로 실행시켜주세요.
+
+테스트할 서버를 키고, gateway 를 실행시켜야 gateway 에서 서버를 spring.application.name 으로 인식할 수 있습니다.
+서버 호출시 게이트웨이 포트번호 8080으로 호출해주세요.
 
 </details>
