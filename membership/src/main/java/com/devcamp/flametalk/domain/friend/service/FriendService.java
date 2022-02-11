@@ -85,14 +85,18 @@ public class FriendService {
     // TODO: refactor
     User userFriend = userRepository.findByPhoneNumber(request.getPhoneNumber())
         .orElse(null);
+
     if (userFriend == null) {
       return null;
+    }
+    if (friendRepository.existsByUserAndUserFriend(user, userFriend)) {
+      throw new EntityExistsException(ErrorCode.FRIEND_EXIST);
     }
 
     Profile assignedProfile = profileRepository.findById(request.getProfileId())
         .orElseThrow(() -> new EntityNotFoundException(ErrorCode.PROFILE_NOT_FOUND));
-    if (friendRepository.existsByUserAndUserFriend(user, userFriend)) {
-      throw new EntityExistsException(ErrorCode.FRIEND_EXIST);
+    if (!assignedProfile.getUser().getId().equals(userId)) {
+      throw new ForbiddenException(ErrorCode.FORBIDDEN_PROFILE);
     }
 
     Friend friend = request
