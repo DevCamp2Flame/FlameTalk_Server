@@ -82,14 +82,11 @@ public class FriendService {
     User user = userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException(ErrorCode.USER_NOT_FOUND));
 
-    // TODO: refactor
-    User userFriend = userRepository.findByPhoneNumber(request.getPhoneNumber())
-        .orElse(null);
-
-    if (userFriend == null) {
+    Optional<User> userFriend = userRepository.findByPhoneNumber(request.getPhoneNumber());
+    if (userFriend.isEmpty()) {
       return null;
     }
-    if (friendRepository.existsByUserAndUserFriend(user, userFriend)) {
+    if (friendRepository.existsByUserAndUserFriend(user, userFriend.get())) {
       throw new EntityExistsException(ErrorCode.FRIEND_EXIST);
     }
 
@@ -100,7 +97,7 @@ public class FriendService {
     }
 
     Friend friend = request
-        .toFriend(user, userFriend, assignedProfile, Preview.from(assignedProfile));
+        .toFriend(user, userFriend.get(), assignedProfile, Preview.from(assignedProfile));
     friendRepository.save(friend);
     return FriendCreateResponse.of(friend, getFriendProfile(friend));
   }
