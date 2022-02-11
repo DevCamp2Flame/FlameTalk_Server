@@ -23,6 +23,7 @@
 6. 협업 규칙 (Collaboration Rools)
 7. 실행 방법 (How to build)
 
+
 ## 1. 팀원 (Team member)
 
 | [<img src="https://avatars.githubusercontent.com/vo0a" width="100">](https://github.com/vo0a) | [<img src="https://avatars.githubusercontent.com/SuyeonChoi" width="100">](https://github.com/SuyeonChoi) |
@@ -79,6 +80,9 @@
 - 파일 송수신
 - N 디바이스 지원
 
+### 📚 3) 각종 문서 취합 (Document Archive)
+[백엔드 아카이브](https://github.com/DevCamp2Flame/FlameTalk_Server/wiki/백엔드-아카이브) </br>
+
 
 ## 3. 아키텍처 (Architecture)
 ![image](https://user-images.githubusercontent.com/44438366/153452515-2cb8d453-2086-49b9-bc71-271e6b072b70.png)
@@ -90,7 +94,7 @@
 [API Spec](https://github.com/DevCamp2Flame/FlameTalk_Server/wiki)
 
 ## 6. 협업 규칙 (Collaboration Rools)
-[백엔드 아카이브](https://github.com/DevCamp2Flame/FlameTalk_Server/wiki/백엔드-아카이브) </br>
+
 [백엔드 협업 규칙](https://github.com/DevCamp2Flame/FlameTalk_Server/wiki/백엔드-협업-규칙) </br>
 
 
