@@ -5,7 +5,7 @@
 </div>
 <div align="center">
 
-### SGS DevCamp2 flame팀의 메신저 clone project입니다🔥
+### SGS 데브캠프 2기 flame팀의 메신저 클론 프로젝트입니다🔥
 
 앱 서비스의 기본적인 회원 인증, 연락처 동기화를 통한 친구 추가, 채팅 프로필 커스텀, 검색 기능과 채팅 기능을 제공합니다.
 <br/>채팅은 STOMP WebSocket 기반의 실시간 통신으로 이루어지며, FCM을 통해 메세지에 대한 푸시 알림 기능이 있습니다.
@@ -13,14 +13,25 @@
 
 <br/>
 
-## 1. Team member
+---
+## 목차
+1. 팀원 (Team member)
+2. 프로젝트 정보 (Project Info)
+3. 아키텍처 (Architecture)
+4. DB 모델링 (Database Modeling)
+5. API 명세서 (API Spec)
+6. 협업 규칙 (Collaboration Rools)
+7. 실행 방법 (How to build)
+
+## 1. 팀원 (Team member)
 
 | [<img src="https://avatars.githubusercontent.com/vo0a" width="100">](https://github.com/vo0a) | [<img src="https://avatars.githubusercontent.com/SuyeonChoi" width="100">](https://github.com/SuyeonChoi) |
-|:---------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:| 
-|                                [김다롬](https://github.com/vo0a)                                 |                                  [최수연](https://github.com/SuyeonChoi)                                     |
+|:---------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------:| 
+|                                [김다롬](https://github.com/vo0a)                                 |                                  [최수연](https://github.com/SuyeonChoi)                                  |
+
 [백엔드 업무 분담](https://github.com/DevCamp2Flame/FlameTalk_Server/wiki/백엔드-업무-분담)
 
-## 4. Project Info
+## 2. 프로젝트 정보 (Project Info)
 
 ### 📚 0) Version Info
 
@@ -37,26 +48,26 @@
 | Spring boot |  2.6.2  |
 |   gradle    |  7.3.3  |
 
-| Database  |       Version        |
-|:---------:|:--------------------:| 
-|   MySQL   |        8.0.27        |
-| cassandra |        4.0.1         |
-|   redis   |       3.0.504        |
+| Database  |       Version        | Description                    |
+|:---------:|:--------------------:|--------------------------------|
+|   MySQL   |        8.0.27        | RDBMS: 사용자 및 프로필, 피드 등 연관관계 저장 |
+| cassandra |        4.0.1         | NoSQL: 채팅 메시지 저장               |
+|   redis   |       3.0.504        | NoSQL: 캐시 - 사용자 탈퇴, 채팅방 입퇴장 기록 |
 
 ### 📚 1) Library
 
-|     Libraby      | Version  | Description            |
-|:----------------:|:--------:|------------------------|
-| Spring Security  |  2.6.2   | 사용자 인증 및 보안설정          |
-| Spring Data JPA  |  2.6.2   | Repository 인터페이스 제공    |
-|   Spring Cloud   | 2021.0.0 | MSA 구성을 지원             |
-| WebSocket, STOMP |  2.6.2   | 양방향 통신을 지원             |
+|     Libraby      | Version  | Description             |
+|:----------------:|:--------:|-------------------------|
+| Spring Security  |  2.6.2   | 사용자 인증 및 보안설정           |
+| Spring Data JPA  |  2.6.2   | Repository 인터페이스 제공     |
+|   Spring Cloud   | 2021.0.0 | MSA 구성을 지원              |
+| WebSocket, STOMP |  2.6.2   | 양방향 통신을 지원              |
 |      kafka       |  2.8.1   | publish/subscribe 모델 지원 |
-|      MySQL       |  2.6.2   | RDBMS: 사용자 연관관계 저장     |
-|    cassandra     |  3.3.0   | NoSQL: 채팅 메시지 저장       |
-|      redis       |  2.6.2   | NoSQL: 캐시              |
+|      MySQL       |  2.6.2   | MySQL 연결을 제공            |
+|    cassandra     |  3.3.0   | cassandra 연결을 제공        |
+|      redis       |  2.6.2   | redis 연결을 제공            |
 
-### 📚 2) Requirements Spec
+### 📚 2) 요구사항 (Requirements Spec)
 
 - 로그인, 회원가입
 - JWT 기반 사용자 인증
@@ -69,24 +80,100 @@
 - N 디바이스 지원
 
 
-## 3. Architecture
+## 3. 아키텍처 (Architecture)
 ![image](https://user-images.githubusercontent.com/44438366/153452515-2cb8d453-2086-49b9-bc71-271e6b072b70.png)
 
-## 4. Database Modeling
+## 4. DB 모델링 (Database Modeling)
 ![milestone2_db](https://user-images.githubusercontent.com/44438366/153452811-ab72ba00-94e9-4994-b5c4-722fcb168ba2.png)
 
-## 5. API Spec
+## 5. API 명세서 (API Spec)
 [API Spec](https://github.com/DevCamp2Flame/FlameTalk_Server/wiki)
 
-## 6. Collaboration Rools
+## 6. 협업 규칙 (Collaboration Rools)
 [백엔드 아카이브](https://github.com/DevCamp2Flame/FlameTalk_Server/wiki/백엔드-아카이브) </br>
 [백엔드 협업 규칙](https://github.com/DevCamp2Flame/FlameTalk_Server/wiki/백엔드-협업-규칙) </br>
 
 
-## 7. How to build
-### MySQL Table 생성
-<details>
-<summary>schema.sql</summary>
+## 7. 실행 방법 (How to build)
+
+### 1) PORT 설정
+- gateway 8080
+- auth 8081
+- membership 8082
+- file 8083
+- chat-api 8084
+- chat 8085
+    - MSA 로 서버 여러대 띄울 때 805X 사용
+    - ex) 8051, 8052
+- presence 8086
+- fcm 8089
+
+### 2)서버 실행 방법
+### 프로젝트 클론 - 빌드
+    
+    // 깃 클론
+    git clone -b develop https://github.com/DevCamp2Flame/FlameTalk_Server
+    
+    // 실행하고 싶은 서버 폴더로 이동
+    cd/FlameTalk_Server/auth
+    
+    // 쓰기 권한 부여
+    chmod +x gradlew
+    
+    // build
+    ./gradlew/build
+    
+여기까지 완료하면 /auth/build/libs 에 jar 파일이 만들어집니다. </br>
+jar 파일을 실행하면 spring boot 를 실행할 수 있습니다.
+    
+### MySQL user 생성
+    
+    
+    // mysql 접속
+    mysql -u root -p
+    
+    // flame 유저 생성
+    create user 'flame'@'%' identified **by** 'flame123!@#';
+    
+    // 생성한 유저에게 권한 부여
+    GRANT ALL PRIVILEGES ON . TO 'flame'@'%' WITH GRANT OPTION;
+    
+    // 변경사항 적용
+    FLUSH PRIVILEGES;
+    
+    // mysql 나가기
+    quit
+    
+**참고**
+    
+Mac 환경에서는 ! 때문에 문제가 됨.
+이때는 유저 굳이 생성하지 않고, root, admin 등 본인의 mysql 계정을 사용해도 됩니다.
+    
+이때는 아래 프로젝트 실행 단계에서 --MYSQL_USER={본인 계정} --MYSQL_PASSWORD={계정
+    비밀번호} 로 치환하고, JWT_SECRET 부분에도 특수문자를 지우고 실행하면 됩니다.
+    
+### 프로젝트 실행
+    
+    cd build/libs
+    
+    java -jar flametalk-0.0.1-SNAPSHOT.jar --MYSQL_PORT=3306 --MYSQL_USER=flame --MYSQL_PASSWORD=flame123!@#
+    --JWT_SECRET=@dkssudgktpdy-durlsms*vmffpdla$xladlqslek!wkf(qnxkremflqslekdyd^rkflz
+    --REDIS_PORT=6379 --APP_NAME=flametalk1.gmail.com
+    --APP_PASSWORD=cnrdmzaaebhkqhgh
+    
+프로젝트 실행하면 808X 포트로 서버가 실행되고, localhost:808X 으로 서버에
+    request 를 보낼 수 있습니다.
+
+### 3) API Gateway 를 통해 서버 호출하기
+
+eureka → 테스트할 서버 실행 (auth, membership, file, ... ) → gateway 순서로 실행시켜주세요.
+
+테스트할 서버를 키고, gateway 를 실행시켜야 gateway 에서 서버를 spring.application.name 으로 인식할 수 있습니다.
+서버 호출시 게이트웨이 포트번호 8080으로 호출해주세요.
+
+### 4) MySQL Table 생성
+
+**schema.sql**
 
     -- MySQL Script generated by MySQL Workbench
     -- Fri Feb 4 17:49:07 2022
@@ -372,85 +459,3 @@
     SET SQL_MODE = @OLD_SQL_MODE;
     SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS;
     SET UNIQUE_CHECKS = @OLD_UNIQUE_CHECKS;
-
-</details>
-
-### PORT 설정
-- gateway 8080
-- auth 8081
-- membership 8082
-- file 8083
-- chat-api 8084
-- chat 8085
-    - MSA 로 서버 여러대 띄울 때 805X 사용
-    - ex) 8051, 8052
-- presence 8086
-- fcm 8089
-
-### 서버 실행 방법
-<details>
-<summary>접기</summary>
-
-### 프로젝트 클론 - 빌드
-    
-    // 깃 클론
-    git clone -b develop https://github.com/DevCamp2Flame/FlameTalk_Server
-    
-    // 실행하고 싶은 서버 폴더로 이동
-    cd/FlameTalk_Server/auth
-    
-    // 쓰기 권한 부여
-    chmod +x gradlew
-    
-    // build
-    ./gradlew/build
-    
-여기까지 완료하면 /auth/build/libs 에 jar 파일이 만들어집니다. </br>
-jar 파일을 실행하면 spring boot 를 실행할 수 있습니다.
-    
-### MySQL user 생성
-    
-    
-    // mysql 접속
-    mysql -u root -p
-    
-    // flame 유저 생성
-    create user 'flame'@'%' identified **by** 'flame123!@#';
-    
-    // 생성한 유저에게 권한 부여
-    GRANT ALL PRIVILEGES ON . TO 'flame'@'%' WITH GRANT OPTION;
-    
-    // 변경사항 적용
-    FLUSH PRIVILEGES;
-    
-    // mysql 나가기
-    quit
-    
-**참고**
-    
-Mac 환경에서는 ! 때문에 문제가 됨.
-이때는 유저 굳이 생성하지 않고, root, admin 등 본인의 mysql 계정을 사용해도 됩니다.
-    
-이때는 아래 프로젝트 실행 단계에서 --MYSQL_USER={본인 계정} --MYSQL_PASSWORD={계정
-    비밀번호} 로 치환하고, JWT_SECRET 부분에도 특수문자를 지우고 실행하면 됩니다.
-    
-### 프로젝트 실행
-    
-    cd build/libs
-    
-    java -jar flametalk-0.0.1-SNAPSHOT.jar --MYSQL_PORT=3306 --MYSQL_USER=flame --MYSQL_PASSWORD=flame123!@#
-    --JWT_SECRET=@dkssudgktpdy-durlsms*vmffpdla$xladlqslek!wkf(qnxkremflqslekdyd^rkflz
-    --REDIS_PORT=6379 --APP_NAME=flametalk1.gmail.com
-    --APP_PASSWORD=cnrdmzaaebhkqhgh
-    
-프로젝트 실행하면 808X 포트로 서버가 실행되고, localhost:808X 으로 서버에
-    request 를 보낼 수 있습니다.
-
-### API Gateway 를 통해 서버 호출하기
-
-eureka → 테스트할 서버 실행 (auth, membership, file, ... ) → gateway 순서로 실행시켜주세요.
-
-테스트할 서버를 키고, gateway 를 실행시켜야 gateway 에서 서버를 spring.application.name 으로 인식할 수 있습니다.
-서버 호출시 게이트웨이 포트번호 8080으로 호출해주세요.
-
-</details>
