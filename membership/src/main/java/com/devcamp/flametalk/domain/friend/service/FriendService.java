@@ -119,7 +119,7 @@ public class FriendService {
    * @param isMarked   관심 친구 조회 여부
    * @param isHidden   숨김 친구 조회 여부
    * @param isBlocked  차단 친구 조회 여부
-   * @return
+   * @return 조회된 친구 정보 리스트
    */
   public List<FriendResponse> findAll(String userId, Boolean isBirthday, Boolean isMarked,
       Boolean isHidden, Boolean isBlocked) {
