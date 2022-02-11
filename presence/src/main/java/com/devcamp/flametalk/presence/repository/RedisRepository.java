@@ -5,7 +5,6 @@ import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Repository;
 public class RedisRepository {
 
   private final RedisTemplate<String, String> redisTemplate; // roomId, { userId/deviceId, ... }
-  private SetOperations<String, String> setOperations; // 레디스 서버에 데이터 작업을 수행하는 스프링 헬퍼 메서드의 집합
+  private SetOperations<String, String> setOperations;
   private final String prefix = "[Presence]";
 
   @PostConstruct
@@ -32,7 +31,7 @@ public class RedisRepository {
     setOperations.remove(prefix + roomId, userId + "/" + deviceId);
   }
 
-  public Set<String> findInsideChatroomUser(String roomId) {
+  public Set<String> getInsideChatroomUser(String roomId) {
     return setOperations.members(prefix + roomId);
   }
 }

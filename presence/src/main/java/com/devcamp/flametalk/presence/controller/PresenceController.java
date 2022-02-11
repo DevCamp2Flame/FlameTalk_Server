@@ -19,6 +19,12 @@ public class PresenceController {
 
   private final PresenceService presenceService;
 
+  /**
+   * 채팅방에 접속상태인 사용자 리스트를 반환합니다.
+   *
+   * @param roomId 채팅방 id
+   * @return 채팅방에 접속상태인 사용자 리스트
+   */
   @GetMapping("/{roomId}")
   public Set<String> getInsideChatroomUser(@PathVariable String roomId) {
     return presenceService.getInsideChatroomUser(roomId);
