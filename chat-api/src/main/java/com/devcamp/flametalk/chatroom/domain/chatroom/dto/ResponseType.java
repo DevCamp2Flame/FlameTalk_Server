@@ -10,6 +10,7 @@ import lombok.Getter;
 @Getter
 public enum ResponseType {
   CHATROOM_CREATE_SUCCESS(201, "채팅방 생성 성공"),
+  CHATROOM_JOIN_SUCCESS(201, "채팅방 입장 성공"),
   USER_CHATROOMS_SUCCESS(200, "채팅방 리스트 조회 성공"),
   CHATROOM_DETAIL_SUCCESS(200, "채팅방 상세 조회 성공"),
   CHATROOM_FILES_SUCCESS(200, "채팅방 파일 리스트 조회 성공"),

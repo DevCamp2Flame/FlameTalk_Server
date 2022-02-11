@@ -13,6 +13,8 @@ import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomFilesResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomsResponse;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.JoinChatroomRequest;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.JoinChatroomResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ProfileSimpleResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomCloseRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomDetailResponse;
@@ -117,6 +119,28 @@ public class ChatroomService {
     }
     return userRepository.findById(userId)
         .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
+  }
+
+  /**
+   * 기존 채팅방에 유저가 입장함에 따라 UserChatroom 엔티티가 생성되며 채팅방 인원수가 증가합니다.
+   *
+   * @param request 입장 정보
+   * @return 입장한 채팅방 정보
+   */
+  @Transactional
+  public JoinChatroomResponse joinChatroom(JoinChatroomRequest request) {
+    // TODO: 오픈 채팅방, 멀티프로필
+    Chatroom chatroom = chatroomRepository.findById(request.getChatroomId())
+        .orElseThrow(() -> new EntityNotFoundException(CHATROOM_NOT_FOUND));
+    User user = userRepository.findById(request.getUserId())
+        .orElseThrow(() -> new EntityNotFoundException(USER_NOT_FOUND));
+
+    UserChatroom userChatroom = request.toUserChatroom(chatroom, user);
+    UserChatroom saved = userChatroomRepository.save(userChatroom);
+    chatroom.join();
+
+    return JoinChatroomResponse.of(chatroom, saved, makeDefaultChatroomTitle(chatroom),
+        makeDefaultChatroomThumbnail(chatroom));
   }
 
   /**

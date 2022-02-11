@@ -74,4 +74,8 @@ public class Chatroom extends BaseTime {
   public void leave() {
     this.count--;
   }
+
+  public void join() {
+    this.count++;
+  }
 }

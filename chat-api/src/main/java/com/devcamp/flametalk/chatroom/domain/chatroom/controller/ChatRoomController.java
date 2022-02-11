@@ -4,6 +4,8 @@ import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomFilesResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomsResponse;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.JoinChatroomRequest;
+import com.devcamp.flametalk.chatroom.domain.chatroom.dto.JoinChatroomResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ResponseType;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomCloseRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.UserChatroomDetailResponse;
@@ -53,6 +55,22 @@ public class ChatRoomController {
     SingleDataResponse<ChatroomCreateResponse> response = new SingleDataResponse<>();
     response.success(ResponseType.CHATROOM_CREATE_SUCCESS.getMessage(), chatroom);
     log.info(chatroom.getChatroomId());
+    return ResponseEntity.ok().body(response);
+  }
+
+  /**
+   * 유저가 기존 채팅방에 입장합니다.
+   *
+   * @param request 입장 정보
+   * @return 입장한 채팅방에 대한 정보
+   */
+  @PostMapping("/join")
+  public ResponseEntity<SingleDataResponse<JoinChatroomResponse>> joinChatroom(
+      @RequestBody @Valid JoinChatroomRequest request) {
+    JoinChatroomResponse chatroom = chatroomService.joinChatroom(request);
+    SingleDataResponse<JoinChatroomResponse> response = new SingleDataResponse<>();
+    response.success(ResponseType.CHATROOM_JOIN_SUCCESS.getMessage(), chatroom);
+    log.info("join chatroom {}", request.getChatroomId());
     return ResponseEntity.ok().body(response);
   }
 
