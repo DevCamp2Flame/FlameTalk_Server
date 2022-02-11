@@ -8,10 +8,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * 친구 한명 추가 요청을 위한 클래스입니다.
  */
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 public class FriendCreateRequest {
