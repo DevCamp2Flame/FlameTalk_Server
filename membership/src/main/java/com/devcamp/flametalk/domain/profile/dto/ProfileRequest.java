@@ -22,6 +22,8 @@ public class ProfileRequest {
   private String imageUrl;
   private String bgImageUrl;
   private String description;
+
+  @NotNull
   private List<Sticker> sticker;
 
   @NotNull
