@@ -1,6 +1,7 @@
 package com.devcamp.flametalk.domain.friend.dto;
 
 import com.devcamp.flametalk.domain.friend.domain.Friend;
+import com.devcamp.flametalk.domain.friend.domain.Preview;
 import com.devcamp.flametalk.domain.profile.domain.Profile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,13 +44,13 @@ public class FriendCreateResponse {
    * @param userFriendRelation 추가하는 친구 유저의 친구관계 Entity
    * @return 생성된 친구 관계 응답 정보
    */
-  public static FriendCreateResponse of(Friend friend, Friend userFriendRelation) {
+  public static FriendCreateResponse of(Friend friend, Preview preview) {
     return new FriendCreateResponse(
         friend.getId(),
         friend.getUserFriend().getNickname(),
-        userFriendRelation.getPreview().getProfileId(),
-        userFriendRelation.getPreview().getImageUrl(),
-        userFriendRelation.getPreview().getDescription()
+        preview.getProfileId(),
+        preview.getImageUrl(),
+        preview.getDescription()
     );
   }
 }

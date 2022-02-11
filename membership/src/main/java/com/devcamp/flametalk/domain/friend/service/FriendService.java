@@ -98,17 +98,7 @@ public class FriendService {
     Friend friend = request
         .toFriend(user, userFriend, assignedProfile, Preview.from(assignedProfile));
     friendRepository.save(friend);
-
-    Friend userFriendRelation = friendRepository
-        .findByUserAndUserFriend(userFriend, user).orElse(null);
-
-    if (userFriendRelation == null) {
-      Profile friendDefaultProfile = profileRepository.findByUserAndIsDefault(userFriend, true)
-          .orElseThrow(() -> new EntityNotFoundException(ErrorCode.DEFAULT_PROFILE_NOT_FOUND));
-      return FriendCreateResponse.ofOneSide(friend, friendDefaultProfile);
-    }
-
-    return FriendCreateResponse.of(friend, userFriendRelation);
+    return FriendCreateResponse.of(friend, getFriendProfile(friend));
   }
 
   /**
