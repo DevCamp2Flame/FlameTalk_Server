@@ -1,0 +1,11 @@
+server:
+  port: 8761 # 유레카 서버가 수신 대기할 포트
+
+eureka:
+  client:
+    registerWithEureka: false # 유레카 서비스에 (자신을) 등록하지 않는다.
+    fetchRegistry: false      # 레지스트리 정보를 로컬에 캐싱하지 않는다.
+  server:
+    waitTimeInMsWhenSyncEmpty: 5 # 서버가 요청을 받기 전 대기할 초기 시간
+  serviceUrl:
+    defaultZone: http://localhost:8761

@@ -1,6 +1,33 @@
+server:
+  port: 8082
+
 spring:
+  application:
+    name: membership
+  profiles:
+    active:
+      default
+  cloud:
+    config:
+      enabled: true
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/flametalk_db?serverTimezone=UTC&characterEncoding=UTF-8
     username: flame
     password: flame123!@#
+  jpa:
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+eureka:
+  instance:
+    hostname: membership
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
