@@ -90,4 +90,8 @@ public class Friend extends BaseTime {
     this.profile = updatedFriend.profile;
     return this;
   }
+
+  public void updatePreview(Preview updatedPreview) {
+    this.preview = updatedPreview;
+  }
 }

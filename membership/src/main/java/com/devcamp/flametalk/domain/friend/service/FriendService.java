@@ -189,4 +189,19 @@ public class FriendService {
     }
     return userFriendRelation.getPreview();
   }
+
+  /**
+   * 유저의 친구들에게 보여주는 프로필 프리뷰를 업데이트합니다.
+   *
+   * @param profileId 업데이트할 프리뷰에 해당하는 프로필 id
+   * @return 프리뷰를 업데이트한 친구 수
+   */
+  @Transactional
+  public int updatePreview(Long profileId) {
+    Profile profile = profileRepository.getById(profileId);
+    Preview preview = Preview.from(profile);
+    List<Friend> friends = friendRepository.findAllByProfile(profile);
+    friends.forEach(friend -> friend.updatePreview(preview));
+    return friends.size();
+  }
 }
