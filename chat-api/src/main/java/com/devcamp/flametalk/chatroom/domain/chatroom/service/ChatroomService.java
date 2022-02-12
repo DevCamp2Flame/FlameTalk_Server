@@ -139,8 +139,9 @@ public class ChatroomService {
     UserChatroom saved = userChatroomRepository.save(userChatroom);
     chatroom.join();
 
-    return JoinChatroomResponse.of(chatroom, saved, makeDefaultChatroomTitle(chatroom),
-        makeDefaultChatroomThumbnail(chatroom));
+    return JoinChatroomResponse
+        .of(chatroom, saved, makeDefaultChatroomTitle(chatroom, userChatroom),
+            makeDefaultChatroomThumbnail(chatroom, userChatroom));
   }
 
   /**
@@ -200,10 +201,12 @@ public class ChatroomService {
       if ((chatroom.getIsOpen() && isOpen) || (!chatroom.getIsOpen() && !isOpen)) {
         UserChatroomResponse response = UserChatroomResponse.of(userChatroom);
         if (response.getThumbnail() == null) { // 채팅방 사진을 지정하지 않은 경우 유저들의 프로필로 생성
-          response.updateDefaultThumbnail(makeDefaultChatroomThumbnail(userChatroom.getChatroom()));
+          response.updateDefaultThumbnail(
+              makeDefaultChatroomThumbnail(userChatroom.getChatroom(), userChatroom));
         }
         if (response.getTitle() == null) { // 채팅방 이름을 지정하지 않은 경우 유저들의 닉네임으로 생성
-          response.updateDefaultTitle(makeDefaultChatroomTitle(userChatroom.getChatroom()));
+          response.updateDefaultTitle(
+              makeDefaultChatroomTitle(userChatroom.getChatroom(), userChatroom));
         }
         userChatroomResponses.add(response);
       }
@@ -250,31 +253,39 @@ public class ChatroomService {
     UserChatroomSimpleResponse response = UserChatroomSimpleResponse.from(updatedUserChatroom);
 
     if (response.getThumbnail() == null) { // 채팅방 사진을 지정하지 않은 경우 유저들의 프로필로 생성
-      response.updateDefaultThumbnail(makeDefaultChatroomThumbnail(userChatroom.getChatroom()));
+      response.updateDefaultThumbnail(
+          makeDefaultChatroomThumbnail(userChatroom.getChatroom(), userChatroom));
     }
     if (response.getTitle() == null) { // 채팅방 이름을 지정하지 않은 경우 유저들의 닉네임으로 생성
-      response.updateDefaultTitle(makeDefaultChatroomTitle(userChatroom.getChatroom()));
+      response
+          .updateDefaultTitle(makeDefaultChatroomTitle(userChatroom.getChatroom(), userChatroom));
     }
     return response;
   }
 
-  private String makeDefaultChatroomTitle(Chatroom chatroom) {
+  private String makeDefaultChatroomTitle(Chatroom chatroom, UserChatroom user) {
     List<UserChatroom> userChatrooms = userChatroomRepository.findAllByChatroom(chatroom);
     List<String> nicknames = new ArrayList<>();
-    userChatrooms.forEach(userChatroom ->
-        nicknames.add(userChatroom.getUser().getNickname()));
+    userChatrooms.forEach(userChatroom -> {
+      if (userChatroom.getId().equals(user.getId())) {
+        return;
+      }
+      nicknames.add(userChatroom.getUser().getNickname());
+    });
     return String.join(", ", nicknames);
   }
 
-  private List<String> makeDefaultChatroomThumbnail(Chatroom chatroom) {
+  private List<String> makeDefaultChatroomThumbnail(Chatroom chatroom, UserChatroom user) {
     List<UserChatroom> userChatrooms = userChatroomRepository.findAllByChatroom(chatroom);
     List<String> imageUrls = new ArrayList<>();
     for (UserChatroom userChatroom : userChatrooms) {
       if (imageUrls.size() > 4) {
         break;
       }
-      imageUrls.add(
-          profileRepository.findByUserAndIsDefault(userChatroom.getUser(), true).getImageUrl());
+      if (!userChatroom.getId().equals(user.getId())) {
+        imageUrls.add(
+            profileRepository.findByUserAndIsDefault(userChatroom.getUser(), true).getImageUrl());
+      }
     }
     return imageUrls;
   }
