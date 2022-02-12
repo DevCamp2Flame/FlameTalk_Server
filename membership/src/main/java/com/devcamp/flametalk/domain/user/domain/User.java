@@ -1,5 +1,6 @@
 package com.devcamp.flametalk.domain.user.domain;
 
+import com.devcamp.flametalk.domain.friend.domain.Friend;
 import com.devcamp.flametalk.domain.openprofile.domain.OpenProfile;
 import com.devcamp.flametalk.domain.profile.domain.Profile;
 import java.util.ArrayList;
@@ -53,4 +54,10 @@ public class User {
 
   @OneToMany(mappedBy = "openProfileUser")
   private List<OpenProfile> openProfiles = new ArrayList<>();
+
+  @OneToMany(mappedBy = "user")
+  private List<Friend> users = new ArrayList<>();
+
+  @OneToMany(mappedBy = "user")
+  private List<Friend> friends = new ArrayList<>();
 }

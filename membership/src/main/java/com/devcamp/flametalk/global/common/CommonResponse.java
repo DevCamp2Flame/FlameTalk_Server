@@ -25,4 +25,9 @@ public class CommonResponse {
     this.status = HttpStatus.OK.value();
     this.message = message;
   }
+
+  public void fail(int status, String message) {
+    this.status = status;
+    this.message = message;
+  }
 }
