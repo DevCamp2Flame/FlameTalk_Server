@@ -1,5 +1,6 @@
 package com.devcamp.flametalk.domain.profile.controller;
 
+import com.devcamp.flametalk.domain.friend.service.FriendService;
 import com.devcamp.flametalk.domain.profile.domain.ProfileResponse;
 import com.devcamp.flametalk.domain.profile.dto.ProfileDetailResponse;
 import com.devcamp.flametalk.domain.profile.dto.ProfileRequest;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProfileController {
 
   private final ProfileService profileService;
+  private final FriendService friendService;
 
   /**
    * 유저 본인의 프로필을 생성합니다.
@@ -93,6 +95,8 @@ public class ProfileController {
       @RequestBody @Valid ProfileRequest request) {
     Long updatedId = profileService.updateProfile(profileId, request);
     log.info("update " + request.getUserId() + " user profile:" + updatedId);
+    int updatedPreviews = friendService.updatePreview(profileId);
+    log.info("update {} profile preview", updatedPreviews);
     return ResponseEntity.ok().body(CommonResponse.from(ProfileResponse.PROFILE_UPDATE_SUCCESS));
   }
 

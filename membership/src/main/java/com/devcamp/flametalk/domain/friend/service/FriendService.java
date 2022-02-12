@@ -189,4 +189,13 @@ public class FriendService {
     }
     return userFriendRelation.getPreview();
   }
+
+  @Transactional
+  public int updatePreview(Long profileId) {
+    Profile profile = profileRepository.getById(profileId);
+    Preview preview = Preview.from(profile);
+    List<Friend> friends = friendRepository.findAllByProfile(profile);
+    friends.forEach(friend -> friend.updatePreview(preview));
+    return friends.size();
+  }
 }

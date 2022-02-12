@@ -1,5 +1,6 @@
 package com.devcamp.flametalk.domain.friend.domain;
 
+import com.devcamp.flametalk.domain.profile.domain.Profile;
 import com.devcamp.flametalk.domain.user.domain.User;
 import java.util.List;
 import java.util.Optional;
@@ -17,4 +18,6 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
   List<Friend> findAllByUserAndIsMarked(User user, Boolean isMarked);
 
   List<Friend> findAllByUserAndIsBlockedAndIsHidden(User user, Boolean isBlocked, Boolean isHidden);
+
+  List<Friend> findAllByProfile(Profile profile);
 }
