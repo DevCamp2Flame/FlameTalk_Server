@@ -24,4 +24,9 @@ public class SingleDataResponse<T> extends CommonResponse {
     this.success(message);
     this.data = data;
   }
+
+  public void fail(Status status, T data) {
+    this.fail(status.getCode(), status.getMessage());
+    this.data = data;
+  }
 }
