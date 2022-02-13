@@ -85,7 +85,7 @@
 
 
 ## 3. 아키텍처 (Architecture)
-![FlameTalk_Architecture-flametalk_architecture](https://user-images.githubusercontent.com/44438366/153744018-dfcadda9-b285-429b-8e92-dd78ff779e86.png)
+![FlameTalk_Architecture-flametalk_architecture](https://user-images.githubusercontent.com/44438366/153760193-40b70261-91bc-452d-abd8-11b9da11b7b8.png)
 
 ## 4. DB 모델링 (Database Modeling)
 ![milestone2_db](https://user-images.githubusercontent.com/44438366/153452811-ab72ba00-94e9-4994-b5c4-722fcb168ba2.png)
@@ -136,13 +136,13 @@ jar 파일을 실행하면 spring boot 를 실행할 수 있습니다.
 mysql -u root -p
 
 # flame 유저 생성
-create user 'flame'@'%' identified **by** 'flame123!@#';
+create user 'flame'@'%' identified by 'flame123!@#';
 
 # 생성한 유저에게 권한 부여
-GRANT ALL PRIVILEGES ON . TO 'flame'@'%' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON . TO 'flame'@'%' WITH GRANT OPTION;
 
 # 변경사항 적용
-FLUSH PRIVILEGES;
+FLUSH PRIVILEGES;
 
 # mysql 나가기
 quit
@@ -150,7 +150,7 @@ quit
     
 **참고**
     
-Mac 환경에서는 ! 때문에 문제가 됨.
+Mac 환경에서는 ! 때문에 문제가 됨.
 이때는 유저 굳이 생성하지 않고, root, admin 등 본인의 mysql 계정을 사용해도 됩니다.
     
 이때는 아래 프로젝트 실행 단계에서 --MYSQL_USER={본인 계정} --MYSQL_PASSWORD={계정
@@ -176,7 +176,7 @@ eureka → 테스트할 서버 실행 (auth, membership, file, ... ) → gateway
 테스트할 서버를 키고, gateway 를 실행시켜야 gateway 에서 서버를 spring.application.name 으로 인식할 수 있습니다.
 서버 호출시 게이트웨이 포트번호 8080으로 호출해주세요.
 
-### 4) MySQL Table 생성
+### 4) MySQL 스키마 및 테이블 생성
 
 **schema.sql**
 ```sql
@@ -464,4 +464,19 @@ ENGINE = InnoDB;
 SET SQL_MODE = @OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS = @OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS = @OLD_UNIQUE_CHECKS;
+```
+### 5) cassandra 스키마 및 테이블 생성
+```sql
+# Keyspace 생성
+CREATE KEYSPACE IF NOT EXISTS flametalk WITH replication ={'class':'NetworkTopologyStrategy','datacenter1':1};
+
+# Keyspace 접속
+USE flametalk;
+
+# 테이블 생성
+CREATE TABLE IF NOT EXISTS message (message_id text, message_type text, sender_id text, nickname text, room_id text, contents text, file_url blob, created_at timestamp, PRIMARY KEY (message_id));
+
+# 데이터 생성 예시
+INSERT INTO message (message_id, message_type, sender_id, nickname, room_id, contents, created_at) VALUES ('1', 'TALK', '1', 'darom', '1', 'hi', '2022-02-14 13:30:54.234');
+INSERT INTO message (message_id, message_type, sender_id, nickname, room_id, file_url, created_at) VALUES ('1', 'TALK', '1', 'darom', '1', 'url', '2022-02-14 13:30:54.234');
 ```
