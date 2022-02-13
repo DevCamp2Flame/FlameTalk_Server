@@ -85,7 +85,7 @@
 
 
 ## 3. 아키텍처 (Architecture)
-![image](https://user-images.githubusercontent.com/44438366/153452515-2cb8d453-2086-49b9-bc71-271e6b072b70.png)
+![FlameTalk_Architecture-flametalk_architecture](https://user-images.githubusercontent.com/44438366/153744018-dfcadda9-b285-429b-8e92-dd78ff779e86.png)
 
 ## 4. DB 모델링 (Database Modeling)
 ![milestone2_db](https://user-images.githubusercontent.com/44438366/153452811-ab72ba00-94e9-4994-b5c4-722fcb168ba2.png)
@@ -211,20 +211,20 @@ eureka → 테스트할 서버 실행 (auth, membership, file, ... ) → gateway
     
     CREATE TABLE IF NOT EXISTS `flametalk_db`.`user`
     (
-    `id`           VARCHAR(20)  NOT NULL,
-    `email`        VARCHAR(320) NOT NULL,
-    `password`     VARCHAR(60)  NULL,
-    `nickname`     VARCHAR(20)  NOT NULL,
-    `phone_number` VARCHAR(13)  NOT NULL,
-    `birthday`     VARCHAR(10)  NOT NULL,
-    `social`       TINYINT      NOT NULL,
-    `status`       TINYINT      NOT NULL,
-    `region`       VARCHAR(2)   NOT NULL,
-    `language`     VARCHAR(3)   NOT NULL,
-    `created_at`   DATETIME     NOT NULL,
-    `updated_at`   DATETIME     NOT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE
+        `id`           VARCHAR(20)  NOT NULL,
+        `email`        VARCHAR(320) NOT NULL,
+        `password`     VARCHAR(60)  NULL,
+        `nickname`     VARCHAR(20)  NOT NULL,
+        `phone_number` VARCHAR(13)  NOT NULL,
+        `birthday`     VARCHAR(10)  NOT NULL,
+        `social`       TINYINT      NOT NULL,
+        `status`       TINYINT      NOT NULL,
+        `region`       VARCHAR(2)   NOT NULL,
+        `language`     VARCHAR(3)   NOT NULL,
+        `created_at`   DATETIME     NOT NULL,
+        `updated_at`   DATETIME     NOT NULL,
+        PRIMARY KEY (`id`),
+        UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE
     )
     ENGINE = InnoDB;
     
@@ -236,20 +236,20 @@ eureka → 테스트할 서버 실행 (auth, membership, file, ... ) → gateway
     
     CREATE TABLE IF NOT EXISTS `flametalk_db`.`device`
     (
-    `id`                 BIGINT       NOT NULL AUTO_INCREMENT,
-    `user_id`            VARCHAR(20)  NOT NULL,
-    `device_id`          VARCHAR(16)  NOT NULL,
-    `token`              VARCHAR(163) NULL,
-    `cur_max_message_id` VARCHAR(45)  NULL,
-    `created_at`         DATETIME     NOT NULL,
-    `updated_at`         DATETIME     NOT NULL,
-    PRIMARY KEY (`id`),
-    INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
-    CONSTRAINT `device_user_id`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `flametalk_db`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+        `id`                 BIGINT       NOT NULL AUTO_INCREMENT,
+        `user_id`            VARCHAR(20)  NOT NULL,
+        `device_id`          VARCHAR(16)  NOT NULL,
+        `token`              VARCHAR(163) NULL,
+        `cur_max_message_id` VARCHAR(45)  NULL,
+        `created_at`         DATETIME     NOT NULL,
+        `updated_at`         DATETIME     NOT NULL,
+        PRIMARY KEY (`id`),
+        INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
+        CONSTRAINT `device_user_id`
+        FOREIGN KEY (`user_id`)
+        REFERENCES `flametalk_db`.`user` (`id`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
     )
     ENGINE = InnoDB;
     
@@ -261,22 +261,22 @@ eureka → 테스트할 서버 실행 (auth, membership, file, ... ) → gateway
     
     CREATE TABLE IF NOT EXISTS `flametalk_db`.`profile`
     (
-    `id`           BIGINT      NOT NULL AUTO_INCREMENT,
-    `user_id`      VARCHAR(20) NOT NULL,
-    `image_url`    BLOB        NULL,
-    `bg_image_url` BLOB        NULL,
-    `sticker`      JSON        NULL,
-    `description`  VARCHAR(60) NULL,
-    `is_default`   TINYINT     NOT NULL,
-    `created_at`   DATETIME    NOT NULL,
-    `updated_at`   DATETIME    NOT NULL,
-    PRIMARY KEY (`id`),
-    INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
-    CONSTRAINT `profile_user_id`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `flametalk_db`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+        `id`           BIGINT      NOT NULL AUTO_INCREMENT,
+        `user_id`      VARCHAR(20) NOT NULL,
+        `image_url`    BLOB        NULL,
+        `bg_image_url` BLOB        NULL,
+        `sticker`      JSON        NULL,
+        `description`  VARCHAR(60) NULL,
+        `is_default`   TINYINT     NOT NULL,
+        `created_at`   DATETIME    NOT NULL,
+        `updated_at`   DATETIME    NOT NULL,
+        PRIMARY KEY (`id`),
+        INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
+        CONSTRAINT `profile_user_id`
+        FOREIGN KEY (`user_id`)
+        REFERENCES `flametalk_db`.`user` (`id`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
     )
     ENGINE = InnoDB;
     
@@ -288,20 +288,20 @@ eureka → 테스트할 서버 실행 (auth, membership, file, ... ) → gateway
     
     CREATE TABLE IF NOT EXISTS `flametalk_db`.`feed`
     (
-    `id`            BIGINT   NOT NULL AUTO_INCREMENT,
-    `profile_id`    BIGINT   NOT NULL,
-    `image_url`     BLOB     NOT NULL,
-    `is_background` TINYINT  NOT NULL,
-    `is_lock`       TINYINT  NOT NULL,
-    `created_at`    DATETIME NOT NULL,
-    `updated_at`    DATETIME NOT NULL,
-    PRIMARY KEY (`id`),
-    INDEX `profile_id_idx` (`profile_id` ASC) VISIBLE,
-    CONSTRAINT `feed_profile_id`
-    FOREIGN KEY (`profile_id`)
-    REFERENCES `flametalk_db`.`profile` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE NO ACTION
+        `id`            BIGINT   NOT NULL AUTO_INCREMENT,
+        `profile_id`    BIGINT   NOT NULL,
+        `image_url`     BLOB     NOT NULL,
+        `is_background` TINYINT  NOT NULL,
+        `is_lock`       TINYINT  NOT NULL,
+        `created_at`    DATETIME NOT NULL,
+        `updated_at`    DATETIME NOT NULL,
+        PRIMARY KEY (`id`),
+        INDEX `profile_id_idx` (`profile_id` ASC) VISIBLE,
+        CONSTRAINT `feed_profile_id`
+        FOREIGN KEY (`profile_id`)
+        REFERENCES `flametalk_db`.`profile` (`id`)
+        ON DELETE CASCADE
+        ON UPDATE NO ACTION
     )
     ENGINE = InnoDB;
     
@@ -313,35 +313,35 @@ eureka → 테스트할 서버 실행 (auth, membership, file, ... ) → gateway
     
     CREATE TABLE IF NOT EXISTS `flametalk_db`.`friend`
     (
-    `id`                  BIGINT      NOT NULL,
-    `user_id`             VARCHAR(20) NOT NULL,
-    `friend_id`           VARCHAR(20) NOT NULL,
-    `assigned_profile_id` BIGINT      NOT NULL,
-    `preview`             JSON        NOT NULL COMMENT '(나의 멀티 프로필에 따른) 프로필 사진, 상태메세지 ',
-    `is_marked`           TINYINT     NOT NULL,
-    `is_hidden`           TINYINT     NOT NULL,
-    `is_blocked`          TINYINT     NOT NULL,
-    `created_at`          DATETIME    NOT NULL,
-    `updated_at`          DATETIME    NOT NULL,
-    PRIMARY KEY (`id`),
-    INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
-    INDEX `profile_idx` (`assigned_profile_id` ASC) VISIBLE,
-    INDEX `friend_friend_id_idx` (`friend_id` ASC) VISIBLE,
-    CONSTRAINT `friend_user_id`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `flametalk_db`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-    CONSTRAINT `friend_assigned_profile_id`
-    FOREIGN KEY (`assigned_profile_id`)
-    REFERENCES `flametalk_db`.`profile` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-    CONSTRAINT `friend_friend_id`
-    FOREIGN KEY (`friend_id`)
-    REFERENCES `flametalk_db`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+        `id`                  BIGINT      NOT NULL,
+        `user_id`             VARCHAR(20) NOT NULL,
+        `friend_id`           VARCHAR(20) NOT NULL,
+        `assigned_profile_id` BIGINT      NOT NULL,
+        `preview`             JSON        NOT NULL COMMENT '(나의 멀티 프로필에 따른) 프로필 사진, 상태메세지 ',
+        `is_marked`           TINYINT     NOT NULL,
+        `is_hidden`           TINYINT     NOT NULL,
+        `is_blocked`          TINYINT     NOT NULL,
+        `created_at`          DATETIME    NOT NULL,
+        `updated_at`          DATETIME    NOT NULL,
+        PRIMARY KEY (`id`),
+        INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
+        INDEX `profile_idx` (`assigned_profile_id` ASC) VISIBLE,
+        INDEX `friend_friend_id_idx` (`friend_id` ASC) VISIBLE,
+        CONSTRAINT `friend_user_id`
+        FOREIGN KEY (`user_id`)
+        REFERENCES `flametalk_db`.`user` (`id`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+        CONSTRAINT `friend_assigned_profile_id`
+        FOREIGN KEY (`assigned_profile_id`)
+        REFERENCES `flametalk_db`.`profile` (`id`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+        CONSTRAINT `friend_friend_id`
+        FOREIGN KEY (`friend_id`)
+        REFERENCES `flametalk_db`.`user` (`id`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
     )
     ENGINE = InnoDB;
     
@@ -353,20 +353,20 @@ eureka → 테스트할 서버 실행 (auth, membership, file, ... ) → gateway
     
     CREATE TABLE IF NOT EXISTS `flametalk_db`.`open_profile`
     (
-    `id`          BIGINT      NOT NULL AUTO_INCREMENT,
-    `user_id`     VARCHAR(20) NOT NULL,
-    `nickname`    VARCHAR(20) NOT NULL,
-    `image_url`   BLOB        NULL,
-    `description` VARCHAR(60) NULL,
-    `created_at`  DATETIME    NOT NULL,
-    `updated_at`  DATETIME    NOT NULL,
-    PRIMARY KEY (`id`),
-    INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
-    CONSTRAINT `open_profile_user_id`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `flametalk_db`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+        `id`          BIGINT      NOT NULL AUTO_INCREMENT,
+        `user_id`     VARCHAR(20) NOT NULL,
+        `nickname`    VARCHAR(20) NOT NULL,
+        `image_url`   BLOB        NULL,
+        `description` VARCHAR(60) NULL,
+        `created_at`  DATETIME    NOT NULL,
+        `updated_at`  DATETIME    NOT NULL,
+        PRIMARY KEY (`id`),
+        INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
+        CONSTRAINT `open_profile_user_id`
+        FOREIGN KEY (`user_id`)
+        REFERENCES `flametalk_db`.`user` (`id`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
     )
     ENGINE = InnoDB;
     
@@ -378,20 +378,20 @@ eureka → 테스트할 서버 실행 (auth, membership, file, ... ) → gateway
     
     CREATE TABLE IF NOT EXISTS `flametalk_db`.`chatroom`
     (
-    `id`         VARCHAR(36) NOT NULL,
-    `host_id`    VARCHAR(20) NULL,
-    `count`      INT         NOT NULL,
-    `is_open`    TINYINT     NOT NULL,
-    `url`        VARCHAR(7)  NULL,
-    `created_at` DATETIME    NOT NULL,
-    `updated_at` DATETIME    NOT NULL,
-    PRIMARY KEY (`id`),
-    INDEX `host_id_idx` (`host_id` ASC) VISIBLE,
-    CONSTRAINT `host_id`
-    FOREIGN KEY (`host_id`)
-    REFERENCES `flametalk_db`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+        `id`         VARCHAR(36) NOT NULL,
+        `host_id`    VARCHAR(20) NULL,
+        `count`      INT         NOT NULL,
+        `is_open`    TINYINT     NOT NULL,
+        `url`        VARCHAR(7)  NULL,
+        `created_at` DATETIME    NOT NULL,
+        `updated_at` DATETIME    NOT NULL,
+        PRIMARY KEY (`id`),
+        INDEX `host_id_idx` (`host_id` ASC) VISIBLE,
+        CONSTRAINT `host_id`
+        FOREIGN KEY (`host_id`)
+        REFERENCES `flametalk_db`.`user` (`id`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
     )
     ENGINE = InnoDB;
     
@@ -403,35 +403,35 @@ eureka → 테스트할 서버 실행 (auth, membership, file, ... ) → gateway
     
     CREATE TABLE IF NOT EXISTS `flametalk_db`.`user_chatroom`
     (
-    `id`                   BIGINT      NOT NULL AUTO_INCREMENT,
-    `chatroom_id`          VARCHAR(36) NOT NULL,
-    `user_id`              VARCHAR(20) NOT NULL,
-    `open_profile_id`      BIGINT      NULL,
-    `title`                VARCHAR(50) NULL,
-    `last_read_message_id` VARCHAR(45) NULL,
-    `image_url`            BLOB        NULL,
-    `input_lock`           TINYINT     NOT NULL,
-    `created_at`           DATETIME    NOT NULL,
-    `updated_at`           DATETIME    NOT NULL,
-    PRIMARY KEY (`id`),
-    INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
-    INDEX `user_chatroom_chatroom_id_idx` (`chatroom_id` ASC) VISIBLE,
-    INDEX `user_chatroom_open_profile_id_idx` (`open_profile_id` ASC) VISIBLE,
-    CONSTRAINT `user_chatroom_user_id`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `flametalk_db`.`user` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-    CONSTRAINT `user_chatroom_chatroom_id`
-    FOREIGN KEY (`chatroom_id`)
-    REFERENCES `flametalk_db`.`chatroom` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-    CONSTRAINT `user_chatroom_open_profile_id`
-    FOREIGN KEY (`open_profile_id`)
-    REFERENCES `flametalk_db`.`open_profile` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+        `id`                   BIGINT      NOT NULL AUTO_INCREMENT,
+        `chatroom_id`          VARCHAR(36) NOT NULL,
+        `user_id`              VARCHAR(20) NOT NULL,
+        `open_profile_id`      BIGINT      NULL,
+        `title`                VARCHAR(50) NULL,
+        `last_read_message_id` VARCHAR(45) NULL,
+        `image_url`            BLOB        NULL,
+        `input_lock`           TINYINT     NOT NULL,
+        `created_at`           DATETIME    NOT NULL,
+        `updated_at`           DATETIME    NOT NULL,
+        PRIMARY KEY (`id`),
+        INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
+        INDEX `user_chatroom_chatroom_id_idx` (`chatroom_id` ASC) VISIBLE,
+        INDEX `user_chatroom_open_profile_id_idx` (`open_profile_id` ASC) VISIBLE,
+        CONSTRAINT `user_chatroom_user_id`
+        FOREIGN KEY (`user_id`)
+        REFERENCES `flametalk_db`.`user` (`id`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+        CONSTRAINT `user_chatroom_chatroom_id`
+        FOREIGN KEY (`chatroom_id`)
+        REFERENCES `flametalk_db`.`chatroom` (`id`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION,
+        CONSTRAINT `user_chatroom_open_profile_id`
+        FOREIGN KEY (`open_profile_id`)
+        REFERENCES `flametalk_db`.`open_profile` (`id`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
     )
     ENGINE = InnoDB;
     
@@ -443,19 +443,19 @@ eureka → 테스트할 서버 실행 (auth, membership, file, ... ) → gateway
     
     CREATE TABLE IF NOT EXISTS `flametalk_db`.`file`
     (
-    `id`          BIGINT       NOT NULL AUTO_INCREMENT,
-    `url`         BLOB         NOT NULL,
-    `title`       VARCHAR(100) NOT NULL,
-    `extension`   VARCHAR(5)   NOT NULL,
-    `chatroom_id` VARCHAR(36)  NULL,
-    `created_at`  DATETIME     NOT NULL,
-    PRIMARY KEY (`id`),
-    INDEX `file_chatroom_id_idx` (`chatroom_id` ASC) VISIBLE,
-    CONSTRAINT `file_chatroom_id`
-    FOREIGN KEY (`chatroom_id`)
-    REFERENCES `flametalk_db`.`chatroom` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION
+        `id`          BIGINT       NOT NULL AUTO_INCREMENT,
+        `url`         BLOB         NOT NULL,
+        `title`       VARCHAR(100) NOT NULL,
+        `extension`   VARCHAR(5)   NOT NULL,
+        `chatroom_id` VARCHAR(36)  NULL,
+        `created_at`  DATETIME     NOT NULL,
+        PRIMARY KEY (`id`),
+        INDEX `file_chatroom_id_idx` (`chatroom_id` ASC) VISIBLE,
+        CONSTRAINT `file_chatroom_id`
+        FOREIGN KEY (`chatroom_id`)
+        REFERENCES `flametalk_db`.`chatroom` (`id`)
+        ON DELETE NO ACTION
+        ON UPDATE NO ACTION
     )
     ENGINE = InnoDB;
     
