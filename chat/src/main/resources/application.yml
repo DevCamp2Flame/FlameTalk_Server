@@ -1,0 +1,28 @@
+server:
+  port: 8085
+
+spring:
+  thymeleaf:
+    prefix : classpath:/templates/
+    suffix : .html
+    cache : false
+
+  kafka:
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: devcamp-flame
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+  data:
+    cassandra:
+      port: 9042
+      contact-points: 127.0.0.1
+      schemaAction: CREATE_IF_NOT_EXISTS
+      keyspace-name: flametalk
+      local-datacenter: datacenter1
