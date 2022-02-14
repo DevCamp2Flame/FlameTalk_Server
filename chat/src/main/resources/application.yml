@@ -2,6 +2,14 @@ server:
   port: 8085
 
 spring:
+  application:
+    name : chat
+  profiles:
+    active:
+      default
+  cloud:
+    config:
+      enabled: true
   thymeleaf:
     prefix : classpath:/templates/
     suffix : .html
@@ -26,3 +34,14 @@ spring:
       schemaAction: CREATE_IF_NOT_EXISTS
       keyspace-name: flametalk
       local-datacenter: datacenter1
+
+
+eureka:
+  instance:
+    hostname: chat
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

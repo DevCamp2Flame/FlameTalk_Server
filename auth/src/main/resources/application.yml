@@ -13,9 +13,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:${MYSQL_PORT}/flametalk_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: ${MYSQL_USER}
-    password: ${MYSQL_PASSWORD}
+    url: jdbc:mysql://localhost:3306/flametalk_db?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: flame
+    password: flame123!@#
 
   jpa:
     open-in-view: false
@@ -28,16 +28,16 @@ spring:
 
   redis:
     host: localhost
-    port: ${REDIS_PORT}
+    port: 6379
 
   jwt:
-    secret: ${JWT_SECRET}
+    secret: dkssudgktpdydurlsmsvmffpdlaxladlqslekwkfqnxkremflqslekdydrkflz
 
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${APP_NAME}
-    password: ${APP_PASSWORD}
+    username: flametalk1.gmail.com
+    password: cnrdmzaaebhkqhgh
     properties:
       mail:
         smtp:

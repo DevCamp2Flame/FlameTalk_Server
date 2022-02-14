@@ -28,8 +28,8 @@ eureka:
 cloud:
   aws:
     credentials:
-      accessKey: ${ACCESS_KEY}
-      secretKey: ${SECRET_KEY}
+      accessKey: AKIAZ4JHLYUEGDRSTI7C
+      secretKey: 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
     s3:
       bucket: flametalk-bucket
     region:
