@@ -27,7 +27,7 @@ spring:
           predicates:
             - Path=/api/auth/**
         - id: auth
-          uri: lb://auth # http://localhost:8081
+          uri: lb://auth
           predicates:
             - Path=/api/device/**
           filters:
@@ -44,6 +44,34 @@ spring:
             - Path=/api/file/**
           filters:
             - AddRequestHeaderFilter
+        - id: chatroom
+          uri: lb://chatroom # http://localhost:8084
+          predicates:
+            - Path=/api/chatroom/**
+          filters:
+            - AddRequestHeaderFilter
+
+        - id: chat
+          uri: lb:ws://chat # ws://localhost:8085
+          predicates:
+            - Path=/stomp/**
+        - id: chat
+          uri: lb:ws://chat
+          predicates:
+            - Path=/chat/**
+          filters:
+            - AddRequestHeaderFilter
+        - id: chat
+          uri: lb://chat
+          predicates:
+            - Path=/api/chat/**
+          filters:
+            - AddRequestHeaderFilter
+
+        - id: presence
+          uri: lb:ws://presence # ws://localhost:8086
+          predicates:
+            - Path=/presence/**
 
   jwt:
     secret: ${JWT_SECRET}
