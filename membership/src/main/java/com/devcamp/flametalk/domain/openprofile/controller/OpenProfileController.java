@@ -80,7 +80,7 @@ public class OpenProfileController {
    */
   @GetMapping
   public ResponseEntity<SingleDataResponse<OpenProfilesResponse>> findByUserId(
-      @RequestHeader String userId) {
+      @RequestHeader("USER-ID") String userId) {
     OpenProfilesResponse openProfiles = openProfileService.findByUserId(userId);
     SingleDataResponse<OpenProfilesResponse> response = new SingleDataResponse<>();
     response.success(OpenProfileResponse.OPEN_PROFILES_SUCCESS.getMessage(), openProfiles);
