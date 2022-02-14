@@ -2,10 +2,14 @@ server:
   port: 8085
 
 spring:
-  thymeleaf:
-    prefix : classpath:/templates/
-    suffix : .html
-    cache : false
+  application:
+    name: chat # 유레카에 등록할 서비스의 논리 이름
+    profiles:
+      active:
+        default
+    cloud:
+      config:
+        enabled: true
 
   kafka:
     consumer:
@@ -26,3 +30,13 @@ spring:
       schemaAction: CREATE_IF_NOT_EXISTS
       keyspace-name: flametalk
       local-datacenter: datacenter1
+
+eureka:
+  instance:
+    hostname: chat
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true # 유레카에 서비스 등록
+    fetch-registry: true      # 유레카 서비스 위치
+    service-url:
+      defaultZone: http://localhost:8761/eureka/ # 레지스트리 사본을 로컬로 가져오기
