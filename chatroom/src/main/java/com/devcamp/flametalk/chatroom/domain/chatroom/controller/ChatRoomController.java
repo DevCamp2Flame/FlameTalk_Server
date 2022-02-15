@@ -1,5 +1,6 @@
 package com.devcamp.flametalk.chatroom.domain.chatroom.controller;
 
+import com.devcamp.flametalk.chatroom.domain.chatroom.domain.Chatroom;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomFilesResponse;
@@ -172,5 +173,10 @@ public class ChatRoomController {
     response.success(ResponseType.USER_CHATROOM_DELETE_SUCCESS.getMessage());
     log.info("delete user chatroom" + userChatroomId);
     return ResponseEntity.ok().body(response);
+  }
+
+  @GetMapping("/{userChatroomId}/users")
+  public List<String> findUsersByChatroom(@PathVariable String userChatroomId) {
+    return chatroomService.findUsersByChatroom(userChatroomId);
   }
 }

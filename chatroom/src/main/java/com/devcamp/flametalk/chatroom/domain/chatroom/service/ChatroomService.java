@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -318,5 +319,22 @@ public class ChatroomService {
     if (chatroom.getCount() == 0) {
       chatroomRepository.delete(chatroom);
     }
+  }
+
+  /**
+   * 채팅방에 속한 모든 사용자의 id 를 반환합니다.
+   *
+   * @param chatroomId 채팅방 id
+   * @return 채팅방에 속한 모든 사용자의 id 리스트
+   */
+  public List<String> findUsersByChatroom(String chatroomId) {
+    Chatroom chatroom = chatroomRepository.findById(chatroomId).orElseGet(null);
+    if (chatroom == null) {
+      return Collections.emptyList();
+    }
+
+    List<User> users = userChatroomRepository.findUsersByChatroom(chatroom);
+    return users.stream().map(User::getId).sorted()
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 }
