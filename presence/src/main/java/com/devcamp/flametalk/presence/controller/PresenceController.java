@@ -2,6 +2,7 @@ package com.devcamp.flametalk.presence.controller;
 
 import com.devcamp.flametalk.presence.repository.RedisRepository;
 import com.devcamp.flametalk.presence.service.PresenceService;
+import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ public class PresenceController {
    * @return 채팅방에 접속상태인 사용자 리스트
    */
   @GetMapping("/{roomId}")
-  public Set<String> getInsideChatroomUser(@PathVariable String roomId) {
+  public List<String> getInsideChatroomUser(@PathVariable String roomId) {
     return presenceService.getInsideChatroomUser(roomId);
   }
 }
