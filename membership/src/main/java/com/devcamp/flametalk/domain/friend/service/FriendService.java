@@ -148,8 +148,9 @@ public class FriendService {
   private List<FriendResponse> toFriendResponse(List<Friend> friends) {
     List<FriendResponse> friendResponses = new ArrayList<>();
     friends.forEach(friend -> friendResponses.add(
-        new FriendResponse(friend.getId(), friend.getUserFriend().getId(),
-            friend.getUserFriend().getNickname(), getFriendProfile(friend))));
+        new FriendResponse(friend.getId(), friend.getProfile().getId(),
+            friend.getUserFriend().getId(), friend.getUserFriend().getNickname(),
+            getFriendProfile(friend))));
     Collections.sort(friendResponses);
     return friendResponses;
   }
