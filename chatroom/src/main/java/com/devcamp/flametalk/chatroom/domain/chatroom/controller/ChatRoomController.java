@@ -173,4 +173,15 @@ public class ChatRoomController {
     log.info("delete user chatroom" + userChatroomId);
     return ResponseEntity.ok().body(response);
   }
+
+  /**
+   * 채팅 서버에서 요청한 id에 해당하는 채팅방의 전체 사용자 리스트를 반환합니다.
+   *
+   * @param chatroomId 채팅방 id
+   * @return 채팅방의 전체 사용자 리스트
+   */
+  @GetMapping("/{chatroomId}/users")
+  public List<String> findUsersByChatroom(@PathVariable String chatroomId) {
+    return chatroomService.findUsersByChatroom(chatroomId);
+  }
 }
