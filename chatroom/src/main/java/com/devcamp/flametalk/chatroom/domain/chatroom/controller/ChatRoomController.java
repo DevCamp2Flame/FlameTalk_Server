@@ -1,6 +1,5 @@
 package com.devcamp.flametalk.chatroom.domain.chatroom.controller;
 
-import com.devcamp.flametalk.chatroom.domain.chatroom.domain.Chatroom;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomFilesResponse;
@@ -51,7 +50,7 @@ public class ChatRoomController {
    */
   @PostMapping
   public ResponseEntity<SingleDataResponse<ChatroomCreateResponse>> create(
-          @RequestHeader("USER-ID") String userId, @RequestBody @Valid ChatroomCreateRequest request) {
+      @RequestHeader("USER-ID") String userId, @RequestBody @Valid ChatroomCreateRequest request) {
     ChatroomCreateResponse chatroom = chatroomService.save(userId, request);
     SingleDataResponse<ChatroomCreateResponse> response = new SingleDataResponse<>();
     response.success(ResponseType.CHATROOM_CREATE_SUCCESS.getMessage(), chatroom);
@@ -175,9 +174,14 @@ public class ChatRoomController {
     return ResponseEntity.ok().body(response);
   }
 
-  @GetMapping("/{userChatroomId}/users")
-  public ResponseEntity<List<String>> findUsersByChatroom(@PathVariable String userChatroomId) {
-    return ResponseEntity.ok().body(chatroomService.findUsersByChatroom(userChatroomId));
-
+  /**
+   * 채팅 서버에서 요청한 id에 해당하는 채팅방의 전체 사용자 리스트를 반환합니다.
+   *
+   * @param chatroomId 채팅방 id
+   * @return 채팅방의 전체 사용자 리스트
+   */
+  @GetMapping("/{chatroomId}/users")
+  public List<String> findUsersByChatroom(@PathVariable String chatroomId) {
+    return chatroomService.findUsersByChatroom(chatroomId);
   }
 }

@@ -325,7 +325,7 @@ public class ChatroomService {
    * 채팅방에 속한 모든 사용자의 id 를 반환합니다.
    *
    * @param chatroomId 채팅방 id
-   * @return 채팅방에 속한 모든 사용자의 id 리스트
+   * @return 채팅방에 속한 모든 사용자 id 리스트
    */
   public List<String> findUsersByChatroom(String chatroomId) {
     Chatroom chatroom = chatroomRepository.findById(chatroomId).orElseGet(null);
