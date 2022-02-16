@@ -12,6 +12,7 @@ import lombok.Getter;
 public class FriendResponse implements Comparable<FriendResponse> {
 
   private Long friendId;
+  private Long assignedProfileId;
   private String userId;
   private String nickname;
   private Preview preview;

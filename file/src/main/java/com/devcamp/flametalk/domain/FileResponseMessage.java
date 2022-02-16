@@ -11,7 +11,9 @@ import lombok.Getter;
 public enum FileResponseMessage {
   FILE_CREATE_SUCCESS("파일 생성 성공"),
   FILE_DELETE_SUCCESS("파일 삭제 성공"),
-  FILE_DETAIL_SUCCESS("파일 조회 성공");
+  FILE_DETAIL_SUCCESS("파일 조회 성공"),
+
+  FILE_CAPACITY_FAIL("파일 용량 초과");
 
   private final String message;
 }

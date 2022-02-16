@@ -23,15 +23,15 @@ spring:
               - DELETE
       routes:
         - id: auth
-          uri: http://localhost:8081
-          predicates:
-            - Path=/test
-          filters:
-            - AddRequestHeaderFilter
-        - id: auth
           uri: lb://auth # http://localhost:8081
           predicates:
             - Path=/api/auth/**
+        - id: auth
+          uri: lb://auth # http://localhost:8081
+          predicates:
+            - Path=/api/device/**
+          filters:
+            - AddRequestHeaderFilter
         - id: membership
           uri: lb://membership # http://localhost:8082
           predicates:
@@ -44,9 +44,21 @@ spring:
             - Path=/api/file/**
           filters:
             - AddRequestHeaderFilter
+        - id: chatroom
+          uri: lb://chatroom # http://localhost:8084
+          predicates:
+            - Path=/api/chatroom/**
+          filters:
+            - AddRequestHeaderFilter
+        - id: chat
+          uri: lb://chat # http://localhost:8085
+          predicates:
+            - Path=/api/chat/**
+          filters:
+              - AddRequestHeaderFilter
 
   jwt:
-    secret: ${JWT_SECRET}
+    secret: dkssudgktpdydurlsmsvmffpdlaxladlqslekwkfqnxkremflqslekdydrkflz
 
 eureka:
   instance:

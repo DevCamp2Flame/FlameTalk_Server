@@ -27,7 +27,7 @@ spring:
           predicates:
             - Path=/api/auth/**
         - id: auth
-          uri: lb://auth
+          uri: lb://auth # http://localhost:8081
           predicates:
             - Path=/api/device/**
           filters:
@@ -50,7 +50,6 @@ spring:
             - Path=/api/chatroom/**
           filters:
             - AddRequestHeaderFilter
-
         - id: chat
           uri: lb:ws://chat # ws://localhost:8085
           predicates:
@@ -67,7 +66,6 @@ spring:
             - Path=/api/chat/**
           filters:
             - AddRequestHeaderFilter
-
         - id: presence
           uri: lb:ws://presence # ws://localhost:8086
           predicates:

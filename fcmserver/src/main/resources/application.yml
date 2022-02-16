@@ -1,0 +1,13 @@
+server:
+  port : 8087
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/flametalk_db?serverTimezone=UTC&characterEncoding=UTF-8
+    username: flame
+    password: flame123!@#
+
+
+firebase_server_key : ${FIREBASE}
+
