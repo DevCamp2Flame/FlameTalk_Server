@@ -14,6 +14,10 @@ spring:
     url: jdbc:mysql://localhost:3306/flametalk_db?serverTimezone=UTC&characterEncoding=UTF-8
     username: flame
     password: flame123!@#
+  servlet:
+    multipart:
+      maxFileSize: 10MB
+      maxRequestSize: 10MB
 
 eureka:
   instance:

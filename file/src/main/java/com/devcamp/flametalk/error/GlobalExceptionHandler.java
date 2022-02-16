@@ -1,5 +1,9 @@
 package com.devcamp.flametalk.error;
 
+import com.devcamp.flametalk.domain.FileResponseMessage;
+import com.devcamp.flametalk.dto.CommonResponse;
+import com.devcamp.flametalk.dto.FileDetailResponse;
+import com.devcamp.flametalk.dto.SingleDataResponse;
 import com.devcamp.flametalk.error.exception.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -7,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 /**
@@ -30,6 +35,16 @@ public class GlobalExceptionHandler {
     log.error("[Missing Servlet RequestPart Exception]" + e);
     ErrorResponse response = ErrorResponse.from(ErrorCode.BAD_REQUEST);
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+  }
+
+  @ExceptionHandler(MaxUploadSizeExceededException.class)
+  protected ResponseEntity<CommonResponse> handleMaxUploadSizeExceededException(
+      MaxUploadSizeExceededException e) {
+    log.error("[Max Upload Size Exceeded Exception]" + e);
+    SingleDataResponse<FileDetailResponse> response = new SingleDataResponse<>(null);
+    response
+        .fail(HttpStatus.BAD_REQUEST.value(), FileResponseMessage.FILE_CAPACITY_FAIL.getMessage());
+    return ResponseEntity.status(HttpStatus.OK).body(response);
   }
 
   @ExceptionHandler(EntityNotFoundException.class)
