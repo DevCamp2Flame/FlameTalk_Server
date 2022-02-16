@@ -51,7 +51,7 @@ public class ChatRoomController {
    */
   @PostMapping
   public ResponseEntity<SingleDataResponse<ChatroomCreateResponse>> create(
-      @RequestHeader("USER-ID") String userId, @RequestBody @Valid ChatroomCreateRequest request) {
+          @RequestHeader("USER-ID") String userId, @RequestBody @Valid ChatroomCreateRequest request) {
     ChatroomCreateResponse chatroom = chatroomService.save(userId, request);
     SingleDataResponse<ChatroomCreateResponse> response = new SingleDataResponse<>();
     response.success(ResponseType.CHATROOM_CREATE_SUCCESS.getMessage(), chatroom);
@@ -176,7 +176,8 @@ public class ChatRoomController {
   }
 
   @GetMapping("/{userChatroomId}/users")
-  public List<String> findUsersByChatroom(@PathVariable String userChatroomId) {
-    return chatroomService.findUsersByChatroom(userChatroomId);
+  public ResponseEntity<List<String>> findUsersByChatroom(@PathVariable String userChatroomId) {
+    return ResponseEntity.ok().body(chatroomService.findUsersByChatroom(userChatroomId));
+
   }
 }
