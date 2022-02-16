@@ -69,9 +69,9 @@ public class Receiver {
         .file_url(message.getFile_url())
         .build();
 
-    HttpEntity<Object> entity = new HttpEntity<>(request, headers);
+    HttpEntity<PushMessageRequest> entity = new HttpEntity<>(request, headers);
     ResponseEntity<String> response = restTemplate.exchange("http://localhost:8087/send",
-        HttpMethod.GET, entity, String.class);
+        HttpMethod.POST, entity, String.class);
 
     log.info("FCM response get Body : {}", response.getBody());
   }
