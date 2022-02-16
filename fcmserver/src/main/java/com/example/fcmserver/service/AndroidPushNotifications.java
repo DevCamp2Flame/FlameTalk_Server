@@ -1,49 +1,69 @@
 package com.example.fcmserver.service;
 
 
+import com.example.fcmserver.domain.Device;
+import com.example.fcmserver.domain.DeviceRepository;
 import com.example.fcmserver.dto.PushMessageRequest;
+import com.google.firebase.messaging.BatchResponse;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.MulticastMessage;
+import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
+@RequiredArgsConstructor
 public class AndroidPushNotifications {
 
-    public static String PeriodicNotificationJson(PushMessageRequest pushMessageRequest) throws JSONException {
-        LocalDate localDate = LocalDate.now();
-        //device token list
-        String sampleData[] = pushMessageRequest.getUser_list().toArray(new String[0]);
+
+    private final DeviceRepository deviceRepository;
+
+    public String PeriodicNotificationJson(PushMessageRequest pushMessageRequest) throws JSONException, UnsupportedEncodingException {
 
 
-        JSONObject body = new JSONObject();
-        List<String> tokenlist = new ArrayList<String>();
-
-        for(int i=0; i<sampleData.length; i++){
-            tokenlist.add(sampleData[i]);
+        List<Device> deviceList = new ArrayList<>();
+        for( String userId : pushMessageRequest.getUser_list())
+        {
+            System.out.println(userId);
+            //deviceRepository is null
+            List<Device> allDevice = deviceRepository.findByUserId(userId);
+            for(Device device : allDevice)
+            {
+                deviceList.add(device);
+            }
         }
+        List<String> tokenlist = new ArrayList<String>();
+        for(int i=0; i<deviceList.size(); i++){
+            tokenlist.add(deviceList.get(i).getToken());
+        }
+        JSONObject body = new JSONObject();
 
         JSONArray array = new JSONArray();
 
         for(int i=0; i<tokenlist.size(); i++) {
             array.put(tokenlist.get(i));
         }
-
         body.put("registration_ids", array);
 
-        JSONObject notification = new JSONObject();
-        //title 유저 이름
-        notification.put("title",pushMessageRequest.getNickname());
-        // 채팅 메시지
-        if(pushMessageRequest.getContents() != "")
-        {
-            notification.put("body",pushMessageRequest.getContents());
-        }else {
-            notification.put("body",pushMessageRequest.getFile_url());
-        }
-        body.put("data", notification);
+        JSONObject dataObject = new JSONObject();
+        String nickname = URLEncoder.encode(pushMessageRequest.getNickname(),"UTF-8");
+        String contents = URLEncoder.encode(pushMessageRequest.getContents(), "UTF-8");
+
+        dataObject.put("room", pushMessageRequest.getRoom_id());
+        dataObject.put("body", contents);
+        dataObject.put("title",nickname);
+        //body.put("notification", notification);
+        body.put("data",dataObject);
+
         System.out.println(body.toString());
 
         return body.toString();

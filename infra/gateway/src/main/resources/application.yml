@@ -51,14 +51,28 @@ spring:
           filters:
             - AddRequestHeaderFilter
         - id: chat
-          uri: lb://chat # http://localhost:8085
+          uri: lb:ws://chat # ws://localhost:8085
+          predicates:
+            - Path=/stomp/**
+        - id: chat
+          uri: lb:ws://chat
+          predicates:
+            - Path=/chat/**
+          filters:
+            - AddRequestHeaderFilter
+        - id: chat
+          uri: lb://chat
           predicates:
             - Path=/api/chat/**
           filters:
-              - AddRequestHeaderFilter
+            - AddRequestHeaderFilter
+        - id: presence
+          uri: lb:ws://presence # ws://localhost:8086
+          predicates:
+            - Path=/presence/**
 
   jwt:
-    secret: dkssudgktpdydurlsmsvmffpdlaxladlqslekwkfqnxkremflqslekdydrkflz
+    secret: ${JWT_SECRET}
 
 eureka:
   instance:

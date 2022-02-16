@@ -8,5 +8,6 @@ spring:
     username: flame
     password: flame123!@#
 
+
 firebase_server_key : ${FIREBASE}
 

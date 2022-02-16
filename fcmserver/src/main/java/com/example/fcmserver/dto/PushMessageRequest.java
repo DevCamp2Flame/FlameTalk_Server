@@ -3,9 +3,10 @@ package com.example.fcmserver.dto;
 import com.google.firebase.database.annotations.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.List;
-
+@ToString
 @AllArgsConstructor
 @Getter
 public class PushMessageRequest {
