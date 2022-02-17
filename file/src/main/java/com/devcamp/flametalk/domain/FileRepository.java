@@ -1,5 +1,6 @@
 package com.devcamp.flametalk.domain;
 
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -9,4 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface FileRepository extends JpaRepository<File, Long> {
 
   Optional<File> findByUrl(String url);
+
+  List<File> findAllByChatroom(Chatroom chatroom);
 }

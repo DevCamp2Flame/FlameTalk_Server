@@ -13,7 +13,6 @@ public enum ResponseType {
   CHATROOM_JOIN_SUCCESS(201, "채팅방 입장 성공"),
   USER_CHATROOMS_SUCCESS(200, "채팅방 리스트 조회 성공"),
   CHATROOM_DETAIL_SUCCESS(200, "채팅방 상세 조회 성공"),
-  CHATROOM_FILES_SUCCESS(200, "채팅방 파일 리스트 조회 성공"),
   CHATROOM_UPDATE_SUCCESS(200, "채팅방 수정 성공"),
   USER_CHATROOM_CLOSE_SUCCESS(200, "채팅방 닫기 성공"),
   USER_CHATROOM_DELETE_SUCCESS(200, "채팅방 나가기 성공");

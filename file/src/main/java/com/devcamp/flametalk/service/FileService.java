@@ -7,11 +7,15 @@ import com.devcamp.flametalk.domain.Chatroom;
 import com.devcamp.flametalk.domain.ChatroomRepository;
 import com.devcamp.flametalk.domain.File;
 import com.devcamp.flametalk.domain.FileRepository;
+import com.devcamp.flametalk.dto.ChatroomFilesResponse;
 import com.devcamp.flametalk.dto.FileDetailResponse;
 import com.devcamp.flametalk.dto.S3UploadedFile;
 import com.devcamp.flametalk.error.exception.EntityNotFoundException;
 import com.devcamp.flametalk.util.S3Util;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +66,25 @@ public class FileService {
     File file = fileRepository.findById(id)
         .orElseThrow(() -> new EntityNotFoundException(FILE_NOT_FOUND));
     return new FileDetailResponse(file);
+  }
+
+  /**
+   * 채팅방에 업로드된 파일 객체를 모두 조회합니다.
+   *
+   * @param id 채팅방 id
+   * @return 생성 시간 역순으로 정렬된 파일 정보 리스트
+   */
+  public List<ChatroomFilesResponse> findAllFilesByChatroomId(String id) {
+    Chatroom chatroom = chatroomRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException(CHATROOM_NOT_FOUND));
+
+    List<File> chatroomFiles = fileRepository.findAllByChatroom(chatroom);
+    List<ChatroomFilesResponse> response = new ArrayList<>();
+    chatroomFiles.forEach(file ->
+        response.add(new ChatroomFilesResponse(file.getId(), file.getUrl(), file.getTitle(),
+            file.getExtension(), file.getCreatedAt())));
+    Collections.sort(response);
+    return response;
   }
 
   /**
