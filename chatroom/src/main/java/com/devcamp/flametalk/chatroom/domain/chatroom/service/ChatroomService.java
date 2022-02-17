@@ -101,12 +101,14 @@ public class ChatroomService {
       ChatroomCreateResponse response = ChatroomCreateResponse.of(
           userChatroomRepository.findByUserAndChatroom(hostUser, savedChatroom), savedChatroom);
 
-      // TODO: refactor
+      UserChatroom hostUserChatroom = userChatroomRepository.findByUserAndChatroom(hostUser, savedChatroom);
       if (response.getThumbnail() == null) { // 채팅방 사진을 지정하지 않은 경우 유저들의 프로필로 생성
-        response.updateDefaultThumbnail(defaultThumbnail);
+        response.updateDefaultThumbnail(
+            makeDefaultChatroomThumbnail(hostUserChatroom.getChatroom(), hostUserChatroom));
       }
       if (response.getTitle() == null) { // 채팅방 이름을 지정하지 않은 경우 유저들의 닉네임으로 생성
-        response.updateDefaultTitle(String.join(", ", defaultTitle));
+        response.updateDefaultTitle(
+            makeDefaultChatroomTitle(hostUserChatroom.getChatroom(), hostUserChatroom));
       }
 
       return response;
