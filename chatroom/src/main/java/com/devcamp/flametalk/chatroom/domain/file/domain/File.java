@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-public class File extends BaseTime {
+public class File {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
