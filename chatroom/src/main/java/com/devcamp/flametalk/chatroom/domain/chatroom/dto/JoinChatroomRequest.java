@@ -20,6 +20,9 @@ public class JoinChatroomRequest {
   @NotNull
   private String userId;
 
+  @NotNull
+  private String lastReadMessageId;
+
   private Long openProfileId;
 
   /**
@@ -32,7 +35,7 @@ public class JoinChatroomRequest {
   public UserChatroom toUserChatroom(Chatroom chatroom, User user) {
     return UserChatroom.builder()
         .title(null)
-        .lastReadMessageId(null)
+        .lastReadMessageId(lastReadMessageId)
         .imageUrl(null)
         .inputLock(false)
         .chatroom(chatroom)

@@ -1,12 +1,14 @@
 package com.devcamp.flametalk.controller;
 
 import com.devcamp.flametalk.domain.FileResponseMessage;
+import com.devcamp.flametalk.dto.ChatroomFilesResponse;
 import com.devcamp.flametalk.dto.CommonResponse;
 import com.devcamp.flametalk.dto.FileDetailResponse;
 import com.devcamp.flametalk.dto.SingleDataResponse;
 import com.devcamp.flametalk.service.FileService;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -69,6 +71,23 @@ public class FileController {
 
     SingleDataResponse<FileDetailResponse> response = new SingleDataResponse<>(fileDetail);
     response.success(FileResponseMessage.FILE_DETAIL_SUCCESS.getMessage());
+    return ResponseEntity.ok().body(response);
+  }
+
+  /**
+   * 채팅방에 업로드된 파일 정보 리스트를 조회합니다.
+   *
+   * @param chatroomId 채팅방 id
+   * @return 업로드된 파일 정보에 대한 리스트
+   */
+  @GetMapping("/chatroom/{chatroomId}")
+  public ResponseEntity<SingleDataResponse<List<ChatroomFilesResponse>>> findAllFilesByChatroomId(
+      @PathVariable String chatroomId) {
+    List<ChatroomFilesResponse> chatroomFiles = fileService
+        .findAllFilesByChatroomId(chatroomId);
+    SingleDataResponse<List<ChatroomFilesResponse>> response = new SingleDataResponse<>(chatroomFiles);
+    response.success(FileResponseMessage.CHATROOM_FILES_SUCCESS.getMessage());
+    log.info("find all files uploaded in chatroom {}", chatroomId);
     return ResponseEntity.ok().body(response);
   }
 

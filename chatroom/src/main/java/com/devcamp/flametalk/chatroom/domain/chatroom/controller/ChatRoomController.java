@@ -2,7 +2,6 @@ package com.devcamp.flametalk.chatroom.domain.chatroom.controller;
 
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomCreateResponse;
-import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomFilesResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.ChatroomsResponse;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.JoinChatroomRequest;
 import com.devcamp.flametalk.chatroom.domain.chatroom.dto.JoinChatroomResponse;
@@ -105,23 +104,6 @@ public class ChatRoomController {
     SingleDataResponse<ChatroomsResponse> response = new SingleDataResponse<>();
     response.success(ResponseType.USER_CHATROOMS_SUCCESS.getMessage(), chatrooms);
     log.info("find all by user id" + chatrooms.toString());
-    return ResponseEntity.ok().body(response);
-  }
-
-  /**
-   * 채팅방에 업로드된 파일 정보 리스트를 조회합니다.
-   *
-   * @param chatroomId 채팅방 id
-   * @return 업로드된 파일 정보에 대한 리스트
-   */
-  @GetMapping("/file/{chatroomId}")
-  public ResponseEntity<SingleDataResponse<List<ChatroomFilesResponse>>> findAllFilesByChatroomId(
-      @PathVariable String chatroomId) {
-    List<ChatroomFilesResponse> chatroomFiles = chatroomService
-        .findAllFilesByChatroomId(chatroomId);
-    SingleDataResponse<List<ChatroomFilesResponse>> response = new SingleDataResponse<>();
-    response.success(ResponseType.CHATROOM_FILES_SUCCESS.getMessage(), chatroomFiles);
-    log.info("find all files uploaded in chatroom {}", chatroomId);
     return ResponseEntity.ok().body(response);
   }
 

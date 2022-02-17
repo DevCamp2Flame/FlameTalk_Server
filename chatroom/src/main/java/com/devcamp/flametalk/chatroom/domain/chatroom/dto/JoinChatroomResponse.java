@@ -15,6 +15,7 @@ public class JoinChatroomResponse {
 
   private String chatroomId;
   private Long userChatroomId;
+  private String lastReadMessageId;
   private Long openProfileId;
   private int count;
   private Boolean isOpen;
@@ -35,6 +36,7 @@ public class JoinChatroomResponse {
     return new JoinChatroomResponse(
         chatroom.getId(),
         userChatroom.getId(),
+        userChatroom.getLastReadMessageId(),
         null,
         chatroom.getCount(),
         chatroom.getIsOpen(),
