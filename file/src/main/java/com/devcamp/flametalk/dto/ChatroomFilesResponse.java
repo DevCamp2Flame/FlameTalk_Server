@@ -1,4 +1,4 @@
-package com.devcamp.flametalk.chatroom.domain.chatroom.dto;
+package com.devcamp.flametalk.dto;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
