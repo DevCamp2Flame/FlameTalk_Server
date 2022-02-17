@@ -163,7 +163,7 @@ public class ChatRoomController {
    * @return 채팅방의 전체 사용자 리스트
    */
   @GetMapping("/{chatroomId}/users")
-  public List<String> findUsersByChatroom(@PathVariable String chatroomId) {
-    return chatroomService.findUsersByChatroom(chatroomId);
+  public ResponseEntity<List<String>> findUsersByChatroom(@PathVariable String chatroomId) {
+    return ResponseEntity.ok().body(chatroomService.findUsersByChatroom(chatroomId));
   }
 }
