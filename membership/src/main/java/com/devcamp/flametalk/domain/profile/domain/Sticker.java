@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class Sticker {
 
   private Long stickerId;
-  private double stickerX;
-  private double stickerY;
+  private double positionX;
+  private double positionY;
 }
