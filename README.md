@@ -85,7 +85,7 @@
 
 
 ## 3. 아키텍처 (Architecture)
-![FlameTalk_Architecture-flametalk_architecture](https://user-images.githubusercontent.com/44438366/153760193-40b70261-91bc-452d-abd8-11b9da11b7b8.png)
+![FlameTalk_Architecture-flametalk_architecture drawio (1)](https://user-images.githubusercontent.com/44438366/154482409-5c87fb72-0030-449e-ba86-85379ba9677f.png)
 
 ## 4. DB 모델링 (Database Modeling)
 ![milestone2_db](https://user-images.githubusercontent.com/44438366/153452811-ab72ba00-94e9-4994-b5c4-722fcb168ba2.png)
@@ -105,12 +105,12 @@
 - auth 8081
 - membership 8082
 - file 8083
-- chat-api 8084
+- chatroom 8084
 - chat 8085
     - MSA 로 서버 여러대 띄울 때 805X 사용
     - ex) 8051, 8052
 - presence 8086
-- fcm 8089
+- fcm 8087
 
 ### 2)서버 실행 방법
 ### 프로젝트 클론 - 빌드
