@@ -80,7 +80,14 @@ USER-ID, DEVICE-ID 를 추가하여 전달합니다.
 채팅 서버에서는 STOMP 를 활용하여 웹 소켓 연결을 맺고, kafka 브로커를 활용하여 구독/발행 구조로 메시지를 송수신하고 있습니다.
 또한 docker 에 cassandra 를 올려 사용하여 채팅 메시지를 저장 및 관리하고 있습니다.
 
-특징은 요청이 웹 소켓 요청인지 HTTP 요청인지에 따라 컨트롤러와 Service 를 분리했다는 점을 꼽을 수 있습니다.
+![FlameTalk_Architecture-채팅 서버 구성](https://user-images.githubusercontent.com/44438366/154780079-86a1005c-a731-4b8f-afc3-171db8122913.png)
+![FlameTalk_Architecture-채팅 메시지 전송 흐름](https://user-images.githubusercontent.com/44438366/154780047-05311328-ba59-4f88-87f5-f2be07edf89e.png)
+
+
+요청이 웹 소켓 요청인지 HTTP 요청인지에 따라 컨트롤러와 Service 를 분리했습니다. 웹 소켓 요청은 채팅 메시지 송수신만 처리하며, HTTP 요청일 경우에는 메시지의 히스토리를 전달하고 있습니다.
+
+FCM 푸시 알림을 주기 위하여 채팅방에 접속하지 않은 사용자를 추려 `FCM 메시지 발신 대상`이라고 정의했고, 이는 `채팅방 전체 사용자`와 `채팅방에 접속 상태인 사용자`의 차집합입니다.
+각각 chatroom 서버, presence 서버에 HTTP 요청을 통해 사용자 목록을 가져와서 `FCM 메시지 발신 대상`을 구할 수 있었습니다.
 
 관련 코드
 - 웹 소켓
