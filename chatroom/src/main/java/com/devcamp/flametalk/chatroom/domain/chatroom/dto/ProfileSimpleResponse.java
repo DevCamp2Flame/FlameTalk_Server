@@ -14,6 +14,7 @@ import lombok.Getter;
 public class ProfileSimpleResponse {
 
   private Long id;
+  private String userId;
   private String nickname;
   private String image;
 
@@ -26,7 +27,7 @@ public class ProfileSimpleResponse {
   public static List<ProfileSimpleResponse> createList(List<Profile> profiles) {
     List<ProfileSimpleResponse> simpleProfiles = new ArrayList<>();
     profiles.forEach(profile -> simpleProfiles.add(
-        new ProfileSimpleResponse(profile.getId(), profile.getUser().getNickname(),
+        new ProfileSimpleResponse(profile.getId(), profile.getUser().getId(),profile.getUser().getNickname(),
             profile.getImageUrl())));
     return simpleProfiles;
   }

@@ -31,40 +31,54 @@ public class AndroidPushNotifications {
 
 
         List<Device> deviceList = new ArrayList<>();
-        for( String userId : pushMessageRequest.getUser_list())
-        {
-            System.out.println(userId);
-            //deviceRepository is null
-            List<Device> allDevice = deviceRepository.findByUserId(userId);
-            for(Device device : allDevice)
-            {
-                deviceList.add(device);
-            }
-        }
         List<String> tokenlist = new ArrayList<String>();
-        for(int i=0; i<deviceList.size(); i++){
-            tokenlist.add(deviceList.get(i).getToken());
-        }
         JSONObject body = new JSONObject();
-
         JSONArray array = new JSONArray();
-
-        for(int i=0; i<tokenlist.size(); i++) {
-            array.put(tokenlist.get(i));
-        }
-        body.put("registration_ids", array);
-
         JSONObject dataObject = new JSONObject();
-        String nickname = URLEncoder.encode(pushMessageRequest.getNickname(),"UTF-8");
-        String contents = URLEncoder.encode(pushMessageRequest.getContents(), "UTF-8");
 
-        dataObject.put("room", pushMessageRequest.getRoom_id());
-        dataObject.put("body", contents);
-        dataObject.put("title",nickname);
-        //body.put("notification", notification);
-        body.put("data",dataObject);
 
-        System.out.println(body.toString());
+            System.out.println("userList : " + pushMessageRequest.getUser_list().toString());
+            for( String userId : pushMessageRequest.getUser_list())
+            {
+                System.out.println(userId);
+                //deviceRepository is null
+                List<Device> allDevice = deviceRepository.findByUserId(userId);
+                for(Device device : allDevice)
+                {
+                    deviceList.add(device);
+                }
+            }
+
+            for(int i=0; i<deviceList.size(); i++){
+                tokenlist.add(deviceList.get(i).getToken());
+            }
+            System.out.println("tokenList : " + tokenlist);
+
+            for(int i=0; i<tokenlist.size(); i++) {
+                array.put(tokenlist.get(i));
+            }
+            body.put("registration_ids", array);
+
+
+            String nickname = URLEncoder.encode(pushMessageRequest.getNickname(),"UTF-8");
+            if(pushMessageRequest.getContents() != null)
+            {
+                String contents = URLEncoder.encode(pushMessageRequest.getContents(), "UTF-8");
+                dataObject.put("body", contents);
+                System.out.println(contents);
+            }
+            else {
+                dataObject.put("file", pushMessageRequest.getFile_url());
+                System.out.println(pushMessageRequest.getFile_url());
+
+            }
+
+
+            dataObject.put("room", pushMessageRequest.getRoom_id());
+            dataObject.put("title",nickname);
+            body.put("data",dataObject);
+
+
 
         return body.toString();
     }
