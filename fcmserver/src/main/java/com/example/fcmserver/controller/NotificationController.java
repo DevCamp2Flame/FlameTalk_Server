@@ -44,23 +44,30 @@ public class NotificationController {
     public ResponseEntity<String> send(
             @RequestBody PushMessageRequest pushMessageRequest
             ) throws JsonProcessingException, UnsupportedEncodingException {
-        String notifications = androidPushNotifications.PeriodicNotificationJson(pushMessageRequest);
 
-        HttpEntity<String> request = new HttpEntity<>(notifications);
+        if(pushMessageRequest.getUser_list().size()==0)
+        {
+            return new ResponseEntity<>("",HttpStatus.OK);
+        }
+        else {
+            String notifications = androidPushNotifications.PeriodicNotificationJson(pushMessageRequest);
+            HttpEntity<String> request = new HttpEntity<>(notifications);
 
-        CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
-        CompletableFuture.allOf(pushNotification).join();
+            CompletableFuture<String> pushNotification = androidPushNotificationsService.send(request);
+            CompletableFuture.allOf(pushNotification).join();
 
-        try{
-            String firebaseResponse = pushNotification.get();
-            return new ResponseEntity<>(firebaseResponse, HttpStatus.OK);
+            try{
+                String firebaseResponse = pushNotification.get();
+                return new ResponseEntity<>(firebaseResponse, HttpStatus.OK);
+            }
+            catch (InterruptedException e){
+                logger.debug("got interrupted!");
+            }
+            catch (ExecutionException e){
+                logger.debug("execution error!");
+            }
         }
-        catch (InterruptedException e){
-            logger.debug("got interrupted!");
-        }
-        catch (ExecutionException e){
-            logger.debug("execution error!");
-        }
+
 
         return new ResponseEntity<>("Push Notification ERROR!", HttpStatus.BAD_REQUEST);
     }
