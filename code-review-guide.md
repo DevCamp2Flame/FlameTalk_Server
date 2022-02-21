@@ -5,17 +5,19 @@ SGS 데브캠프 2기 flame 팀의 김다롬입니다.
 
 ## 폴더 구조
 ```shell
-├─auth        # 인증 서버
-├─chat        # 채팅 서버 (채팅 메시지 송수신)
-├─chatroom    # 채팅방 서버 (채팅방 생성 및 채팅방 참여자 목록 불러오기)
-├─common      # 여러 서버에서 공통적으로 사용하는 공통 모듈 - 현재 사용하지 않습니다.
-├─fcmserver   # FCM 알림 서버
-├─file        # 파일 서버 (프로필 이미지 등 각종 파일 관리)
-├─infra       # Spring Cloud 서버 (서비스 디스커버리, 게이트웨이)
+├─chatting-service
+│  ├─chat        # 채팅 서버 (채팅 메시지 송수신)
+│  ├─fcmserver   # FCM 알림 서버
+│  └─presence    # 접속 상태 서버 (채팅방 입/퇴장 기록)
+├─common         # 여러 서버에서 공통적으로 사용하는 공통 모듈 - 현재 사용하지 않습니다.
+├─infrastructure # Spring Cloud 서버 (서비스 디스커버리, 게이트웨이)
 │  ├─eureka
 │  └─gateway
-├─membership  # 멤버십 서버
-└─presence    # 접속 상태 서버 (채팅방 입/퇴장 기록)
+└─membership-service
+    ├─auth        # 인증 서버
+    ├─chatroom    # 채팅방 서버 (채팅방 생성 및 채팅방 참여자 목록 불러오기)
+    ├─file        # 파일 서버 (프로필 이미지 등 각종 파일 관리)
+    └─membership  # 멤버십 서버
 ```
 
 ## 역할
